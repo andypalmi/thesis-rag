@@ -1,0 +1,74 @@
+\documentclass[12pt, a4paper]{report} % Single column, 12pt font, A4 paper
+
+% PACKAGES - Add any other packages you need
+\usepackage[utf8]{inputenc} % Input encoding
+\usepackage[T1]{fontenc}    % Font encoding
+\usepackage{amsmath}        % For math environments
+\usepackage{graphicx}       % To include images
+\usepackage{setspace}       % For line spacing, e.g., \onehalfspacing
+\usepackage[english]{babel} % For English language hyphenation and terms
+\usepackage{geometry}       % For page margins
+\geometry{a4paper, margin=1in} % Example: 1 inch margins
+\usepackage{csquotes}       % Context sensitive quotation facilities
+\usepackage{titling}        % For title formatting
+\usepackage[
+    backend=biber,      % or backend=bibtex
+    style=numeric,      % Citation style (numeric, authoryear, etc.)
+    sorting=none        % Order of references as they appear
+]{biblatex}
+\addbibresource{references.bib} % Your .bib file
+
+% THESIS INFORMATION
+\title{A Comprehensive Study on Retrieval Augmented Generation Methods for More Robust LLMs}
+\author{Andrea Palmieri \\
+        Artificial Intelligence For Science and Technology \\
+        Università degli Studi di Milano-Bicocca \\
+        \texttt{palmieri.andrea2000@gmail.com}}
+\date{\today} % Or specify a date, e.g., {September 2024}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{1cm} % Adjust vertical spacing as needed
+    {\Huge\bfseries \thetitle \par} % Thesis title
+    \vspace{1.5cm}
+    {\Large \theauthor \par} % Author and affiliation
+    \vspace{2cm}
+    A thesis submitted in fulfillment of the requirements for the degree of \\
+    \vspace{0.5cm}
+    {\Large Master of Science} \\
+    in \\
+    {\Large Artificial Intelligence For Science and Technology} \\
+    \vspace{2cm}
+    {\large Supervisor: Dr. Napoletano Paolo} \\ % <-- Optional: Add supervisor
+    \vfill % Pushes content to the bottom
+    {\large \thedate \par} % Date
+\end{titlepage}
+
+\maketitle % Displays the title, author, and date
+
+\begin{abstract}
+    % Your abstract will go here.
+    This thesis investigates various methods to enhance the robustness of Large Language Models (LLMs) through Retrieval Augmented Generation (RAG). It explores fundamental RAG concepts, advanced retrieval and optimization techniques, prompt engineering strategies, and the impact of different LLMs. A key part of this work is an experimental evaluation of retrieval system performance, focusing on precision and recall, comparing baseline embedding models with novel thresholding techniques and reranking approaches.
+\end{abstract}
+
+\tableofcontents % Generates the table of contents
+
+\onehalfspacing % Or \doublespacing if required
+
+% INCLUDE CHAPTERS
+% Each chapter is in its own .tex file in the same directory
+\include{chapter1_introduction}
+\include{chapter2_fundamentals_rag}
+\include{chapter3_retrieval_optimization}
+\include{chapter4_prompt_engineering}
+\include{chapter5_llm_comparison}
+\include{chapter6_relevant_chunks}
+\include{chapter7_experiments_results}
+\include{chapter8_conclusions}
+
+% BIBLIOGRAPHY
+\printbibliography % Prints the bibliography
+
+\end{document}

@@ -1,0 +1,43 @@
+\chapter{Experiments and Results}
+\label{chap:experiments_results}
+
+This chapter details the experimental setup and presents the results of the performance investigation into the retrieval system. The primary goal is to evaluate different strategies for improving precision and recall in a RAG pipeline.
+
+\section{Experimental Setup}
+\subsection{Dataset}
+Describe the dataset used for the experiments (e.g., a question-answering dataset, a domain-specific document collection).
+\subsection{Baseline System}
+The baseline retrieval system uses the \texttt{ada-002} embedding model. A predefined function is applied to the similarity scores to implement a fixed threshold for relevance.
+\subsection{Evaluation Metrics}
+The primary metrics for evaluating the retrieval component are:
+\begin{itemize}
+    \item \textbf{Precision@k}: The proportion of retrieved chunks in the top k that are relevant.
+    \item \textbf{Recall@k}: The proportion of all relevant chunks in the dataset that are retrieved in the top k.
+    \item \textbf{F1-score@k}: The harmonic mean of Precision@k and Recall@k.
+\end{itemize}
+These metrics are crucial for understanding the effectiveness of the retrieval stage in RAG systems \autocite{rag_eval_ridgerun_2024}. [9]
+
+\section{Performance Investigation of Retrieval System}
+\label{sec:performance_investigation}
+This section focuses on the comparative performance analysis as outlined in the introduction.
+
+\subsection{Method 1: Baseline (ada-002 with Fixed Threshold)}
+Detail the performance of the baseline system using the \texttt{ada-002} embedding model and a standard, fixed thresholding function on the cosine similarity scores.
+
+\subsection{Method 2: Alternative Thresholding Strategies with ada-002}
+Investigate different methods for computing or applying a threshold to the similarity scores from \texttt{ada-002}. This could include:
+\begin{itemize}
+    \item \textbf{Dynamic Thresholding}: Adapting the threshold based on query characteristics or score distributions (e.g., using Kernel Density Estimation as described by \autocite{dynamic_thresholding_dell_2023}). [6]
+    \item \textbf{Top-N Cutoff}: Simply taking the top N most similar chunks, varying N.
+    \item Other statistical approaches to determine an optimal cutoff.
+\end{itemize}
+The original similarity function (e.g., cosine similarity from ada-002) remains the same, but the method of deciding which chunks are "relevant enough" changes.
+
+\subsection{Method 3: Reranking Model with Original Thresholding Function}
+Here, the initial set of chunks is retrieved using \texttt{ada-002} (potentially a larger initial set). A reranking model (e.g., a cross-encoder based on BERT or T5, as discussed in reranking surveys \autocite{reranking_survey_2025_djoudi}) [5] is then applied to these retrieved chunks to re-calculate similarity scores. The original thresholding function is then applied to these *new* reranked scores.
+
+\subsection{Method 4: Reranking Model with Alternative Thresholding Strategies}
+This combines the reranking approach from Method 3 with the alternative thresholding strategies from Method 2. The reranking model provides new similarity scores, and then dynamic or other advanced thresholding methods are applied to these reranked scores.
+
+\section{Results and Discussion}
+Present the precision, recall, and F1-score results for each method. Include tables and potentially graphs to compare the performance. Discuss the implications of the results, highlighting which strategies offer the best improvements over the baseline and under what conditions.

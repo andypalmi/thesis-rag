@@ -1,0 +1,22 @@
+\chapter{Retrieval and Optimization Methods}
+\label{chap:retrieval_optimization}
+
+The effectiveness of a RAG system heavily depends on the quality of its retrieval component and the optimization techniques employed. This chapter explores various methods to enhance information retrieval for RAG.
+
+\section{Chunking Techniques: Late Chunking vs. Naive Chunking}
+Chunking, the process of breaking down large documents into smaller, manageable pieces, is a critical preprocessing step. We will discuss different strategies like naive fixed-size chunking versus more adaptive methods sometimes referred to as "late chunking" or semantic chunking.
+
+\section{Different Embedding Models}
+The choice of embedding model (e.g., ada-002, Sentence-BERT, custom models) significantly impacts the semantic representation of text and thus the relevance of retrieved chunks.
+
+\section{Contextual Embeddings}
+Contextual embeddings, which capture the meaning of words in their specific context, are generally preferred over static word embeddings for RAG.
+
+\section{BM25 and TF-IDF for Reranking}
+Traditional IR methods like BM25 and TF-IDF can be effectively used as a reranking step to refine the results from an initial dense retrieval \autocite{llm_ir_survey_2024}. [4] These methods focus on lexical overlap and term importance.
+
+\section{Hybrid Systems: Combining Similarity with BM25/TF-IDF for Reranking}
+Hybrid systems aim to leverage the strengths of both dense retrieval (semantic similarity) and sparse retrieval (keyword matching like BM25) for improved reranking performance \autocite{reranking_survey_2025_djoudi}. [5]
+
+\section{Dynamic Similarity Thresholding}
+Instead of using a fixed similarity threshold for retrieved chunks, dynamic thresholding adapts the threshold based on the query or the distribution of similarity scores \autocite{dynamic_thresholding_dell_2023}. [6] This can help in retrieving a more appropriate number of relevant chunks.

@@ -1,0 +1,22 @@
+\chapter{Fundamentals of Retrieval-Augmented Generation}
+\label{chap:fundamentals_rag}
+
+Retrieval-Augmented Generation (RAG) systems combine the strengths of pre-trained language models with information retrieval systems \autocite{rag_survey_2024_ralm}. [2] This chapter lays the groundwork by explaining the core mechanics of RAG, the primary challenges in its implementation, the role of vector databases, and strategies for mitigating common issues like LLM hallucinations.
+
+\section{How it Works}
+At its core, a RAG system operates in two main stages: retrieval and generation. When a query is posed, the retriever first searches a knowledge base (e.g., a collection of documents, a database) for information relevant to the query. This retrieved context is then passed, along with the original query, to a language model, which generates the final response.
+
+\section{Main Challenges}
+Several challenges need to be addressed for effective RAG systems, including:
+\begin{itemize}
+    \item Ensuring the relevance and quality of retrieved documents.
+    \item Optimizing the trade-off between retrieval speed and comprehensiveness.
+    \item Handling noisy or conflicting information in the retrieved context.
+    \item Seamlessly integrating the retrieved context into the generation process.
+\end{itemize}
+
+\section{Vector Databases}
+Vector databases are crucial for efficient similarity search in RAG. They store embeddings of text chunks and allow for fast retrieval of the most similar chunks to a query embedding.
+
+\section{Mitigating Hallucinations}
+By providing relevant, factual context, RAG significantly reduces the tendency of LLMs to hallucinate or generate factually incorrect statements \autocite{rag_prompt_eng_guide}. [3] The quality of the retrieved context is paramount for this.

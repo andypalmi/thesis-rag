@@ -1,0 +1,16 @@
+\chapter{Prompt Engineering}
+\label{chap:prompt_engineering}
+
+Prompt engineering plays a vital role in guiding the LLM to effectively utilize the retrieved context and generate the desired output in a RAG system.
+
+\section{Concepts of Prompt Engineering}
+This section will cover the fundamental principles of designing effective prompts for RAG, including how to structure the prompt to include the query and the retrieved context.
+
+\section{Prompt Styles}
+Different styles of prompts (e.g., zero-shot, few-shot, instruction-based) can be used depending on the task and the LLM.
+
+\section{Prompt Evaluation using Golden Datasets and LLM-as-a-Judge (e.g., DeepEval)}
+Evaluating the quality of prompts is crucial. This section will discuss methods using golden datasets and leveraging other LLMs as evaluators (LLM-as-a-Judge) with frameworks like DeepEval \autocite{rag_eval_qdrant_2024}. [7]
+
+\section{Evaluation Metrics: GEval, DAG, Hallucination, Answer Relevancy, Faithfulness}
+Key metrics for evaluating RAG outputs, often assessed by LLM judges, include G-Eval, Answer Relevancy, Faithfulness, and specific metrics for hallucination detection \autocite{rag_eval_pinecone}. [8]
