@@ -1,22 +1,44 @@
 \chapter{Retrieval and Optimization Methods}
 \label{chap:retrieval_optimization}
 
-The effectiveness of a RAG system heavily depends on the quality of its retrieval component and the optimization techniques employed. This chapter explores various methods to enhance information retrieval for RAG.
+The retrieval component is the heart of a RAG system. Its ability to surface high-quality, relevant information from a vast corpus is the primary determinant of the system's overall performance. This chapter provides a detailed exploration of the critical techniques used to build and optimize the retrieval pipeline, from the initial processing of documents to the final reranking of retrieved candidates.
 
-\section{Chunking Techniques: Late Chunking vs. Naive Chunking}
-Chunking, the process of breaking down large documents into smaller, manageable pieces, is a critical preprocessing step. We will discuss different strategies like naive fixed-size chunking versus more adaptive methods sometimes referred to as "late chunking" or semantic chunking.
+\section{Chunking Techniques}
+Chunking is the foundational step of breaking down large documents into smaller, more manageable pieces. The goal is to create chunks that are semantically coherent and small enough to be efficiently processed by embedding models and fit within the context window of an LLM. The choice of chunking strategy has a profound impact on retrieval quality.
 
-\section{Different Embedding Models}
-The choice of embedding model (e.g., ada-002, Sentence-BERT, custom models) significantly impacts the semantic representation of text and thus the relevance of retrieved chunks.
+\subsection{Naive vs. Semantic Chunking}
+\textbf{Naive Chunking}, also known as fixed-size chunking, is the simplest approach. It involves splitting documents into segments of a predetermined length (e.g., 200 words) with an optional overlap between adjacent chunks. While easy to implement, this method can be suboptimal as it often splits sentences or paragraphs in the middle, breaking the semantic continuity of the text.
 
-\section{Contextual Embeddings}
-Contextual embeddings, which capture the meaning of words in their specific context, are generally preferred over static word embeddings for RAG.
+\textbf{Semantic Chunking} represents a more sophisticated approach. Instead of relying on arbitrary lengths, it aims to divide the text at logical boundaries. This can be done in several ways:
+\begin{itemize}
+    \item \textbf{Sentence-Level Chunking:} Using natural language processing libraries to split the text into individual sentences.
+    \item \textbf{Recursive Chunking:} A hierarchical method that first tries to split by paragraphs, then by sentences, and finally by words, to maintain semantic coherence as much as possible.
+    \item \textbf{Agentic Chunking:} Employing an LLM to analyze the document and decide the most appropriate chunking strategy based on the content's structure and nature.
+\end{itemize}
 
-\section{BM25 and TF-IDF for Reranking}
-Traditional IR methods like BM25 and TF-IDF can be effectively used as a reranking step to refine the results from an initial dense retrieval \autocite{llm_ir_survey_2024}. [4] These methods focus on lexical overlap and term importance.
+\subsection{Late Chunking}
+Late chunking, or small-to-big retrieval, is an advanced technique that decouples the chunks used for retrieval from the chunks passed to the LLM. It works by first retrieving smaller, more semantically precise chunks (e.g., individual sentences). Once the most relevant small chunks are identified, the system retrieves the larger parent documents or surrounding context associated with them. This larger context is then fed to the LLM, providing it with more comprehensive information to generate a high-quality answer.
 
-\section{Hybrid Systems: Combining Similarity with BM25/TF-IDF for Reranking}
-Hybrid systems aim to leverage the strengths of both dense retrieval (semantic similarity) and sparse retrieval (keyword matching like BM25) for improved reranking performance \autocite{reranking_survey_2025_djoudi}. [5]
+\section{Embedding Models}
+The choice of embedding model is critical for capturing the semantic meaning of the text. These models transform text into high-dimensional vectors, where semantically similar texts are located closer to each other in the vector space.
+
+\subsection{Contextual Embeddings}
+Modern RAG systems rely on \textbf{contextual embeddings}, such as those produced by transformer-based models like BERT, RoBERTa, and the OpenAI Ada series. Unlike older static word embeddings (e.g., Word2Vec, GloVe), which assign a single vector to each word, contextual embeddings generate a unique vector for a word based on the sentence it appears in. This allows them to capture nuances, ambiguity, and the richness of language, leading to more accurate semantic search.
+
+\subsection{Fine-tuning Embedding Models}
+For domain-specific applications, pre-trained embedding models may not perform optimally. Fine-tuning the embedding model on a dataset that is representative of the target domain can significantly improve retrieval relevance. This process adapts the model to the specific vocabulary and semantic relationships present in the corpus.
+
+\section{Reranking and Hybrid Search}
+Standard vector search excels at finding semantic similarity, but it can sometimes miss relevant documents that use different terminology (the vocabulary mismatch problem). Reranking and hybrid search are techniques used to refine the initial set of retrieved results.
+
+\subsection{BM25 and TF-IDF for Reranking}
+Traditional information retrieval algorithms like \textbf{BM25} and \textbf{TF-IDF} are based on keyword matching. They are highly effective at finding documents that contain the exact keywords from the query. While dense retrievers (vector search) find what the user \textit{means}, these sparse retrievers find what the user \textit{says}. By using BM25 or TF-IDF to rerank the candidates retrieved by vector search, we can improve precision by boosting the rank of documents that have high lexical overlap with the query \autocite{llm_ir_survey_2024}.
+
+\subsection{Hybrid Systems: Combining Similarity with BM25/TF-IDF}
+A fully \textbf{hybrid system} combines the scores from both dense (semantic) and sparse (keyword) retrieval methods from the outset. A common approach is to use a weighted combination of the scores from a vector search and a BM25 search to produce a final relevance score. This allows the system to leverage the strengths of both approaches, capturing both semantic relevance and keyword importance for a more robust retrieval process \autocite{reranking_survey_2025_djoudi}.
+
+\subsection{Cross-Encoder Rerankers}
+For the highest possible accuracy, a \textbf{cross-encoder} model can be used as a final reranking step. Unlike bi-encoders (standard embedding models) that create separate embeddings for the query and documents, a cross-encoder takes the query and a candidate document as a single input. This allows the model to perform a deep, token-by-token comparison, resulting in a highly accurate relevance score. However, cross-encoders are computationally expensive and are typically only used to rerank a small number of top candidates from a faster, initial retrieval stage.
 
 \section{Dynamic Similarity Thresholding}
-Instead of using a fixed similarity threshold for retrieved chunks, dynamic thresholding adapts the threshold based on the query or the distribution of similarity scores \autocite{dynamic_thresholding_dell_2023}. [6] This can help in retrieving a more appropriate number of relevant chunks.
+Instead of retrieving a fixed number of chunks (top-N), \textbf{dynamic similarity thresholding} adapts the retrieval process based on the query itself. For some queries, only a few highly relevant chunks may be needed, while for others, a broader context is beneficial. Dynamic thresholding methods analyze the distribution of similarity scores for a given query and attempt to find a natural cutoff point, helping to retrieve a more contextually appropriate number of chunks \autocite{dynamic_thresholding_dell_2023}. This prevents the inclusion of irrelevant documents when the similarity scores drop off sharply and allows for more comprehensive retrieval when many documents are similarly relevant.

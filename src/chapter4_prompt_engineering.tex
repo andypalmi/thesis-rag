@@ -1,16 +1,55 @@
-\chapter{Prompt Engineering}
+\chapter{Prompt Engineering for RAG}
 \label{chap:prompt_engineering}
 
-Prompt engineering plays a vital role in guiding the LLM to effectively utilize the retrieved context and generate the desired output in a RAG system.
+In a Retrieval-Augmented Generation system, the prompt is the critical bridge between the retrieved information and the generative capabilities of the Large Language Model. Effective prompt engineering is essential to guide the LLM in synthesizing the provided context and generating an accurate, relevant, and well-structured response. This chapter explores the fundamental principles of prompt design for RAG, different prompting styles, and the methodologies for evaluating their effectiveness.
 
 \section{Concepts of Prompt Engineering}
-This section will cover the fundamental principles of designing effective prompts for RAG, including how to structure the prompt to include the query and the retrieved context.
+A RAG prompt is more complex than a standard query to an LLM. It must effectively integrate two distinct pieces of information: the user's original query and the retrieved context. The structure of the prompt dictates how the LLM will perceive and use the provided information.
+
+A typical RAG prompt includes:
+\begin{itemize}
+    \item \textbf{Instructions:} Explicit directions to the LLM on how to behave. This might include instructions to use only the provided context, to adopt a certain persona, or to format the output in a specific way.
+    \item \textbf{Context:} The set of retrieved document chunks that are relevant to the query.
+    \item \textbf{Query:} The user's original question or request.
+\end{itemize}
+
+Crafting the prompt involves carefully arranging these elements. For example, a common template might look like this:
+
+\texttt{You are a helpful assistant. Use the following context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.}
+
+\texttt{Context: [retrieved chunks]}
+
+\texttt{Question: [user query]}
 
 \section{Prompt Styles}
-Different styles of prompts (e.g., zero-shot, few-shot, instruction-based) can be used depending on the task and the LLM.
+Different prompting styles can be employed depending on the specific task and the LLM being used. The choice of style can significantly influence the quality of the generated response.
 
-\section{Prompt Evaluation using Golden Datasets and LLM-as-a-Judge (e.g., DeepEval)}
-Evaluating the quality of prompts is crucial. This section will discuss methods using golden datasets and leveraging other LLMs as evaluators (LLM-as-a-Judge) with frameworks like DeepEval \autocite{rag_eval_qdrant_2024}. [7]
+\begin{itemize}
+    \item \textbf{Zero-Shot Prompting:} This is the most common style in RAG, where the LLM is given instructions and context but no prior examples of how to complete the task. The effectiveness of zero-shot prompts relies heavily on the clarity of the instructions and the LLM's inherent ability to reason and follow directions.
+    
+    \item \textbf{Few-Shot Prompting:} In this approach, the prompt includes a few examples (shots) of the desired input-output format. This can be particularly useful for complex tasks or when a very specific output structure is required. For RAG, this might involve showing the model how to synthesize context into an answer for a few sample questions before presenting the actual query.
+    
+    \item \textbf{Instruction-Based Prompts:} These prompts focus on providing very detailed and explicit instructions. This can include negative constraints (e.g., \"Do not mention information not present in the context\") and positive constraints (e.g., \"Summarize the answer in three bullet points\").
+    
+    \item \textbf{Role-Playing Prompts:} Assigning a role to the LLM (e.g., \"You are a financial analyst reviewing these documents\") can help to frame the context and guide the tone and focus of the response.
+\end{itemize}
 
-\section{Evaluation Metrics: GEval, DAG, Hallucination, Answer Relevancy, Faithfulness}
-Key metrics for evaluating RAG outputs, often assessed by LLM judges, include G-Eval, Answer Relevancy, Faithfulness, and specific metrics for hallucination detection \autocite{rag_eval_pinecone}. [8]
+\section{Prompt Evaluation}
+Evaluating the effectiveness of different prompts is a critical step in optimizing a RAG pipeline. Since the quality of a generated response can be subjective, a combination of qualitative and quantitative methods is often used.
+
+\subsection{Golden Datasets}
+A \textbf{golden dataset} is a curated collection of queries paired with ideal, human-verified answers. By comparing the LLM's output for a given query to the golden answer, one can assess the quality of the prompt. While creating a golden dataset can be labor-intensive, it provides a strong benchmark for evaluation.
+
+\subsection{LLM-as-a-Judge}
+A more scalable approach to evaluation is to use another, often more powerful, LLM as an evaluator. This is known as the \textbf{LLM-as-a-Judge} method. Frameworks like \textbf{DeepEval} have emerged to standardize this process. An evaluator LLM is given a set of criteria and asked to score the output of the RAG system on various dimensions \autocite{rag_eval_qdrant_2024}.
+
+\section{Evaluation Metrics}
+When using an LLM-as-a-Judge, several key metrics are used to assess the quality of the RAG output. These metrics provide a multi-faceted view of performance:
+\begin{itemize}
+    \item \textbf{G-Eval / DAG (Detail, Accuracy, Groundedness):} A composite score where the evaluator LLM assesses the response based on its level of detail, factual accuracy, and how well it is grounded in the provided context.
+    \item \textbf{Answer Relevancy:} Measures how well the generated answer addresses the user's actual query. A factually correct answer is not useful if it does not answer the question.
+    \item \textbf{Faithfulness:} This metric assesses whether the LLM's response is a faithful representation of the information in the retrieved context. A high faithfulness score means the model did not invent information that wasn't present in the source documents.
+    \item \textbf{Hallucination Rate:} Specifically measures the presence of factually incorrect or nonsensical statements in the output. This is a critical metric for building trustworthy RAG systems \autocite{rag_eval_pinecone}.
+\end{itemize}
+
+By systematically testing different prompt structures and styles and evaluating them against these metrics, it is possible to identify the optimal prompt design that maximizes the performance of the RAG system for a given application.

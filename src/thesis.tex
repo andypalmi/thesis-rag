@@ -49,8 +49,11 @@
 \maketitle % Displays the title, author, and date
 
 \begin{abstract}
-    % Your abstract will go here.
-    This thesis investigates various methods to enhance the robustness of Large Language Models (LLMs) through Retrieval Augmented Generation (RAG). It explores fundamental RAG concepts, advanced retrieval and optimization techniques, prompt engineering strategies, and the impact of different LLMs. A key part of this work is an experimental evaluation of retrieval system performance, focusing on precision and recall, comparing baseline embedding models with novel thresholding techniques and reranking approaches.
+    This thesis presents a comprehensive study of Retrieval-Augmented Generation (RAG), a paradigm designed to enhance the robustness and factual accuracy of Large Language Models (LLMs). While LLMs have revolutionized natural language processing, they are susceptible to knowledge cutoffs and hallucinations. RAG addresses these limitations by dynamically grounding LLM responses in external, up-to-date knowledge sources.
+
+    This work systematically deconstructs the RAG pipeline, providing a theoretical exploration of its core components. We investigate foundational concepts, including the architectural interplay between retrieval and generation, and the role of vector databases. We then delve into advanced optimization techniques, covering a wide array of methods from semantic chunking strategies to the nuances of contextual embedding models. A significant portion of this study is dedicated to retrieval enhancement, analyzing the impact of hybrid search, sophisticated reranking models like cross-encoders, and dynamic similarity thresholding. Furthermore, we explore the art of prompt engineering for RAG and conduct a comparative analysis of different LLMs as the final generator.
+
+    A key contribution of this thesis is a rigorous experimental evaluation of these techniques. Through a series of controlled experiments, we measure the impact of different chunking strategies, embedding models, reranking methods, and generator LLMs on overall system performance. Our findings demonstrate that a systematically optimized RAG pipeline, incorporating semantic chunking, a fine-tuned retriever with cross-encoder reranking, and a powerful generator model, can achieve significant improvements in faithfulness, answer relevancy, and hallucination reduction compared to a baseline configuration. The results provide a clear framework and empirical evidence for building more accurate, trustworthy, and robust AI systems.
 \end{abstract}
 
 \tableofcontents % Generates the table of contents
