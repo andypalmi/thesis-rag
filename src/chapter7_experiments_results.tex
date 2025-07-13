@@ -16,7 +16,7 @@ To measure the impact of different optimization techniques, a baseline RAG confi
     \item \textbf{Embedding Model:} OpenAI \texttt{text-embedding-ada-002}, a widely used and strong baseline model.
     \item \textbf{Chunking Strategy:} Naive fixed-size chunking with a chunk size of 300 tokens and an overlap of 50 tokens.
     \item \textbf{Retrieval Strategy:} Basic cosine similarity search with a fixed retrieval of the top 5 most similar chunks (Top-N).
-    \item \textbf{Generator LLM:} \texttt{GPT-3.5-Turbo}.
+    \item \textbf{Generator LLM:} \texttt{GPT-4}.
     \item \textbf{Prompt Template:} A standard zero-shot prompt instructing the LLM to answer the question based on the provided context.
 \end{itemize}
 
@@ -46,8 +46,8 @@ The results, presented in Table \ref{tab:chunking_results}, show that semantic c
 \hline
 \textbf{Method} & \textbf{Precision@5} & \textbf{Recall@5} \\
 \hline
-Naive Chunking & 0.65 & 0.72 \\
-Semantic Chunking & 0.69 & 0.75 \\
+Naive Chunking & TBD & TBD \\
+Semantic Chunking & TBD & TBD \\
 \hline
 \end{tabular}
 \end{table}
@@ -71,8 +71,8 @@ As shown in Table \ref{tab:embedding_results}, the Sentence-BERT model slightly 
 \hline
 \textbf{Model} & \textbf{Precision@5} & \textbf{MRR} \\
 \hline
-Ada-002 & 0.69 & 0.78 \\
-Sentence-BERT & 0.72 & 0.81 \\
+Ada-002 & TBD & TBD \\
+Sentence-BERT & TBD & TBD \\
 \hline
 \end{tabular}
 \end{table}
@@ -82,7 +82,7 @@ Sentence-BERT & 0.72 & 0.81 \\
 This experiment evaluated the benefit of adding a reranking step after the initial retrieval (using Sentence-BERT).
 \subsection{Reranking Methods Compared}
 \begin{itemize}
-    \item \textbf{No Reranking (Baseline).}
+    \item \textbf{No Reranking (Baseline)}.
     \item \textbf{BM25 Reranking:} Using BM25 scores to rerank the top 20 candidates from the initial dense retrieval.
     \item \textbf{Cross-Encoder Reranking:} Using a powerful cross-encoder model to rerank the top 20 candidates.
 \end{itemize}
@@ -97,41 +97,102 @@ The results in Table \ref{tab:reranking_results} demonstrate the significant imp
 \hline
 \textbf{Method} & \textbf{Precision@5} & \textbf{MRR} \\
 \hline
-No Reranking & 0.72 & 0.81 \\
-BM25 Reranking & 0.76 & 0.85 \\
-Cross-Encoder & \textbf{0.82} & \textbf{0.91} \\
+No Reranking & TBD & TBD \\
+BM25 Reranking & TBD & TBD \\
+Cross-Encoder & \textbf{TBD} & \textbf{TBD} \\
 \hline
 \end{tabular}
 \end{table}
 
-\section{Experiment 4: Impact of Different LLMs (Generators)}
-\label{sec:exp_llm_choice}
-This experiment evaluated how the choice of the generator LLM affects the final output quality, using the best retrieval setup (Sentence-BERT + Cross-Encoder).
-\subsection{LLMs Compared}
-\begin{itemize}
-    \item \textbf{Baseline:} \texttt{GPT-3.5-Turbo}.
-    \item \textbf{Advanced Model:} \texttt{GPT-4}.
-\end{itemize}
-\subsection{Results and Discussion}
-The generation quality metrics, shown in Table \ref{tab:llm_results}, reveal a clear advantage for GPT-4. While both models had high answer relevancy, GPT-4 demonstrated significantly better faithfulness and a near-zero hallucination rate. This indicates that more advanced models are better at adhering strictly to the provided context and avoiding the introduction of external, unverified information.
+\begin{landscape}
+    \small
+    \setlength{\tabcolsep}{4pt}       % default is ~6pt
+    \renewcommand{\arraystretch}{0.9}  % tighten row height
+    \setlength{\LTleft}{0pt}          % left align longtable
+    \setlength{\LTright}{0pt}         % right align longtable
+    \begin{longtable}{|l|c|c|ccccc|c|ccccc|ccccc|}
+        \caption{DeepEval Prompt Engineering Evaluation Results} \\
+        \toprule
+        \textbf{Model} & \textbf{Prompt} & \textbf{Temp} & \multicolumn{5}{c|}{\textbf{Avg. Scores}} & \textbf{Total} & \multicolumn{5}{c|}{\textbf{GPT-4o}} & \multicolumn{5}{c|}{\textbf{Claude 3.5}} \\
+        & & & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} \\
+        \midrule
+        \endfirsthead
 
-\begin{table}[h!]
-\centering
-\caption{Generator LLM Performance}
-\label{tab:llm_results}
-\begin{tabular}{|l|c|c|c|}
-\hline
-\textbf{LLM} & \textbf{Faithfulness} & \textbf{Answer Relevancy} & \textbf{Hallucination Rate} \\
-\hline
-GPT-3.5-Turbo & 0.85 & 0.92 & 0.08 \\
-GPT-4 & \textbf{0.98} & \textbf{0.95} & \textbf{0.01} \\
-\hline
-\end{tabular}
-\end{table}
+        \multicolumn{19}{c}{\tablename\ \thetable{} -- continued from previous page} \\
+        \midrule
+        \textbf{Model} & \textbf{Prompt} & \textbf{Temp} & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} \\
+        \midrule
+        \endhead
+
+        \midrule
+        \multicolumn{19}{r}{Continued on next page} \\
+        \endfoot
+
+        \bottomrule
+        \endlastfoot
+        Claude 3 Haiku & P1 & 0.0 & 57.70 & 66.66 & 87.18 & 69.23 & 74.36 & 355.13 & 61.54 & 69.23 & 84.62 & 64.10 & 79.49 & 53.85 & 64.10 & 89.74 & 74.36 & 69.23 \\
+        Claude 3 Haiku & P1 & 0.2 & 62.82 & 61.54 & 87.18 & 65.38 & 67.94 & 344.86 & 61.54 & 53.85 & 84.62 & 58.97 & 64.10 & 64.10 & 69.23 & 89.74 & 71.79 & 71.79 \\
+        Claude 3 Haiku & P2 & 0.0 & 66.66 & 62.82 & 89.74 & 67.94 & 74.36 & 361.52 & 64.10 & 56.41 & 89.74 & 64.10 & 82.05 & 69.23 & 69.23 & 89.74 & 71.79 & 66.67 \\
+        Claude 3 Haiku & P2 & 0.2 & 62.82 & 61.53 & 79.49 & 65.38 & 73.07 & 342.29 & 61.54 & 58.97 & 79.49 & 58.97 & 82.05 & 64.10 & 64.10 & 79.49 & 71.79 & 64.10 \\
+        Claude 3.5 Sonnet & P1 & 0.0 & 58.97 & 76.93 & 92.31 & 74.35 & 71.79 & 374.35 & 61.54 & 69.23 & 97.44 & 58.97 & 71.79 & 56.41 & 84.62 & 87.18 & 89.74 & 71.79 \\
+        Claude 3.5 Sonnet v2 & P1 & 0.0 & 48.72 & 75.65 & 96.16 & 66.66 & 67.95 & 355.14 & 48.72 & 66.67 & 92.31 & 51.28 & 69.23 & 48.72 & 84.62 & 100.00 & 82.05 & 66.67 \\
+        Claude 3.5 Sonnet v2 & P1 & 0.2 & 52.56 & 69.23 & 96.16 & 71.80 & 69.23 & 358.98 & 53.85 & 53.85 & 94.87 & 56.41 & 76.92 & 51.28 & 84.62 & 97.44 & 87.18 & 61.54 \\
+        Claude 3.5 Sonnet v2 & P2 & 0.0 & 62.82 & 70.52 & 91.03 & 78.20 & 84.62 & 387.19 & 64.10 & 61.54 & 89.74 & 61.54 & 84.62 & 61.54 & 79.49 & 92.31 & 94.87 & 84.62 \\
+        Claude 3.5 Sonnet v2 & P2 & 0.2 & 64.10 & 75.64 & 94.87 & 76.92 & 88.46 & 399.99 & 71.79 & 74.36 & 94.87 & 61.54 & 89.74 & 56.41 & 76.92 & 94.87 & 92.31 & 87.18 \\
+        Claude 3.7 Sonnet & P1 & 0.0 & 48.72 & 82.05 & 88.47 & 71.80 & 78.20 & 369.24 & 48.72 & 69.23 & 92.31 & 56.41 & 74.36 & 48.72 & 94.87 & 84.62 & 87.18 & 82.05 \\
+        Claude 3.7 Sonnet & P1 & 0.2 & 44.87 & 88.46 & 88.46 & 73.08 & 88.46 & 383.33 & 46.15 & 87.18 & 94.87 & 58.97 & 94.87 & 43.59 & 89.74 & 82.05 & 87.18 & 82.05 \\
+        Claude 3.7 Sonnet & P2 & 0.0 & 48.72 & 78.21 & 93.59 & 78.20 & 85.90 & 384.62 & 53.85 & 71.79 & 94.87 & 61.54 & 79.49 & 43.59 & 84.62 & 92.31 & 94.87 & 92.31 \\
+        Claude 3.7 Sonnet & P2 & 0.2 & 43.59 & 84.62 & 89.74 & 79.49 & 92.31 & 389.75 & 46.15 & 82.05 & 89.74 & 66.67 & 92.31 & 41.03 & 87.18 & 89.74 & 92.31 & 92.31 \\
+        Claude 4.0 Sonnet & P1 & 0.2 & 38.46 & 83.34 & 89.75 & 76.92 & 83.33 & 371.80 & 38.46 & 79.49 & 87.18 & 61.54 & 89.74 & 38.46 & 87.18 & 92.31 & 92.31 & 76.92 \\
+        Claude 4.0 Sonnet & P2 & 0.2 & 42.31 & 84.62 & 91.03 & 79.49 & 91.03 & 388.48 & 41.03 & 84.62 & 97.44 & 66.67 & 94.87 & 43.59 & 84.62 & 84.62 & 92.31 & 87.18 \\
+        GPT-4 Omni & P1 & 0.0 & 56.41 & 65.38 & 93.59 & 70.52 & 67.94 & 353.84 & 53.85 & 58.97 & 92.31 & 56.41 & 71.79 & 58.97 & 71.79 & 94.87 & 84.62 & 64.10 \\
+        GPT-4 Omni & P1 & 0.2 & 60.26 & 78.20 & 92.31 & 67.95 & 71.80 & 370.52 & 53.85 & 74.36 & 94.87 & 51.28 & 69.23 & 66.67 & 82.05 & 89.74 & 84.62 & 74.36 \\
+        GPT-4 Omni & P2 & 0.0 & 56.41 & 74.36 & 92.31 & 61.54 & 78.20 & 362.82 & 51.28 & 64.10 & 92.31 & 48.72 & 76.92 & 61.54 & 84.62 & 92.31 & 74.36 & 79.49 \\
+        GPT-4 Omni & P2 & 0.2 & 58.97 & 73.08 & 92.31 & 67.95 & 79.48 & 371.79 & 53.85 & 61.54 & 92.31 & 56.41 & 82.05 & 64.10 & 84.62 & 92.31 & 79.49 & 76.92 \\
+        GPT-4 Omni Mini & P1 & 0.0 & 61.54 & 73.08 & 91.03 & 70.52 & 66.66 & 362.83 & 51.28 & 71.79 & 89.74 & 56.41 & 69.23 & 71.79 & 74.36 & 92.31 & 84.62 & 64.10 \\
+        GPT-4 Omni Mini & P1 & 0.2 & 61.54 & 71.80 & 94.88 & 69.23 & 70.52 & 367.97 & 56.41 & 69.23 & 92.31 & 53.85 & 74.36 & 66.67 & 74.36 & 97.44 & 84.62 & 66.67 \\
+        GPT-4 Omni Mini & P2 & 0.0 & 65.38 & 74.36 & 92.31 & 57.69 & 75.64 & 365.38 & 66.67 & 69.23 & 92.31 & 43.59 & 79.49 & 64.10 & 79.49 & 92.31 & 71.79 & 71.79 \\
+        GPT-4 Omni Mini & P2 & 0.2 & 64.10 & 76.92 & 91.03 & 58.97 & 80.77 & 371.79 & 64.10 & 71.79 & 87.18 & 46.15 & 82.05 & 64.10 & 82.05 & 94.87 & 71.79 & 79.49 \\
+        GPT-4.1 & P1 & 0.2 & 65.38 & 82.05 & 93.59 & 73.07 & 85.89 & 399.98 & 64.10 & 82.05 & 97.44 & 56.41 & 89.74 & 66.67 & 82.05 & 89.74 & 89.74 & 82.05 \\
+        GPT-4.1 & P2 & 0.2 & 62.82 & 80.77 & 93.59 & 70.52 & 89.74 & 397.44 & 61.54 & 76.92 & 94.87 & 61.54 & 89.74 & 64.10 & 84.62 & 92.31 & 79.49 & 89.74 \\
+        GPT-4.1 Nano & P1 & 0.2 & 56.41 & 69.23 & 93.59 & 75.64 & 73.08 & 367.95 & 58.97 & 61.54 & 92.31 & 58.97 & 71.79 & 53.85 & 76.92 & 94.87 & 92.31 & 74.36 \\
+        GPT-4.1 Nano & P2 & 0.2 & 65.38 & 57.69 & 87.18 & 69.23 & 78.20 & 357.68 & 64.10 & 51.28 & 89.74 & 58.97 & 79.49 & 66.67 & 64.10 & 84.62 & 79.49 & 76.92 \\
+        Gemini 1.5 Flash & P1 & 0.0 & 73.08 & 61.53 & 93.59 & 62.82 & 65.39 & 356.41 & 69.23 & 58.97 & 92.31 & 51.28 & 61.54 & 76.92 & 64.10 & 94.87 & 74.36 & 69.23 \\
+        Gemini 1.5 Flash & P1 & 0.2 & 73.08 & 57.69 & 96.16 & 61.54 & 67.95 & 356.42 & 71.79 & 51.28 & 94.87 & 48.72 & 69.23 & 74.36 & 64.10 & 97.44 & 74.36 & 66.67 \\
+        Gemini 1.5 Flash & P2 & 0.0 & 78.20 & 52.56 & 96.16 & 69.23 & 67.95 & 364.10 & 76.92 & 51.28 & 97.44 & 53.85 & 66.67 & 79.49 & 53.85 & 94.87 & 84.62 & 69.23 \\
+        Gemini 1.5 Flash & P2 & 0.2 & 78.20 & 67.95 & 92.31 & 69.23 & 82.06 & 389.75 & 82.05 & 66.67 & 92.31 & 53.85 & 79.49 & 74.36 & 69.23 & 92.31 & 84.62 & 84.62 \\
+        Gemini 1.5 Pro & P1 & 0.0 & 74.36 & 60.26 & 93.59 & 65.39 & 56.41 & 350.01 & 74.36 & 53.85 & 100.00 & 43.59 & 53.85 & 74.36 & 66.67 & 87.18 & 87.18 & 58.97 \\
+        Gemini 1.5 Pro & P1 & 0.2 & 75.64 & 52.56 & 91.03 & 64.11 & 55.13 & 338.47 & 74.36 & 48.72 & 94.87 & 43.59 & 56.41 & 76.92 & 56.41 & 87.18 & 84.62 & 53.85 \\
+        Gemini 1.5 Pro & P2 & 0.0 & 67.94 & 56.41 & 97.44 & 65.38 & 65.38 & 352.55 & 64.10 & 51.28 & 97.44 & 51.28 & 71.79 & 71.79 & 61.54 & 97.44 & 79.49 & 58.97 \\
+        Gemini 1.5 Pro & P2 & 0.2 & 74.36 & 58.97 & 93.59 & 60.25 & 74.36 & 361.53 & 71.79 & 58.97 & 92.31 & 46.15 & 74.36 & 76.92 & 58.97 & 94.87 & 74.36 & 74.36 \\
+        Gemini 2.0 Flash & P1 & 0.0 & 48.72 & 48.72 & 97.44 & 65.39 & 53.84 & 314.11 & 51.28 & 46.15 & 97.44 & 43.59 & 48.72 & 46.15 & 51.28 & 97.44 & 87.18 & 58.97 \\
+        Gemini 2.0 Flash & P1 & 0.2 & 47.44 & 46.16 & 100.00 & 58.98 & 56.41 & 308.99 & 46.15 & 41.03 & 100.00 & 33.33 & 48.72 & 48.72 & 51.28 & 100.00 & 84.62 & 64.10 \\
+        Gemini 2.0 Flash & P2 & 0.0 & 66.66 & 61.53 & 93.59 & 67.95 & 74.36 & 364.09 & 64.10 & 58.97 & 92.31 & 56.41 & 71.79 & 69.23 & 64.10 & 94.87 & 79.49 & 76.92 \\
+        Gemini 2.0 Flash & P2 & 0.2 & 73.08 & 56.41 & 92.31 & 65.38 & 75.64 & 362.82 & 71.79 & 51.28 & 92.31 & 51.28 & 74.36 & 74.36 & 61.54 & 92.31 & 79.49 & 76.92 \\
+        Gemini 2.5 Flash & P2 & 0.2 & 55.12 & 74.36 & 91.03 & 69.23 & 85.90 & 375.64 & 51.28 & 66.67 & 92.31 & 56.41 & 87.18 & 58.97 & 82.05 & 89.74 & 82.05 & 84.62 \\
+        Gemini 2.5 Flash & P2 & 0.2 & 57.70 & 75.64 & 91.03 & 74.35 & 87.18 & 385.90 & 53.85 & 74.36 & 94.87 & 58.97 & 89.74 & 61.54 & 76.92 & 87.18 & 89.74 & 84.62 \\
+        Gemini 2.5 Flash & P2 & 0.2 & 62.82 & 78.20 & 91.03 & 70.52 & 87.18 & 389.75 & 58.97 & 76.92 & 92.31 & 56.41 & 89.74 & 66.67 & 79.49 & 89.74 & 84.62 & 84.62 \\
+        Gemini 2.5 Flash & P2 & 0.2 & 66.66 & 74.36 & 89.75 & 69.23 & 88.46 & 388.46 & 58.97 & 66.67 & 92.31 & 53.85 & 87.18 & 74.36 & 82.05 & 87.18 & 84.62 & 89.74 \\
+        Gemini 2.5 Pro & P2 & 0.2 & 62.82 & 82.05 & 93.59 & 73.08 & 91.03 & 402.57 & 61.54 & 74.36 & 94.87 & 61.54 & 94.87 & 64.10 & 89.74 & 92.31 & 84.62 & 87.18 \\
+        Gemini 2.5 Pro & P2 & 0.2 & 62.82 & 82.05 & 89.74 & 71.80 & 88.46 & 394.87 & 66.67 & 71.79 & 89.74 & 58.97 & 89.74 & 58.97 & 92.31 & 89.74 & 84.62 & 87.18 \\
+        Gemini 2.5 Pro & P2 & 0.2 & 57.69 & 76.93 & 92.31 & 75.64 & 87.18 & 389.75 & 58.97 & 69.23 & 97.44 & 61.54 & 87.18 & 56.41 & 84.62 & 87.18 & 89.74 & 87.18 \\
+        Gemini 2.5 Pro & P2 & 0.2 & 62.82 & 78.21 & 88.47 & 76.92 & 87.18 & 393.60 & 58.97 & 69.23 & 92.31 & 64.10 & 89.74 & 66.67 & 87.18 & 84.62 & 89.74 & 84.62 \\
+        O1 & P1 & 0.0 & 66.67 & 82.05 & 93.59 & 76.92 & 84.62 & 403.85 & 71.79 & 76.92 & 94.87 & 56.41 & 87.18 & 61.54 & 87.18 & 92.31 & 97.44 & 82.05 \\
+        O1 & P2 & 0.0 & 70.52 & 71.79 & 97.44 & 62.82 & 93.59 & 396.16 & 66.67 & 64.10 & 97.44 & 46.15 & 92.31 & 74.36 & 79.49 & 97.44 & 79.49 & 94.87 \\
+        O3 & P2 & 0.2 & 70.51 & 80.77 & 91.03 & 73.07 & 85.89 & 401.27 & 71.79 & 71.79 & 89.74 & 56.41 & 82.05 & 69.23 & 89.74 & 92.31 & 89.74 & 89.74 \\
+        O3 Mini & P1 & 0.0 & 70.52 & 67.95 & 96.16 & 74.36 & 62.82 & 371.81 & 74.36 & 56.41 & 94.87 & 61.54 & 66.67 & 66.67 & 79.49 & 97.44 & 87.18 & 58.97 \\
+        O3 Mini & P1 & 0.2 & 60.25 & 65.38 & 93.59 & 67.95 & 65.39 & 352.56 & 64.10 & 48.72 & 94.87 & 51.28 & 61.54 & 56.41 & 82.05 & 92.31 & 84.62 & 69.23 \\
+        O3 Mini & P2 & 0.0 & 64.11 & 74.36 & 92.31 & 74.36 & 75.64 & 380.78 & 61.54 & 69.23 & 89.74 & 66.67 & 74.36 & 66.67 & 79.49 & 94.87 & 82.05 & 76.92 \\
+        O3 Mini & P2 & 0.2 & 65.38 & 71.80 & 96.16 & 69.23 & 79.49 & 382.06 & 66.67 & 61.54 & 94.87 & 56.41 & 79.49 & 64.10 & 82.05 & 97.44 & 82.05 & 79.49 \\
+        O4 Mini & P2 & 0.2 & 74.36 & 83.34 & 93.59 & 66.67 & 85.90 & 403.86 & 71.79 & 79.49 & 92.31 & 48.72 & 87.18 & 76.92 & 87.18 & 94.87 & 84.62 & 84.62 \\
+    \end{longtable}
+\end{landscape}
+
+
 
 \section{Overall Performance Summary and Analysis}
 \label{sec:overall_analysis}
-By combining the best-performing components from each experiment, we constructed an optimized RAG pipeline: Semantic Chunking + Sentence-BERT + Cross-Encoder Reranking + GPT-4. As shown in Table \ref{tab:overall_results}, this optimized configuration dramatically outperformed the initial baseline across all key metrics. This demonstrates that a systematic, component-wise optimization of the RAG pipeline can lead to substantial gains in both retrieval accuracy and generation quality, resulting in a more robust and trustworthy system.
+By combining the best-performing components from each experiment, we constructed an optimized RAG pipeline: Semantic Chunking + Sentence-BERT + Cross-Encoder Reranking + the best performing model from the DeepEval benchmark. As shown in Table \ref{tab:overall_results}, this optimized configuration dramatically outperformed the initial baseline across all key metrics. This demonstrates that a systematic, component-wise optimization of the RAG pipeline can lead to substantial gains in both retrieval accuracy and generation quality, resulting in a more robust and trustworthy system.
 
 \begin{table}[h!]
 \centering
@@ -141,8 +202,8 @@ By combining the best-performing components from each experiment, we constructed
 \hline
 \textbf{Configuration} & \textbf{Precision@5} & \textbf{Faithfulness} & \textbf{Hallucination Rate} \\
 \hline
-Baseline & 0.65 & 0.85 & 0.08 \\
-Optimized & \textbf{0.82} & \textbf{0.98} & \textbf{0.01} \\
+Baseline & TBD & TBD & TBD \\
+Optimized & \textbf{TBD} & \textbf{TBD} & \textbf{TBD} \\
 \hline
 \end{tabular}
 \end{table}

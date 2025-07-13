@@ -18,7 +18,7 @@ Different LLMs exhibit varying levels of proficiency in these areas. The perform
 \subsection{Comparing LLM Families}
 We can categorize LLMs into several families, each with its own characteristics:
 \begin{itemize}
-    \item \textbf{GPT (Generative Pre-trained Transformer) Series (e.g., GPT-3.5, GPT-4):} Developed by OpenAI, these models are known for their strong reasoning and instruction-following capabilities. GPT-4, in particular, has shown a high degree of faithfulness and an ability to synthesize complex information, making it a popular choice for high-quality RAG systems.
+    \item \textbf{GPT (Generative Pre-trained Transformer) Series (e.g., GPT-4):} Developed by OpenAI, these models are known for their strong reasoning and instruction-following capabilities. GPT-4, in particular, has shown a high degree of faithfulness and an ability to synthesize complex information, making it a popular choice for high-quality RAG systems.
     \item \textbf{Llama Series (e.g., Llama 2, Llama 3):} Developed by Meta, these are powerful open-source models that have become highly competitive with their proprietary counterparts. They offer a strong balance of performance and customizability, allowing for fine-tuning on specific domains.
     \item \textbf{Claude Series (e.g., Claude 3 Sonnet, Opus):} Developed by Anthropic, these models are particularly noted for their large context windows and strong performance on tasks requiring complex reasoning and a deep understanding of long documents.
     \item \textbf{Specialized Models (e.g., Flan-T5):} These models are often fine-tuned specifically for instruction-following tasks, which can make them very effective and efficient generators in a RAG pipeline, even if their overall size is smaller than the frontier models.
@@ -27,7 +27,7 @@ We can categorize LLMs into several families, each with its own characteristics:
 \subsection{The Impact of Context Window Size}
 The \textbf{context window size} of an LLM defines the maximum amount of text (prompt + retrieved context + generated response) that the model can handle at one time. This has several implications for RAG:
 \begin{itemize}
-    \item \textbf{Information Density:} A larger context window allows for more retrieved chunks to be passed to the LLM, potentially increasing the comprehensiveness of the answer. However, this also increases the risk of the \"lost in the middle\" problem, where the model may overlook relevant information buried in a long context.
+    \item \textbf{Information Density:} A larger context window allows for more retrieved chunks to be passed to the LLM, potentially increasing the comprehensiveness of the answer. However, this also increases the risk of the "lost in the middle" problem, where the model may overlook relevant information buried in a long context.
     \item \textbf{Cost and Latency:} Processing larger contexts is more computationally expensive, leading to higher operational costs and slower response times.
     \item \textbf{Architectural Differences:} Newer models with very large context windows (e.g., Claude 3) are designed to be more effective at finding and using information within long documents, which can be a significant advantage for certain RAG applications.
 \end{itemize}

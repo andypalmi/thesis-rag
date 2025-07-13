@@ -32,7 +32,7 @@ Another approach is to analyze the alignment after the response has been generat
 This method provides a more quantitative and verifiable way to link the output to the input, but it is not foolproof. A generated sentence might synthesize information from multiple chunks, making a one-to-one mapping difficult.
 
 \subsection{Analyzing Attention Mechanisms}
-For transformer-based LLMs, the internal \textit{attention mechanism} can theoretically provide insights into which parts of the input context were most influential in generating a particular part of the output. By inspecting the attention weights, one could see which of the retrieved chunks the model was \"paying attention to\" when it generated a specific word or phrase.
+For transformer-based LLMs, the internal \textit{attention mechanism} can theoretically provide insights into which parts of the input context were most influential in generating a particular part of the output. By inspecting the attention weights, one could see which of the retrieved chunks the model was "paying attention to" when it generated a specific word or phrase.
 
 In practice, this is a highly complex approach. Accessing and interpreting attention weights can be difficult, especially with proprietary, black-box models. Furthermore, the relationship between high attention scores and factual contribution is not always direct and is an ongoing area of research.
 
