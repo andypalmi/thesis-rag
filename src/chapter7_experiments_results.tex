@@ -104,6 +104,33 @@ Cross-Encoder & \textbf{TBD} & \textbf{TBD} \\
 \end{tabular}
 \end{table}
 
+\section{Experiment 4: Generative Model and Prompt Evaluation}
+\label{sec:exp_generator_prompt}
+This experiment focuses on the generation part of the RAG pipeline, evaluating a wide range of Large Language Models to serve as the generator. The primary goal was to find the best-performing model and the optimal prompt and temperature configuration for our specific use case.
+
+\subsection{Motivation and Baseline}
+The evaluation started with a baseline configuration of \textbf{GPT-4o} using prompt \texttt{P1} and a temperature of \texttt{0.2}. As new and more powerful models were released during the course of this research, they were systematically evaluated against this baseline. This continuous evaluation process allowed us to stay at the cutting edge and select the most suitable model for integration into a production RAG system, ensuring that any replacement would offer superior performance.
+
+\subsection{Evaluation Methodology}
+We used the \textbf{DeepEval} framework \autocite{deepeval2023}, which employs an LLM-as-a-Judge approach to score the generator's output. For subjective, use-case-specific evaluations, we utilized DeepEval's \textbf{G-Eval} functionality, which is inspired by the G-Eval framework \autocite{liu2023geval} and uses a chain-of-thought process to evaluate outputs against custom criteria. We defined two such metrics:
+\begin{itemize}
+    \item \textbf{Correctness (C):} This metric determines whether the actual output is factually correct based on the expected output. It heavily penalizes the omission of key details and the inclusion of information that contradicts the expected output.
+    \item \textbf{Specific Information Accuracy (SIA):} This metric evaluates whether the model's response appropriately uses information from the context without introducing specific details (names, places, numbers) that are not explicitly provided. It is particularly important for testing the model's ability to recognize when a question cannot be answered from the given context. For example, a high SIA score is awarded if the model correctly states it cannot answer a question like "Who is Cinderella?" when given an anonymized version of the story, as this demonstrates it is not relying on its own parametric knowledge.
+\end{itemize}
+
+In addition to our custom G-Eval metrics, we used several of DeepEval's standard metrics to assess other critical qualities of the generated output:
+\begin{itemize}
+    \item \textbf{Answer Relevancy (AR):} This metric measures how relevant the generated output is to the user's input query. It ensures that the model's response is on-topic and directly addresses the question asked \autocite{deepeval2023}.
+    \item \textbf{Faithfulness (F):} This metric evaluates whether the generated output factually aligns with the information present in the retrieved context. A high score indicates that the model did not invent facts and stayed true to the source material \autocite{deepeval2023}.
+    \item \textbf{Hallucination (H):} This metric determines if the model generates factually incorrect information by comparing the output to the provided context. It is a crucial measure for ensuring the trustworthiness of the RAG system \autocite{deepeval2023}.
+\end{itemize}
+
+
+\subsection{Results and Discussion}
+The comprehensive results are presented in Table \ref{tab:deepeval_results}. The baseline configuration (GPT-4o, P1, Temp 0.2) achieved a total score of 370.52. The results show that several newer models and prompt configurations were able to significantly outperform this baseline.
+
+For instance, the \textbf{O4 Mini} model using prompt \texttt{P2} and a temperature of \texttt{0.2} achieved the highest total score of \textbf{403.86}. This demonstrates the value of continuous evaluation, as it allowed us to identify a model that not only performs better than the original baseline but also to determine the ideal prompt (\texttt{P2}) and temperature (\texttt{0.2}) for it. These findings are critical for deploying a RAG system that is not only accurate and faithful but also robust in handling queries that cannot be answered from the available context.
+
 \clearpage
 \newgeometry{
   inner=2cm,     % left margin on even pages
@@ -120,7 +147,9 @@ Cross-Encoder & \textbf{TBD} & \textbf{TBD} \\
     \setlength{\LTleft}{0pt}          % left align longtable
     \setlength{\LTright}{0pt}         % right align longtable
     \begin{longtable}{|l|c|c|ccccc|c|ccccc|ccccc|}
-        \caption{DeepEval Prompt Engineering Evaluation Results} \\
+        \caption{DeepEval Generative Model and Prompt Evaluation Results}
+        \label{tab:deepeval_results} \\
+
         \toprule
         \textbf{Model} & \textbf{Prompt} & \textbf{Temp} & \multicolumn{5}{c|}{\textbf{Avg. Scores}} & \textbf{Total} & \multicolumn{5}{c|}{\textbf{GPT-4o}} & \multicolumn{5}{c|}{\textbf{Claude 3.5}} \\
         & & & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} \\
@@ -134,10 +163,12 @@ Cross-Encoder & \textbf{TBD} & \textbf{TBD} \\
         \endhead
 
         \midrule
+        \multicolumn{19}{l}{\footnotesize{\textbf{AR}: Answer Relevancy, \textbf{C}: Correctness, \textbf{F}: Faithfulness, \textbf{H}: Hallucination, \textbf{SIA}: Specific Information Accuracy}} \\
         \multicolumn{19}{r}{Continued on next page} \\
         \endfoot
 
         \bottomrule
+        \multicolumn{19}{l}{\footnotesize{\textbf{AR}: Answer Relevancy, \textbf{C}: Correctness, \textbf{F}: Faithfulness, \textbf{H}: Hallucination, \textbf{SIA}: Specific Information Accuracy}}
         \endlastfoot
         Claude 3 Haiku & P1 & 0.0 & 57.70 & 66.66 & 87.18 & 69.23 & 74.36 & 355.13 & 61.54 & 69.23 & 84.62 & 64.10 & 79.49 & 53.85 & 64.10 & 89.74 & 74.36 & 69.23 \\
         Claude 3 Haiku & P1 & 0.2 & 62.82 & 61.54 & 87.18 & 65.38 & 67.94 & 344.86 & 61.54 & 53.85 & 84.62 & 58.97 & 64.10 & 64.10 & 69.23 & 89.74 & 71.79 & 71.79 \\
@@ -200,10 +231,53 @@ Cross-Encoder & \textbf{TBD} & \textbf{TBD} \\
 \restoregeometry
 \pagestyle{headings}
 
+\subsection{Comparative Analysis Against GPT-4o}
+\label{sec:comparative_analysis_gpt4o}
+
+To better understand the relative performance of each model, we calculated the delta between each model's total score and the baseline score of GPT-4o (370.52). The results are summarized in Table \ref{tab:deepeval_delta_results}.
+
+\begin{table}[!htbp]
+\centering
+\caption{Total Score Delta vs. GPT-4o (Highest Scores)}
+\label{tab:deepeval_delta_results}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Model} & \textbf{Prompt} & \textbf{Temp} & \textbf{Delta from GPT-4o} \\
+\hline
+O4 Mini & P2 & 0.2 & +33.34 \\
+O1 & P1 & 0.0 & +33.33 \\
+Gemini 2.5 Pro & P2 & 0.2 & +32.05 \\
+O3 & P2 & 0.2 & +30.75 \\
+Claude 3.5 Sonnet v2 & P2 & 0.2 & +29.47 \\
+GPT-4.1 & P1 & 0.2 & +29.46 \\
+Claude 3.7 Sonnet & P2 & 0.2 & +19.23 \\
+Gemini 1.5 Flash & P2 & 0.2 & +19.23 \\
+Gemini 2.5 Flash & P2 & 0.2 & +19.23 \\
+Claude 4.0 Sonnet & P2 & 0.2 & +17.96 \\
+O3 Mini & P2 & 0.2 & +11.54 \\
+Claude 3.5 Sonnet & P1 & 0.0 & +3.83 \\
+GPT-4 Omni Mini & P2 & 0.2 & +1.27 \\
+GPT-4 Omni & P2 & 0.2 & +1.27 \\
+\hline
+\multicolumn{4}{|c|}{\textbf{GPT-4o Baseline Total Score: 370.52}} \\
+\hline
+GPT-4.1 Nano & P1 & 0.2 & -2.57 \\
+Gemini 2.0 Flash & P2 & 0.0 & -6.43 \\
+Claude 3 Haiku & P2 & 0.0 & -9.00 \\
+Gemini 1.5 Pro & P2 & 0.2 & -9.00 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Inference from the Results}
+The delta analysis reveals several key insights. Firstly, the top-performing models, such as \textbf{O4 Mini}, \textbf{O1}, and \textbf{Gemini 2.5 Pro}, show a significant improvement over the GPT-4o baseline, with score increases exceeding 30 points. This underscores the rapid advancements in generative models, where newer architectures can yield substantial performance gains.
+
+Secondly, the choice of prompt and temperature settings is evidently crucial. For many models, there is a considerable performance variance between different prompt versions (P1 vs. P2) and temperature settings. For instance, the O1 model with prompt P1 scores much higher than with P2 (403.85 vs 396.16: +7.69 points). This highlights the necessity of meticulous prompt engineering and parameter tuning to unlock a model's full potential.
+
 
 \section{Overall Performance Summary and Analysis}
 \label{sec:overall_analysis}
-By combining the best-performing components from each experiment, we constructed an optimized RAG pipeline: Semantic Chunking + Sentence-BERT + Cross-Encoder Reranking + the best performing model from the DeepEval benchmark. As shown in Table \ref{tab:overall_results}, this optimized configuration dramatically outperformed the initial baseline across all key metrics. This demonstrates that a systematic, component-wise optimization of the RAG pipeline can lead to substantial gains in both retrieval accuracy and generation quality, resulting in a more robust and trustworthy system.
+By combining the best-performing components from each experiment, we constructed an optimized RAG pipeline: Semantic Chunking (Experiment \ref{sec:exp_chunking}) + Sentence-BERT (Experiment \ref{sec:exp_embedding_models}) + Cross-Encoder Reranking (Experiment \ref{sec:exp_reranking}) + the best performing model from the DeepEval benchmark (Experiment \ref{sec:exp_generator_prompt}). As shown in Table \ref{tab:overall_results}, this optimized configuration dramatically outperformed the initial baseline across all key metrics. This demonstrates that a systematic, component-wise optimization of the RAG pipeline can lead to substantial gains in both retrieval accuracy and generation quality, resulting in a more robust and trustworthy system.
 
 \begin{table}[!htbp]
 \centering
