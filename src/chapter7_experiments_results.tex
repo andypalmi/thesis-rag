@@ -23,8 +23,8 @@ To measure the impact of different optimization techniques, a baseline RAG confi
 \subsection{Core Evaluation Metrics}
 The performance of the RAG system was evaluated at both the retrieval and generation stages.
 \begin{itemize}
-    \item \textbf{Retrieval Performance:} Assessed using \textit{Precision@k}, \textit{Recall@k}, and \textit{Mean Reciprocal Rank (MRR)}. These metrics are crucial for understanding the effectiveness of the retrieval stage in isolation \autocite{rag_eval_ridgerun_2024}.
-    \item \textbf{Generation Quality:} Evaluated using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The key metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{rag_eval_qdrant_2024, rag_eval_pinecone}.
+\item \textbf{Retrieval Performance:} Assessed using \textit{Precision@k}, \textit{Recall@k}, and \textit{Mean Reciprocal Rank (MRR)}. These metrics are crucial for understanding the effectiveness of the retrieval stage in isolation \autocite{rag_eval_ridgerun_2024}.
+\item \textbf{Generation Quality:} Evaluated using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The key metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{rag_eval_qdrant_2024, rag_eval_pinecone}.
 \end{itemize}
 
 \section{Experiment 1: Impact of Chunking Techniques}
@@ -38,7 +38,7 @@ This experiment investigated the effect of different document chunking strategie
 \subsection{Results and Discussion}
 The results, presented in Table \ref{tab:chunking_results}, show that semantic chunking provided a modest but consistent improvement in retrieval metrics over the naive baseline. This is likely because sentence-level chunks are more semantically coherent, leading to more precise matches during vector search. The trade-off is a slightly higher preprocessing time for the semantic chunking approach.
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \centering
 \caption{Chunking Technique Performance}
 \label{tab:chunking_results}
@@ -63,7 +63,7 @@ This experiment compared the performance of various embedding models for the ret
 \subsection{Results and Discussion}
 As shown in Table \ref{tab:embedding_results}, the Sentence-BERT model slightly outperformed the Ada-002 baseline on this specific dataset. This highlights that for certain domains, specialized or differently trained open-source models can be more effective than general-purpose proprietary ones. The choice of embedding model is a critical factor in retrieval quality.
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \centering
 \caption{Embedding Model Performance}
 \label{tab:embedding_results}
@@ -89,7 +89,7 @@ This experiment evaluated the benefit of adding a reranking step after the initi
 \subsection{Results and Discussion}
 The results in Table \ref{tab:reranking_results} demonstrate the significant impact of reranking. The BM25 reranker provided a solid improvement by adding a keyword-based signal. However, the cross-encoder, despite its higher computational cost, yielded the best performance by a clear margin, showcasing the power of deep, token-level comparison for fine-grained relevance assessment.
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \centering
 \caption{Reranking Strategy Performance}
 \label{tab:reranking_results}
@@ -104,9 +104,18 @@ Cross-Encoder & \textbf{TBD} & \textbf{TBD} \\
 \end{tabular}
 \end{table}
 
+\clearpage
+\newgeometry{
+  inner=2cm,     % left margin on even pages
+  outer=2cm,     % right margin on odd pages
+  top=1cm,
+  bottom=1cm,
+  bindingoffset=0cm
+}
+\pagestyle{empty}
 \begin{landscape}
     \small
-    \setlength{\tabcolsep}{4pt}       % default is ~6pt
+    \setlength{\tabcolsep}{3pt}       % default is ~6pt
     \renewcommand{\arraystretch}{0.9}  % tighten row height
     \setlength{\LTleft}{0pt}          % left align longtable
     \setlength{\LTright}{0pt}         % right align longtable
@@ -187,14 +196,16 @@ Cross-Encoder & \textbf{TBD} & \textbf{TBD} \\
         O4 Mini & P2 & 0.2 & 74.36 & 83.34 & 93.59 & 66.67 & 85.90 & 403.86 & 71.79 & 79.49 & 92.31 & 48.72 & 87.18 & 76.92 & 87.18 & 94.87 & 84.62 & 84.62 \\
     \end{longtable}
 \end{landscape}
-
+\clearpage
+\restoregeometry
+\pagestyle{headings}
 
 
 \section{Overall Performance Summary and Analysis}
 \label{sec:overall_analysis}
 By combining the best-performing components from each experiment, we constructed an optimized RAG pipeline: Semantic Chunking + Sentence-BERT + Cross-Encoder Reranking + the best performing model from the DeepEval benchmark. As shown in Table \ref{tab:overall_results}, this optimized configuration dramatically outperformed the initial baseline across all key metrics. This demonstrates that a systematic, component-wise optimization of the RAG pipeline can lead to substantial gains in both retrieval accuracy and generation quality, resulting in a more robust and trustworthy system.
 
-\begin{table}[h!]
+\begin{table}[!htbp]
 \centering
 \caption{Overall Performance: Baseline vs. Optimized}
 \label{tab:overall_results}

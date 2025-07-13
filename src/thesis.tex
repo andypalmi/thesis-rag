@@ -1,79 +1,70 @@
-\documentclass[12pt, a4paper]{report} % Single column, 12pt font, A4 paper
+\makeatletter
+\def\input@path{{styles/}} % look here for .cls, .sty, .inc
+\makeatother
+\documentclass{styles/tthesis} % load tthesis.cls (it “ProvidesClass{tthesis}”)
+\sloppy
+\usepackage[backend=biber,style=numeric,sorting=none]{biblatex}
+\addbibresource{references.bib}
+% if you need these symbols elsewhere, keep these
+\newcommand{\dspic}{dsPIC$^{\text{\textregistered}}$ DSC}
+\newcommand{\dcbus}{DC-BUS\texttrademark }
 
-% PACKAGES - Add any other packages you need
-\usepackage[utf8]{inputenc} % Input encoding
-\usepackage[T1]{fontenc}    % Font encoding
-\usepackage{amsmath}        % For math environments
-\usepackage{graphicx}       % To include images
-\usepackage{setspace}       % For line spacing, e.g., \onehalfspacing
-\usepackage[english]{babel} % For English language hyphenation and terms
-\usepackage{geometry}       % For page margins
-\usepackage{rotating}
-\usepackage{lscape,longtable,booktabs}
-\geometry{a4paper, margin=1in} % Example: 1 inch margins
-\usepackage{csquotes}       % Context sensitive quotation facilities
-\usepackage{titling}        % For title formatting
-\usepackage[
-    backend=biber,      % or backend=bibtex
-    style=numeric,      % Citation style (numeric, authoryear, etc.)
-    sorting=none        % Order of references as they appear
-]{biblatex}
-\addbibresource{references.bib} % Your .bib file
+% point to the university’s frontpage template
+\renewcommand{\frontpagefile}{frontpages/frontpage-ai4st.inc}
 
-% THESIS INFORMATION
+% thesis metadata
 \title{A Comprehensive Study on Retrieval Augmented Generation Methods for More Robust LLMs}
-\author{Andrea Palmieri \\
-        Artificial Intelligence For Science and Technology \\
-        Università degli Studi di Milano-Bicocca \\
-        \texttt{palmieri.andrea2000@gmail.com}}
-\date{\today} % Or specify a date, e.g., {September 2024}
+\author{Andrea Palmieri}
+\renewcommand{\regnumber}{921785}
+\graduation{Master of Science in Artificial Intelligence For Science and Technology}
+\academicyear{2024/2025}
+\supervisor{Dr.\ Napoletano Paolo}
 
 \begin{document}
 
-\begin{titlepage}
-    \centering
-    \vspace*{1cm} % Adjust vertical spacing as needed
-    {\Huge\bfseries \thetitle \par} % Thesis title
-    \vspace{1.5cm}
-    {\Large \theauthor \par} % Author and affiliation
-    \vspace{2cm}
-    A thesis submitted in fulfillment of the requirements for the degree of \\
-    \vspace{0.5cm}
-    {\Large Master of Science} \\
-    in \\
-    {\Large Artificial Intelligence For Science and Technology} \\
-    \vspace{2cm}
-    {\large Supervisor: Dr. Napoletano Paolo} \\ % <-- Optional: Add supervisor
-    \vfill % Pushes content to the bottom
-    {\large \thedate \par} % Date
-\end{titlepage}
+% --- FRONTPAGE ---
+\printfrontpage
 
-\maketitle % Displays the title, author, and date
+% --- ABSTRACT ---
+\input{abstract.inc}
 
-\begin{abstract}
-    This thesis presents a comprehensive study of Retrieval-Augmented Generation (RAG), a paradigm designed to enhance the robustness and factual accuracy of Large Language Models (LLMs). While LLMs have revolutionized natural language processing, they are susceptible to knowledge cutoffs and hallucinations. RAG addresses these limitations by dynamically grounding LLM responses in external, up-to-date knowledge sources.
+% an empty “preface” page (per template)
+\chapter*{\mbox{}}
+\begin{flushright}
+  \thispagestyle{empty}
+  \null\vspace*{\stretch{1}}
+  {\it Here you can write whatever you want
+   \vspace{10pt}
+   and here too.
+  }
+  \vspace{\stretch{2}}\null
+\end{flushright}
+\thispagestyle{empty}
+\mbox{}
+\newpage
 
-    This work systematically deconstructs the RAG pipeline, providing a theoretical exploration of its core components. We investigate foundational concepts, including the architectural interplay between retrieval and generation, and the role of vector databases. We then delve into advanced optimization techniques, covering a wide array of methods from semantic chunking strategies to the nuances of contextual embedding models. A significant portion of this study is dedicated to retrieval enhancement, analyzing the impact of hybrid search, sophisticated reranking models like cross-encoders, and dynamic similarity thresholding. Furthermore, we explore the art of prompt engineering for RAG and conduct a comparative analysis of different LLMs as the final generator.
+% --- ACKNOWLEDGMENTS ---
+\input{acknowledgments.inc}
 
-    A key contribution of this thesis is a rigorous experimental evaluation of these techniques. Through a series of controlled experiments, we measure the impact of different chunking strategies, embedding models, reranking methods, and generator LLMs on overall system performance. Our findings demonstrate that a systematically optimized RAG pipeline, incorporating semantic chunking, a fine-tuned retriever with cross-encoder reranking, and a powerful generator model, can achieve significant improvements in faithfulness, answer relevancy, and hallucination reduction compared to a baseline configuration. The results provide a clear framework and empirical evidence for building more accurate, trustworthy, and robust AI systems.
-\end{abstract}
+% --- LISTS AND INDEXES ---
+\tableofcontents
+% \listoffigures
+% \listoftables
 
-\tableofcontents % Generates the table of contents
+\mainmatter
 
-\onehalfspacing % Or \doublespacing if required
+% --- CHAPTERS ---
+\input{chapter1_introduction}
+\input{chapter2_fundamentals_rag}
+\input{chapter3_retrieval_optimization}
+\input{chapter4_prompt_engineering}
+\input{chapter5_llm_comparison}
+\input{chapter6_relevant_chunks}
+\input{chapter7_experiments_results}
+\input{chapter8_conclusions}
 
-% INCLUDE CHAPTERS
-% Each chapter is in its own .tex file in the same directory
-\include{chapter1_introduction}
-\include{chapter2_fundamentals_rag}
-\include{chapter3_retrieval_optimization}
-\include{chapter4_prompt_engineering}
-\include{chapter5_llm_comparison}
-\include{chapter6_relevant_chunks}
-\include{chapter7_experiments_results}
-\include{chapter8_conclusions}
-
-% BIBLIOGRAPHY
-\printbibliography % Prints the bibliography
+% --- BIBLIOGRAPHY ---
+\label{Bibliography}
+\printbibliography
 
 \end{document}

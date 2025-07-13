@@ -12,10 +12,10 @@ At its core, a RAG system operates in two main stages: retrieval and generation.
     \item \textbf{Generation Stage:} The retrieved context is then combined with the original query into a structured prompt. This augmented prompt is fed to the LLM. By providing this explicit, relevant information, the LLM is guided to generate a response that is not only contextually appropriate but also grounded in the facts contained within the retrieved documents. This process significantly enhances the accuracy and factuality of the output.
 \end{enumerate}
 
-\begin{figure}[h!]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{images/chapter2/rag_architecture.png}
-    \caption{High-level architecture of a Retrieval-Augmented Generation system. Image from IBM \cite{ibm-rag-pattern}.}
+    \caption{High-level architecture of a Retrieval-Augmented Generation system. Image from IBM \autocite{ibm-rag-pattern}.}
     \label{fig:rag_architecture}
 \end{figure}
 
