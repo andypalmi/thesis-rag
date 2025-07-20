@@ -17,7 +17,7 @@ Chunking is the foundational step of breaking down large documents into smaller,
 \end{itemize}
 
 \subsection{Late Chunking}
-Late chunking, or small-to-big retrieval, is an advanced technique that decouples the chunks used for retrieval from the chunks passed to the LLM. It works by first retrieving smaller, more semantically precise chunks (e.g., individual sentences). Once the most relevant small chunks are identified, the system retrieves the larger parent documents or surrounding context associated with them. This larger context is then fed to the LLM, providing it with more comprehensive information to generate a high-quality answer.
+Late chunking, or small-to-big retrieval, is an advanced technique that decouples the chunks used for retrieval from the chunks passed to the LLM. It works by first retrieving smaller, more semantically precise chunks (e.g., individual sentences). Once the most relevant small chunks are identified, the system retrieves the larger parent documents or surrounding context associated with them. This larger context is then fed to the LLM, providing it with more comprehensive information to generate a high-quality answer. The effectiveness of this technique is evaluated in Experiment 2 (Section \ref{sec:exp_embedding_models}), where its performance is compared against traditional chunking methods on the LongEmbed benchmark.
 
 \section{Embedding Models}
 The choice of embedding model is critical for capturing the semantic meaning of the text. These models transform text into high-dimensional vectors, where semantically similar texts are located closer to each other in the vector space.

@@ -52,30 +52,87 @@ Semantic Chunking & TBD & TBD \\
 \end{tabular}
 \end{table}
 
-\section{Experiment 2: Evaluation of Different Embedding Models}
+\section{Experiment 2: Evaluation of Different Embedding Models for Long-Context Retrieval}
 \label{sec:exp_embedding_models}
-This experiment compared the performance of various embedding models for the retrieval task, using the superior semantic chunking strategy.
-\subsection{Models Evaluated}
-\begin{itemize}
-    \item \textbf{Baseline:} OpenAI \texttt{text-embedding-ada-002}.
-    \item \textbf{Alternative Model:} \texttt{Sentence-BERT (all-MiniLM-L6-v2)}, a popular open-source model.
-\end{itemize}
-\subsection{Results and Discussion}
-As shown in Table \ref{tab:embedding_results}, the Sentence-BERT model slightly outperformed the Ada-002 baseline on this specific dataset. This highlights that for certain domains, specialized or differently trained open-source models can be more effective than general-purpose proprietary ones. The choice of embedding model is a critical factor in retrieval quality.
+This experiment evaluates the performance of different embedding models on long-context retrieval tasks. The goal is to understand how different architectural and chunking strategies affect retrieval performance on documents of varying lengths and complexity.
 
-\begin{table}[!htbp]
-\centering
-\caption{Embedding Model Performance}
-\label{tab:embedding_results}
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Model} & \textbf{Precision@5} & \textbf{MRR} \\
-\hline
-Ada-002 & TBD & TBD \\
-Sentence-BERT & TBD & TBD \\
-\hline
-\end{tabular}
-\end{table}
+\subsection{Models and Methodology}
+We compared three embedding models on the \textbf{LongEmbed} benchmark \autocite{zhu2024longembedextendingembeddingmodels}, a suite of datasets designed to test long-context retrieval. The models evaluated were:
+\begin{itemize}
+    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely-used, high-performance proprietary model.
+    \item \textbf{Jina AI \texttt{jina-embeddings-v3}:} A model that implements \textit{late chunking}, where chunks from the same document are tokenized together up to the model's context window of 8192 tokens.
+    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} A model that uses a classical chunking approach with a maximum chunk size of 500 tokens.
+\end{itemize}
+All three models have a context window of 8192 tokens. Performance was measured using Recall@k and Mean Reciprocal Rank (MRR)@k across six datasets from the LongEmbed benchmark.
+
+\subsection{Results and Discussion}
+The detailed results for Recall@k and MRR@k across all datasets and k values are presented in Table \ref{tab:embedding_results_detailed}.
+
+%–– vertically center and horizontally expand the table ––%
+\par\vspace*{\fill}
+\noindent\makebox[\textwidth][c]{%
+  \begin{minipage}{\dimexpr\textwidth+6cm\relax} % <- expand width by 2cm total
+    \centering
+    \small
+    \setlength{\tabcolsep}{2pt}
+    \renewcommand{\arraystretch}{0.9}
+    \setlength{\LTleft}{\fill}
+    \setlength{\LTright}{\fill}
+    \begin{longtable}{|l|c|cccccc|c|cccccc|c|}
+      \caption{Detailed Embedding Model Performance on LongEmbed}
+      \label{tab:embedding_results_detailed} \\
+      \toprule
+      \textbf{Model} & \textbf{k} 
+        & \multicolumn{7}{c|}{\textbf{Recall@k (\%)}} 
+        & \multicolumn{7}{c|}{\textbf{MRR@k (\%)}} \\
+      & & 2wiki & narrative & needle & passkey & qmsum & summ & \textbf{Avg}
+        & 2wiki & narrative & needle & passkey & qmsum & summ & \textbf{Avg} \\
+      \midrule
+      \endfirsthead
+      \multicolumn{14}{c}{\tablename\ \thetable{} -- continued from previous page} \\
+      \midrule
+      \textbf{Model} & \textbf{k} & 2wiki & narrative & needle & passkey & qmsum & summ
+        & 2wiki & narrative & needle & passkey & qmsum & summ \\
+      \midrule
+      \endhead
+      \midrule
+      \multicolumn{14}{r}{Continued on next page} \\
+      \endfoot
+      \bottomrule
+      \endlastfoot
+
+      % ada_embeddings data
+      \texttt{ada-002} 
+      & 1 & 85.67 & 58.38 & 1.00 & 7.75 & 47.09 & 86.90 & 55.20 & 85.67 & 58.38 & 1.00 & 7.75 & 47.09 & 86.90 & 55.20 \\
+      & 5 & 93.67 & 68.60 & 1.75 & 16.75 & 68.24 & 97.02 & 66.29 & 88.67 & 62.36 & 1.21 & 10.86 & 55.05 & 91.09 & 59.48 \\
+      & 10 & 96.00 & 71.22 & 2.50 & 21.00 & 76.42 & 98.81 & 69.51 & 89.03 & 62.71 & 1.32 & 11.43 & 56.14 & 91.32 & 59.91 \\
+      & 25 & 97.67 & 74.54 & 4.50 & 26.25 & 84.87 & 99.70 & 73.34 & 89.14 & 62.93 & 1.44 & 11.76 & 56.69 & 91.37 & 60.16 \\
+      \hline
+      % jina_embeddings data
+      \texttt{jina-v3} 
+      & 1 & 80.33 & 38.82 & 3.00 & 10.25 & 34.91 & 88.39 & 38.62 & 80.33 & 38.82 & 3.00 & 10.25 & 34.91 & 88.39 & 38.62 \\
+      & 5 & 87.67 & 42.94 & 5.50 & 16.00 & 48.46 & 94.94 & 43.95 & 82.82 & 40.31 & 4.01 & 12.56 & 39.66 & 90.71 & 40.54 \\
+      & 10 & 90.33 & 45.41 & 7.75 & 16.75 & 58.55 & 96.73 & 47.22 & 83.16 & 40.64 & 4.32 & 12.65 & 40.96 & 90.98 & 40.97 \\
+      & 25 & 94.67 & 48.41 & 9.50 & 17.75 & 69.68 & 98.81 & 51.05 & 83.45 & 40.84 & 4.42 & 12.72 & 41.66 & 91.10 & 41.22 \\
+      \hline
+      % nomic_embeddings data
+      \texttt{nomic} 
+      & 1 & 63.33 & 48.45 & 3.25 & 6.50 & 25.08 & 72.62 & 44.13 & 63.33 & 48.45 & 3.25 & 6.50 & 25.08 & 72.62 & 44.13 \\
+      & 5 & 75.00 & 61.36 & 6.50 & 8.25 & 42.83 & 87.80 & 57.00 & 68.09 & 53.47 & 4.41 & 7.31 & 31.40 & 78.77 & 49.08 \\
+      & 10 & 80.33 & 65.30 & 7.00 & 8.25 & 53.11 & 91.37 & 61.46 & 68.75 & 54.01 & 4.47 & 7.31 & 32.79 & 79.28 & 49.69 \\
+      & 25 & 87.67 & 70.40 & 10.25 & 8.50 & 64.44 & 94.05 & 67.06 & 69.25 & 54.34 & 4.67 & 7.34 & 33.53 & 79.45 & 50.05 \\
+      \bottomrule
+    \end{longtable}
+  \end{minipage}%
+}
+\vspace*{\fill}\par
+%–– back to normal text here ––%
+
+The results show that \textbf{OpenAI's \texttt{text-embedding-ada-002} is the strongest performer overall}, achieving the highest average recall and MRR across most datasets and k-values. This suggests that it is a highly effective and robust general-purpose retriever.
+
+However, the performance on the synthetic tasks within LongEmbed reveals a more nuanced picture. On the \texttt{needle} task (a "needle-in-a-haystack" scenario), both \texttt{jina-embeddings-v3} and \texttt{nomic-embed-text} significantly outperform \texttt{ada-002}, particularly at smaller values of k. This indicates their potential strength in locating highly specific, isolated facts within long documents. Conversely, \texttt{ada-002} is the top performer on the \texttt{passkey} task, which tests the model's ability to retrieve a specific key from a long document.
+
+The \textbf{late chunking} strategy of the \texttt{jina-embeddings-v3} model did not translate into a general performance advantage in this evaluation. Its lower overall scores, particularly on real-world question-answering datasets like \texttt{2wikimqa} and \texttt{narrativeqa}, suggest that while advanced chunking techniques are promising, their effectiveness is highly task-dependent. The \texttt{nomic-embed-text} model shows competitive performance, often outperforming \texttt{jina-embeddings-v3}, but it does not consistently match the high performance of \texttt{ada-002} on the real-world datasets.
 
 \section{Experiment 3: Reranking Strategies}
 \label{sec:exp_reranking}
@@ -219,13 +276,13 @@ For instance, the \textbf{O4 Mini} model using prompt \texttt{P2} and a temperat
         Gemini 2.5 Pro & P2 & 0.2 & 62.82 & 78.21 & 88.47 & 76.92 & 87.18 & 393.60 & 58.97 & 69.23 & 92.31 & 64.10 & 89.74 & 66.67 & 87.18 & 84.62 & 89.74 & 84.62 \\
         O1 & P1 & 0.0 & 66.67 & 82.05 & 93.59 & 76.92 & 84.62 & 403.85 & 71.79 & 76.92 & 94.87 & 56.41 & 87.18 & 61.54 & 87.18 & 92.31 & 97.44 & 82.05 \\
         O1 & P2 & 0.0 & 70.52 & 71.79 & 97.44 & 62.82 & 93.59 & 396.16 & 66.67 & 64.10 & 97.44 & 46.15 & 92.31 & 74.36 & 79.49 & 97.44 & 79.49 & 94.87 \\
-        O3 & P1 & 0.2 & 75.64 & 66.67 & 88.47 & 69.23 & 78.2 & 76.92 & 74.36 & 61.54 & 71.79 & 84.62 & 92.31 & 53.85 & 84.62 & 76.92 & 79.49 \\
+        O3 & P1 & 0.2 & 75.64 & 66.67 & 88.47 & 69.23 & 78.20 & 378.21 & 76.92 & 74.36 & 61.54 & 71.79 & 84.62 & 92.31 & 53.85 & 84.62 & 76.92 & 79.49 \\
         O3 & P2 & 0.2 & 70.51 & 80.77 & 91.03 & 73.07 & 85.89 & 401.27 & 71.79 & 71.79 & 89.74 & 56.41 & 82.05 & 69.23 & 89.74 & 92.31 & 89.74 & 89.74 \\
         O3 Mini & P1 & 0.0 & 70.52 & 67.95 & 96.16 & 74.36 & 62.82 & 371.81 & 74.36 & 56.41 & 94.87 & 61.54 & 66.67 & 66.67 & 79.49 & 97.44 & 87.18 & 58.97 \\
         O3 Mini & P1 & 0.2 & 60.25 & 65.38 & 93.59 & 67.95 & 65.39 & 352.56 & 64.10 & 48.72 & 94.87 & 51.28 & 61.54 & 56.41 & 82.05 & 92.31 & 84.62 & 69.23 \\
         O3 Mini & P2 & 0.0 & 64.11 & 74.36 & 92.31 & 74.36 & 75.64 & 380.78 & 61.54 & 69.23 & 89.74 & 66.67 & 74.36 & 66.67 & 79.49 & 94.87 & 82.05 & 76.92 \\
         O3 Mini & P2 & 0.2 & 65.38 & 71.80 & 96.16 & 69.23 & 79.49 & 382.06 & 66.67 & 61.54 & 94.87 & 56.41 & 79.49 & 64.10 & 82.05 & 97.44 & 82.05 & 79.49 \\
-        O4 Mini & P1 & 0.2 & 67.95 & 75.64 & 93.59 & 73.07 & 83.34 & 69.23 & 66.67 & 76.92 & 74.36 & 94.87 & 92.31 & 56.41 & 89.74 & 84.62 & 82.05 \\
+        O4 Mini & P1 & 0.2 & 67.95 & 75.64 & 93.59 & 73.07 & 83.34 & 393.59 & 69.23 & 66.67 & 76.92 & 74.36 & 94.87 & 92.31 & 56.41 & 89.74 & 84.62 & 82.05 \\
         O4 Mini & P2 & 0.2 & 74.36 & 83.34 & 93.59 & 66.67 & 85.90 & 403.86 & 71.79 & 79.49 & 92.31 & 48.72 & 87.18 & 76.92 & 87.18 & 94.87 & 84.62 & 84.62 \\
     \end{longtable}
 \end{landscape}
