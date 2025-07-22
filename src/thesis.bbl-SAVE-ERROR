@@ -254,6 +254,7 @@
       \strng{authornamehash}{cf0448ba0cc5da33822422d43ffc6762}
       \strng{authorfullhash}{bfb1384d052b65d0a76639d60f85fb21}
       \strng{authorfullhashraw}{bfb1384d052b65d0a76639d60f85fb21}
+      \field{extraname}{1}
       \field{sortinit}{8}
       \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
       \field{labelnamesource}{author}
@@ -420,6 +421,149 @@
       \endverb
       \verb{url}
       \verb https://ridgerun.ai/blog/how-to-evaluate-retrieval-augmented-generation-rag-systems/
+      \endverb
+    \endentry
+    \entry{zhu2024longembedextendingembeddingmodels}{misc}{}{}
+      \name{author}{7}{}{%
+        {{hash=e5661c9555f1f8667d1d03ab0c37ef0a}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod},
+           given={Dawei},
+           giveni={D\bibinitperiod}}}%
+        {{hash=cce05cab2c437e9c128f853684ee3137}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Liang},
+           giveni={L\bibinitperiod}}}%
+        {{hash=a44174a97a52d8b64289ef831cb1ac37}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Nan},
+           giveni={N\bibinitperiod}}}%
+        {{hash=d68fd1271e0d323e67e41f024ee405d9}{%
+           family={Song},
+           familyi={S\bibinitperiod},
+           given={Yifan},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=7fdd066f4b31702d1a4f29a6982632d0}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Wenhao},
+           giveni={W\bibinitperiod}}}%
+        {{hash=e5bfd490d91c5d1b935092ce3132a083}{%
+           family={Wei},
+           familyi={W\bibinitperiod},
+           given={Furu},
+           giveni={F\bibinitperiod}}}%
+        {{hash=a283876860b2d61e3800367b94805eae}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Sujian},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{1ca6cfc920adb3ec9c80c65fc76d6d28}
+      \strng{fullhash}{15b84886a183f3be0b37107192bf4f09}
+      \strng{fullhashraw}{15b84886a183f3be0b37107192bf4f09}
+      \strng{bibnamehash}{1ca6cfc920adb3ec9c80c65fc76d6d28}
+      \strng{authorbibnamehash}{1ca6cfc920adb3ec9c80c65fc76d6d28}
+      \strng{authornamehash}{1ca6cfc920adb3ec9c80c65fc76d6d28}
+      \strng{authorfullhash}{15b84886a183f3be0b37107192bf4f09}
+      \strng{authorfullhashraw}{15b84886a183f3be0b37107192bf4f09}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.CL}
+      \field{eprinttype}{arXiv}
+      \field{title}{LongEmbed: Extending Embedding Models for Long Context Retrieval}
+      \field{year}{2024}
+      \verb{eprint}
+      \verb 2404.12096
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2404.12096
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2404.12096
+      \endverb
+    \endentry
+    \entry{deepeval2023}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=03fcf74c7449cd37c3e69dda04a37d82}{%
+           family={AI},
+           familyi={A\bibinitperiod},
+           given={Confident},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{03fcf74c7449cd37c3e69dda04a37d82}
+      \strng{fullhash}{03fcf74c7449cd37c3e69dda04a37d82}
+      \strng{fullhashraw}{03fcf74c7449cd37c3e69dda04a37d82}
+      \strng{bibnamehash}{03fcf74c7449cd37c3e69dda04a37d82}
+      \strng{authorbibnamehash}{03fcf74c7449cd37c3e69dda04a37d82}
+      \strng{authornamehash}{03fcf74c7449cd37c3e69dda04a37d82}
+      \strng{authorfullhash}{03fcf74c7449cd37c3e69dda04a37d82}
+      \strng{authorfullhashraw}{03fcf74c7449cd37c3e69dda04a37d82}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://github.com/confident-ai/deepeval}}
+      \field{note}{Accessed: 2025-07-01}
+      \field{title}{{DeepEval: An open-source evaluation framework for LLMs}}
+      \field{year}{2023}
+    \endentry
+    \entry{liu2023geval}{misc}{}{}
+      \name{author}{6}{}{%
+        {{hash=621013bf54d3546375ad71f17f020b5b}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Yang},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=5491649d7b9eeab75bf54d1832e83bc5}{%
+           family={Iter},
+           familyi={I\bibinitperiod},
+           given={Dan},
+           giveni={D\bibinitperiod}}}%
+        {{hash=e8acff368822f4c09bf6b92fc68f8b56}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Yichong},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=5e5b074eac11025ce8ec1e809f999edf}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Shuohang},
+           giveni={S\bibinitperiod}}}%
+        {{hash=add220557fbbab6ea5f9cc7268088bd3}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Ruochen},
+           giveni={R\bibinitperiod}}}%
+        {{hash=18da93aeef135dea4a44b078bf8271ed}{%
+           family={Zhu},
+           familyi={Z\bibinitperiod},
+           given={Chenguang},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{df83681b9acfd53a0c867d0eb509f8f3}
+      \strng{fullhash}{726e740ec42570f6413a711091ba533b}
+      \strng{fullhashraw}{726e740ec42570f6413a711091ba533b}
+      \strng{bibnamehash}{df83681b9acfd53a0c867d0eb509f8f3}
+      \strng{authorbibnamehash}{df83681b9acfd53a0c867d0eb509f8f3}
+      \strng{authornamehash}{df83681b9acfd53a0c867d0eb509f8f3}
+      \strng{authorfullhash}{726e740ec42570f6413a711091ba533b}
+      \strng{authorfullhashraw}{726e740ec42570f6413a711091ba533b}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{cs.CL}
+      \field{eprinttype}{arXiv}
+      \field{title}{G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment}
+      \field{year}{2023}
+      \verb{eprint}
+      \verb 2303.16634
       \endverb
     \endentry
   \enddatalist

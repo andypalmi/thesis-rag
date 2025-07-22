@@ -68,65 +68,51 @@ All three models have a context window of 8192 tokens. Performance was measured 
 \subsection{Results and Discussion}
 The detailed results for Recall@k and MRR@k across all datasets and k values are presented in Table \ref{tab:embedding_results_detailed}.
 
-%–– vertically center and horizontally expand the table ––%
-\par\vspace*{\fill}
-\noindent\makebox[\textwidth][c]{%
-  \begin{minipage}{\dimexpr\textwidth+6cm\relax} % <- expand width by 2cm total
-    \centering
-    \small
-    \setlength{\tabcolsep}{2pt}
-    \renewcommand{\arraystretch}{0.9}
-    \setlength{\LTleft}{\fill}
-    \setlength{\LTright}{\fill}
-    \begin{longtable}{|l|c|cccccc|c|cccccc|c|}
-      \caption{Detailed Embedding Model Performance on LongEmbed}
-      \label{tab:embedding_results_detailed} \\
-      \toprule
-      \textbf{Model} & \textbf{k} 
-        & \multicolumn{7}{c|}{\textbf{Recall@k (\%)}} 
-        & \multicolumn{7}{c|}{\textbf{MRR@k (\%)}} \\
-      & & 2wiki & narrative & needle & passkey & qmsum & summ & \textbf{Avg}
-        & 2wiki & narrative & needle & passkey & qmsum & summ & \textbf{Avg} \\
-      \midrule
-      \endfirsthead
-      \multicolumn{14}{c}{\tablename\ \thetable{} -- continued from previous page} \\
-      \midrule
-      \textbf{Model} & \textbf{k} & 2wiki & narrative & needle & passkey & qmsum & summ
-        & 2wiki & narrative & needle & passkey & qmsum & summ \\
-      \midrule
-      \endhead
-      \midrule
-      \multicolumn{14}{r}{Continued on next page} \\
-      \endfoot
-      \bottomrule
-      \endlastfoot
+\begin{table}[htbp] % Use [htbp] placement specifier for better float positioning
+\centering
+\caption{Detailed Embedding Model Performance on LongEmbed}
+\label{tab:embedding_results_detailed}
+\setlength{\tabcolsep}{4pt} % Adjust space between columns to help it fit
+\small % Use \small or \footnotesize to adjust font size if needed
 
-      % ada_embeddings data
-      \texttt{ada-002} 
-      & 1 & 85.67 & 58.38 & 1.00 & 7.75 & 47.09 & 86.90 & 55.20 & 85.67 & 58.38 & 1.00 & 7.75 & 47.09 & 86.90 & 55.20 \\
-      & 5 & 93.67 & 68.60 & 1.75 & 16.75 & 68.24 & 97.02 & 66.29 & 88.67 & 62.36 & 1.21 & 10.86 & 55.05 & 91.09 & 59.48 \\
-      & 10 & 96.00 & 71.22 & 2.50 & 21.00 & 76.42 & 98.81 & 69.51 & 89.03 & 62.71 & 1.32 & 11.43 & 56.14 & 91.32 & 59.91 \\
-      & 25 & 97.67 & 74.54 & 4.50 & 26.25 & 84.87 & 99.70 & 73.34 & 89.14 & 62.93 & 1.44 & 11.76 & 56.69 & 91.37 & 60.16 \\
-      \hline
-      % jina_embeddings data
-      \texttt{jina-v3} 
-      & 1 & 80.33 & 38.82 & 3.00 & 10.25 & 34.91 & 88.39 & 38.62 & 80.33 & 38.82 & 3.00 & 10.25 & 34.91 & 88.39 & 38.62 \\
-      & 5 & 87.67 & 42.94 & 5.50 & 16.00 & 48.46 & 94.94 & 43.95 & 82.82 & 40.31 & 4.01 & 12.56 & 39.66 & 90.71 & 40.54 \\
-      & 10 & 90.33 & 45.41 & 7.75 & 16.75 & 58.55 & 96.73 & 47.22 & 83.16 & 40.64 & 4.32 & 12.65 & 40.96 & 90.98 & 40.97 \\
-      & 25 & 94.67 & 48.41 & 9.50 & 17.75 & 69.68 & 98.81 & 51.05 & 83.45 & 40.84 & 4.42 & 12.72 & 41.66 & 91.10 & 41.22 \\
-      \hline
-      % nomic_embeddings data
-      \texttt{nomic} 
-      & 1 & 63.33 & 48.45 & 3.25 & 6.50 & 25.08 & 72.62 & 44.13 & 63.33 & 48.45 & 3.25 & 6.50 & 25.08 & 72.62 & 44.13 \\
-      & 5 & 75.00 & 61.36 & 6.50 & 8.25 & 42.83 & 87.80 & 57.00 & 68.09 & 53.47 & 4.41 & 7.31 & 31.40 & 78.77 & 49.08 \\
-      & 10 & 80.33 & 65.30 & 7.00 & 8.25 & 53.11 & 91.37 & 61.46 & 68.75 & 54.01 & 4.47 & 7.31 & 32.79 & 79.28 & 49.69 \\
-      & 25 & 87.67 & 70.40 & 10.25 & 8.50 & 64.44 & 94.05 & 67.06 & 69.25 & 54.34 & 4.67 & 7.34 & 33.53 & 79.45 & 50.05 \\
-      \bottomrule
-    \end{longtable}
-  \end{minipage}%
+\makebox[\linewidth][c]{%
+  % Use a standard `tabular` environment. The @{} removes extra space at the ends.
+  \begin{tabular}{@{}|l|r|*{6}{c}|c|| *{6}{c}|c|@{}} 
+  \toprule
+  \textbf{Model} & \textbf{k} 
+      & \multicolumn{7}{c}{\textbf{Recall@k (\%)}} 
+      & \multicolumn{7}{c}{\textbf{MRR@k (\%)}} \\
+  \cmidrule(lr){3-9} \cmidrule(lr){10-16} % Partial rules under the main headers
+  & & 2Wk & Nar & Ned & Pk & Qm & Su & Avg
+      & 2Wk & Nar & Ned & Pk & Qm & Su & Avg \\
+  \midrule
+  % Data for ada-002
+  \texttt{ada-002} 
+  & 1 & 85.67 & 58.38 & 1.00 & 7.75 & 47.09 & 86.90 & 55.20 & 85.67 & 58.38 & 1.00 & 7.75 & 47.09 & 86.90 & 55.20 \\
+  & 5 & 93.67 & 68.60 & 1.75 & 16.75 & 68.24 & 97.02 & 66.29 & 88.67 & 62.36 & 1.21 & 10.86 & 55.05 & 91.09 & 59.48 \\
+  & 10 & 96.00 & 71.22 & 2.50 & 21.00 & 76.42 & 98.81 & 69.51 & 89.03 & 62.71 & 1.32 & 11.43 & 56.14 & 91.32 & 59.91 \\
+  & 25 & 97.67 & 74.54 & 4.50 & 26.25 & 84.87 & 99.70 & 73.34 & 89.14 & 62.93 & 1.44 & 11.76 & 56.69 & 91.37 & 60.16 \\
+  \midrule
+  % Data for jina-v3
+  \texttt{jina-v3} 
+  & 1 & 80.33 & 38.82 & 3.00 & 10.25 & 34.91 & 88.39 & 38.62 & 80.33 & 38.82 & 3.00 & 10.25 & 34.91 & 88.39 & 38.62 \\
+  & 5 & 87.67 & 42.94 & 5.50 & 16.00 & 48.46 & 94.94 & 43.95 & 82.82 & 40.31 & 4.01 & 12.56 & 39.66 & 90.71 & 40.54 \\
+  & 10 & 90.33 & 45.41 & 7.75 & 16.75 & 58.55 & 96.73 & 47.22 & 83.16 & 40.64 & 4.32 & 12.65 & 40.96 & 90.98 & 40.97 \\
+  & 25 & 94.67 & 48.41 & 9.50 & 17.75 & 69.68 & 98.81 & 51.05 & 83.45 & 40.84 & 4.42 & 12.72 & 41.66 & 91.10 & 41.22 \\
+  \midrule
+  % Data for nomic
+  \texttt{nomic} 
+  & 1 & 63.33 & 48.45 & 3.25 & 6.50 & 25.08 & 72.62 & 44.13 & 63.33 & 48.45 & 3.25 & 6.50 & 25.08 & 72.62 & 44.13 \\
+  & 5 & 75.00 & 61.36 & 6.50 & 8.25 & 42.83 & 87.80 & 57.00 & 68.09 & 53.47 & 4.41 & 7.31 & 31.40 & 78.77 & 49.08 \\
+  & 10 & 80.33 & 65.30 & 7.00 & 8.25 & 53.11 & 91.37 & 61.46 & 68.75 & 54.01 & 4.47 & 7.31 & 32.79 & 79.28 & 49.69 \\
+  & 25 & 87.67 & 70.40 & 10.25 & 8.50 & 64.44 & 94.05 & 67.06 & 69.25 & 54.34 & 4.67 & 7.34 & 33.53 & 79.45 & 50.05 \\
+  \midrule
+  % The abbreviations row is just a regular row using \multicolumn
+  \multicolumn{16}{@{}l}{\footnotesize Datasets abbreviations: 2Wk=2wiki, Nar=narrative, Ned=needle, Pk=passkey, Qm=qmsum, Su=summ.} \\
+  \bottomrule
+  \end{tabular}%
 }
-\vspace*{\fill}\par
-%–– back to normal text here ––%
+\end{table}
 
 The results show that \textbf{OpenAI's \texttt{text-embedding-ada-002} is the strongest performer overall}, achieving the highest average recall and MRR across most datasets and k-values. This suggests that it is a highly effective and robust general-purpose retriever.
 

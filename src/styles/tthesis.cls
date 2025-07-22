@@ -33,6 +33,8 @@
 \usepackage{tabulary}
 \usepackage{lscape,longtable,booktabs}
 \usepackage{geometry}
+\usepackage{array}
+\usepackage{changepage}
 
 % citations at the beginning of each chapter
 \usepackage{epigraph}
