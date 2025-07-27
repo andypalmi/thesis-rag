@@ -1,10 +1,10 @@
 \chapter{Identifying Relevant Chunks for Responses}
 \label{chap:relevant_chunks}
 
-In a Retrieval-Augmented Generation system, the final response is a synthesis of information drawn from multiple retrieved document chunks. For the purposes of transparency, debuggability, and continuous improvement, it is crucial to understand exactly which pieces of the retrieved context were used to construct the answer. This chapter explores the methods and importance of analyzing the alignment between the generated response and the source chunks, a process often referred to as \textit{citation and attribution}.
+In a Retrieval-Augmented Generation system, the final response is a synthesis of information drawn from multiple retrieved document chunks. For the purposes of transparency, debuggability, and continuous improvement, it is crucial to understand exactly which pieces of the retrieved context were used to construct the answer. This chapter explores the methods and importance of analyzing the alignment between the generated response and the source chunks, a process often referred to as \textit{citation and attribution} or \textit{groundedness}.
 
 \section{The Importance of Chunk-Response Alignment}
-Understanding the link between the source context and the final output serves several key functions:
+Understanding the link between the source context and the final output, as highlighted by Gao et al. (2024) \autocite{gao2024retrievalaugmented}, serves several key functions:
 \begin{itemize}
     \item \textbf{Trust and Verifiability:} For users, especially in critical applications like medical or legal research, being able to see the source of a particular statement is essential for trusting the system's output. Citations allow users to verify the information for themselves.
     \item \textbf{Debugging and Evaluation:} When a RAG system produces a suboptimal or incorrect answer, tracing the response back to the source chunks is the first step in diagnosing the problem. It helps to determine if the issue lies with the retriever (fetching irrelevant context), the generator (misinterpreting the context), or the source documents themselves.
@@ -13,7 +13,7 @@ Understanding the link between the source context and the final output serves se
 \end{itemize}
 
 \section{Methods for Analyzing Chunk-Response Alignment}
-Several techniques can be used to trace the provenance of the information in the generated response. The complexity and accuracy of these methods can vary significantly.
+Several techniques can be used to trace the provenance of the information in the generated response. The complexity and accuracy of these methods can vary significantly, and they often involve a trade-off between computational cost and precision.
 
 \subsection{Prompt-Based Attribution}
 The simplest method is to explicitly ask the LLM to cite its sources in the prompt. The instructions might include a directive like: \textit{"After each sentence in your response, cite the ID of the source document you used to formulate that sentence."}
@@ -28,7 +28,6 @@ Another approach is to analyze the alignment after the response has been generat
     \item Comparing the embedding of the generated sentence to the embeddings of the original retrieved chunks.
     \item The chunk with the highest semantic similarity to a given sentence is considered its most likely source.
 \end{enumerate}
-
 This method provides a more quantitative and verifiable way to link the output to the input, but it is not foolproof. A generated sentence might synthesize information from multiple chunks, making a one-to-one mapping difficult.
 
 \subsection{Analyzing Attention Mechanisms}
@@ -39,4 +38,12 @@ In practice, this is a highly complex approach. Accessing and interpreting atten
 \subsection{Building a Knowledge Graph}
 A more structured approach involves building a knowledge graph from the source documents. The graph would contain entities and their relationships. When a response is generated, the entities mentioned in the response can be linked back to the nodes in the knowledge graph, providing a clear and structured form of attribution. This is a powerful but resource-intensive method that is best suited for well-defined domains.
 
-By implementing these alignment techniques, developers and users of RAG systems can move from a black-box paradigm to a more transparent and interpretable one, fostering trust and enabling more effective system optimization.
+\section{Evaluation Metrics for Retrieval}
+As discussed by Gao et al. (2024) \autocite{gao2024retrievalaugmented}, evaluating the retrieval component is crucial for understanding the overall RAG system performance. Key metrics include:
+\begin{itemize}
+    \item \textbf{Precision@k:} The proportion of relevant documents among the top-k retrieved documents.
+    \item \textbf{Recall@k:} The proportion of all relevant documents in the corpus that are found in the top-k retrieved documents.
+    \item \textbf{Mean Reciprocal Rank (MRR):} The average of the reciprocal ranks of the first relevant document for a set of queries. A higher MRR indicates that the system is better at ranking relevant documents higher.
+    \item \textbf{Normalized Discounted Cumulative Gain (nDCG):} A measure of ranking quality that considers the graded relevance of documents.
+\end{itemize}
+These metrics help quantify the effectiveness of the retrieval stage in isolation from the generation stage.

@@ -1,10 +1,10 @@
 \chapter{Comparative Analysis of Different LLMs}
 \label{chap:llm_comparison}
 
-The Large Language Model serves as the brain of the RAG system, responsible for synthesizing the retrieved information and generating the final response. The choice of LLM is a critical decision that significantly impacts the system's overall performance, cost, and speed. This chapter provides a comparative analysis of different LLMs in the context of RAG, focusing on how their architectural differences, context window sizes, and inherent capabilities affect their suitability for the generation task.
+The Large Language Model serves as the generative component of the RAG system, responsible for synthesizing the retrieved information and generating the final response. The choice of the generator LLM is a critical decision that significantly impacts the system's overall performance, cost, and speed. This chapter provides a comparative analysis of different LLMs in the context of RAG, focusing on how their architectural differences, context window sizes, and inherent capabilities affect their suitability for the generation task.
 
 \section{The Role of the Generator LLM}
-In a RAG pipeline, the LLM's role is not to recall facts from its internal memory but to reason over the provided context. The ideal generator LLM should excel at:
+In a RAG pipeline, the LLM's role is not to recall facts from its internal parametric memory but to reason over the provided context. As highlighted by Gao et al. (2024) \autocite{gao2024retrievalaugmented}, the ideal generator LLM should excel at:
 \begin{itemize}
     \item \textbf{Context Adherence (Faithfulness):} Strictly basing its answer on the provided context and avoiding the introduction of outside information.
     \item \textbf{Information Synthesis:} Weaving together facts from multiple retrieved chunks into a single, coherent answer.
@@ -13,7 +13,7 @@ In a RAG pipeline, the LLM's role is not to recall facts from its internal memor
 \end{itemize}
 
 \section{Performance Evaluation based on Model and Context Window Size}
-Different LLMs exhibit varying levels of proficiency in these areas. The performance of a RAG system is therefore highly dependent on the specific model chosen for the generation step.
+Different LLMs exhibit varying levels of proficiency in these areas. The performance of a RAG system is therefore highly dependent on the specific model chosen for the generation step. This section evaluates various models based on these criteria.
 
 \subsection{Comparing LLM Families}
 We can categorize LLMs into several families, each with its own characteristics:
@@ -25,9 +25,9 @@ We can categorize LLMs into several families, each with its own characteristics:
 \end{itemize}
 
 \subsection{The Impact of Context Window Size}
-The \textbf{context window size} of an LLM defines the maximum amount of text (prompt + retrieved context + generated response) that the model can handle at one time. This has several implications for RAG:
+The \textbf{context window size} of an LLM defines the maximum amount of text (prompt + retrieved context + generated response) that the model can handle at one time. This has several implications for RAG, as discussed by Gao et al. (2024) \autocite{gao2024retrievalaugmented}:
 \begin{itemize}
-    \item \textbf{Information Density:} A larger context window allows for more retrieved chunks to be passed to the LLM, potentially increasing the comprehensiveness of the answer. However, this also increases the risk of the "lost in the middle" problem, where the model may overlook relevant information buried in a long context.
+    \item \textbf{Information Density:} A larger context window allows for more retrieved chunks to be passed to the LLM, potentially increasing the comprehensiveness of the answer. However, this also increases the risk of the "lost in the middle" problem, where the model may overlook relevant information buried in a long context \autocite{liu2023lost}.
     \item \textbf{Cost and Latency:} Processing larger contexts is more computationally expensive, leading to higher operational costs and slower response times.
     \item \textbf{Architectural Differences:} Newer models with very large context windows (e.g., Claude 3) are designed to be more effective at finding and using information within long documents, which can be a significant advantage for certain RAG applications.
 \end{itemize}

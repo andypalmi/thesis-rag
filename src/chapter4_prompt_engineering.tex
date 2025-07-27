@@ -41,7 +41,7 @@ Evaluating the effectiveness of different prompts is a critical step in optimizi
 A \textbf{golden dataset} is a curated collection of queries paired with ideal, human-verified answers. By comparing the LLM's output for a given query to the golden answer, one can assess the quality of the prompt. While creating a golden dataset can be labor-intensive, it provides a strong benchmark for evaluation.
 
 \subsection{LLM-as-a-Judge}
-A more scalable approach to evaluation is to use another, often more powerful, LLM as an evaluator. This is known as the \textbf{LLM-as-a-Judge} method. Frameworks like \textbf{DeepEval} have emerged to standardize this process. An evaluator LLM is given a set of criteria and asked to score the output of the RAG system on various dimensions \autocite{rag_eval_qdrant_2024}.
+A more scalable approach to evaluation is to use another, often more powerful, LLM as an evaluator, an approach that has been shown to correlate well with human judgment \autocite{zheng2023judging}. This is known as the \textbf{LLM-as-a-Judge} method. Frameworks like \textbf{DeepEval} have emerged to standardize this process. An evaluator LLM is given a set of criteria and asked to score the output of the RAG system on various dimensions \autocite{rag_eval_qdrant_2024}.
 
 \section{Evaluation Metrics}
 When using an LLM-as-a-Judge, several key metrics are used to assess the quality of the RAG output. These metrics provide a multi-faceted view of performance:

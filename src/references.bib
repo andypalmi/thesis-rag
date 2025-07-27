@@ -14,26 +14,33 @@
     note = {Accessed: 2025-07-10},
 }
 
-@inproceedings{hnsw_malkov_2018,
-  title={Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs},
-  author={Malkov, Yu A and Yashunin, Dmitry A},
-  booktitle={IEEE transactions on pattern analysis and machine intelligence},
-  volume={42},
-  number={4},
-  pages={824--836},
-  year={2018},
-  publisher={IEEE}
+@misc{hnsw_malkov_2018,
+      title={Efficient and robust approximate nearest neighbor search using Hierarchical Navigable Small World graphs}, 
+      author={Yu. A. Malkov and D. A. Yashunin},
+      year={2018},
+      eprint={1603.09320},
+      archivePrefix={arXiv},
+      primaryClass={cs.DS},
+      url={https://arxiv.org/abs/1603.09320}, 
 }
 
-@inproceedings{ivf_jegou_2011,
-  title={Product quantization for nearest neighbor search},
-  author={Jegou, Herve and Douze, Matthijs and Schmid, Cordelia},
-  booktitle={IEEE transactions on pattern analysis and machine intelligence},
-  volume={33},
-  number={1},
-  pages={117--128},
-  year={2011},
-  publisher={IEEE}
+@article{ivf_zobel, 
+  author = {Zobel, Justin and Moffat, Alistair and Ramamohanarao, Kotagiri}, 
+  title = {Inverted files versus signature files for text indexing}, 
+  year = {1998}, 
+  issue_date = {Dec. 1998}, 
+  publisher = {Association for Computing Machinery}, 
+  address = {New York, NY, USA}, 
+  volume = {23}, 
+  number = {4}, 
+  issn = {0362-5915}, 
+  url = {https://doi.org/10.1145/296854.277632}, 
+  doi = {10.1145/296854.277632}, 
+  journal = {ACM Trans. Database Syst.}, 
+  month = dec, 
+  pages = {453–490}, 
+  numpages = {38}, 
+  keywords = {indexing, inverted files, performance, signature files, text databases, text indexing}
 }
 
 @misc{deepeval2023,
@@ -71,4 +78,88 @@
       archivePrefix={arXiv},
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2404.12096}, 
+}
+
+@inproceedings{lewis2020retrieval,
+  title={Retrieval-Augmented Generation for Knowledge-Intensive {NLP} Tasks},
+  author={Patrick Lewis and Ethan Perez and Aleksandra Piktus and Fabio Petroni and Vladimir Karpukhin and Naman Goyal and Heinrich K{\"u}ttler and Mike Lewis and Wen-tau Yih and Tim Rockt{\"a}schel and Sebastian Riedel and Douwe Kiela},
+  booktitle={Advances in Neural Information Processing Systems},
+  editor={H. Larochelle and M. Ranzato and R. Hadsell and M. F. Balcan and H. Lin},
+  volume={33},
+  pages={9459--9474},
+  year={2020}
+}
+
+@misc{gao2024retrievalaugmented,
+  title={Retrieval-Augmented Generation for Large Language Models: A Survey},
+  author={Yunfan Gao and Yunqing Zhai and Daniel M. Bikel and Shuo Zhang and Zhaofeng He and Chen-Yu Lee and Thomas G. D. Wolf},
+  year={2024},
+  eprint={2312.10997},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
+}
+
+@misc{liu2023lost,
+  title={Lost in the Middle: How Language Models Use Long Contexts},
+  author={Nelson F. Liu and Kevin Lin and John Hewitt and Ashish Vaswani and Percy Liang and Thomas T. A. L. V. L. H. I. D. U.},
+  year={2023},
+  eprint={2307.03172},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
+}
+
+@inproceedings{khattab2020colbert,
+  author = {Khattab, Omar and Zaharia, Matei},
+  title = {{ColBERT}: Efficient and Effective Passage Search via Contextualized Late Interaction over {BERT}},
+  booktitle = {Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  year = {2020},
+  pages = {39--48},
+  url = {https://doi.org/10.1145/3397271.3401075}
+}
+
+@misc{zheng2023judging,
+  title={Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena},
+  author={Lianmin Zheng and Wei-Lin Chiang and Ying Sheng and Siyuan Zhuang and Zhanghao Wu and Yonghao Zhuang and Zi Lin and Zhuohan Li and Dacheng Li and Eric P. Xing and Hao Zhang and Joseph E. Gonzalez and Ion Stoica},
+  year={2023},
+  eprint={2306.05685},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
+}
+
+@article{rag_fusion_2024,
+    title={{RAG-Fusion: a New Take on Retrieval-Augmented Generation}},
+    author={Diskin, Yair and Hazan, Elad and Ram, Ofer},
+    journal={arXiv preprint arXiv:2401.10221},
+    year={2024},
+    url={https://arxiv.org/abs/2401.10221}
+}
+
+@misc{günther2025latechunkingcontextualchunk,
+      title={Late Chunking: Contextual Chunk Embeddings Using Long-Context Embedding Models}, 
+      author={Michael Günther and Isabelle Mohr and Daniel James Williams and Bo Wang and Han Xiao},
+      year={2025},
+      eprint={2409.04701},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2409.04701}, 
+}
+
+@misc{sturua2024jinaembeddingsv3multilingualembeddingstask,
+      title={jina-embeddings-v3: Multilingual Embeddings With Task LoRA}, 
+      author={Saba Sturua and Isabelle Mohr and Mohammad Kalim Akram and Michael Günther and Bo Wang and Markus Krimmel and Feng Wang and Georgios Mastrapas and Andreas Koukounas and Nan Wang and Han Xiao},
+      year={2024},
+      eprint={2409.10173},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2409.10173}, 
+}
+
+@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+      title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval}, 
+      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Bo Wang and Sedigheh Eslami and Scott Martens and Maximilian Werk and Nan Wang and Han Xiao},
+      year={2025},
+      eprint={2506.18902},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2506.18902}, 
 }

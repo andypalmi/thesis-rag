@@ -24,7 +24,7 @@ To measure the impact of different optimization techniques, a baseline RAG confi
 The performance of the RAG system was evaluated at both the retrieval and generation stages.
 \begin{itemize}
 \item \textbf{Retrieval Performance:} Assessed using \textit{Precision@k}, \textit{Recall@k}, and \textit{Mean Reciprocal Rank (MRR)}. These metrics are crucial for understanding the effectiveness of the retrieval stage in isolation \autocite{rag_eval_ridgerun_2024}.
-\item \textbf{Generation Quality:} Evaluated using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The key metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{rag_eval_qdrant_2024, rag_eval_pinecone}.
+\item \textbf{Generation Quality:} Evaluated using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The key metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{zheng2023judging, rag_eval_qdrant_2024, rag_eval_pinecone}.
 \end{itemize}
 
 \section{Experiment 1: Impact of Chunking Techniques}

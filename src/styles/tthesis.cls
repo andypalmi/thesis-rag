@@ -36,6 +36,10 @@
 \usepackage{array}
 \usepackage{changepage}
 
+% Algorithm
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
 % citations at the beginning of each chapter
 \usepackage{epigraph}
 	\setlength{\epigraphwidth}{0.59\textwidth}
