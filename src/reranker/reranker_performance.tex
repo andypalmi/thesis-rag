@@ -1,0 +1,49 @@
+\begin{table*}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption{Comparison of Reranker Performance Across Different Chunking Strategies and Thresholding Methods. The highest score in each metric column is highlighted in bold.}
+\label{tab:reranker_performance}
+\begin{tabular}{llrrrrrr}
+\toprule
+ &  & \multicolumn{3}{c}{Full Page} & \multicolumn{3}{c}{Page Split} \\
+ Threshold & Model & F1 Score & Precision & Recall & F1 Score & Precision & Recall \\
+\midrule
+\multirow[t]{4}{*}{Baseline} & No Reranker & 0.021 & 0.011 & 0.967 & 0.021 & 0.011 & 0.918 \\
+ & GTE ML Reranker Base & 0.024 & 0.012 & 0.871 & 0.027 & 0.014 & 0.840 \\
+ & Jina Reranker v1 Tiny EN & 0.023 & 0.012 & 0.919 & 0.021 & 0.011 & 0.891 \\
+ & MXBAI Rerank Base v2 & 0.062 & 0.033 & 0.947 & 0.060 & 0.032 & 0.880 \\
+\cline{1-8}
+\multirow[t]{4}{*}{GMM} & No Reranker & 0.016 & 0.008 & 0.986 & 0.014 & 0.007 & 0.920 \\
+ & GTE ML Reranker Base & 0.008 & 0.004 & \textbf{0.988} & 0.006 & 0.003 & 0.924 \\
+ & Jina Reranker v1 Tiny EN & 0.023 & 0.012 & 0.976 & 0.020 & 0.010 & \textbf{0.924} \\
+ & MXBAI Rerank Base v2 & 0.009 & 0.005 & 0.986 & 0.008 & 0.004 & 0.920 \\
+\cline{1-8}
+\multirow[t]{4}{*}{Knee} & No Reranker & 0.082 & 0.044 & 0.881 & 0.081 & 0.043 & 0.878 \\
+ & GTE ML Reranker Base & 0.108 & 0.059 & 0.936 & 0.095 & 0.052 & 0.871 \\
+ & Jina Reranker v1 Tiny EN & 0.107 & 0.060 & 0.838 & 0.090 & 0.049 & 0.862 \\
+ & MXBAI Rerank Base v2 & 0.105 & 0.066 & 0.388 & 0.092 & 0.059 & 0.347 \\
+\cline{1-8}
+\multirow[t]{4}{*}{Max Gap} & No Reranker & 0.456 & 0.404 & 0.681 & 0.598 & 0.548 & 0.751 \\
+ & GTE ML Reranker Base & \textbf{0.654} & \textbf{0.594} & 0.867 & \textbf{0.646} & \textbf{0.601} & 0.797 \\
+ & Jina Reranker v1 Tiny EN & 0.435 & 0.379 & 0.893 & 0.468 & 0.410 & 0.800 \\
+ & MXBAI Rerank Base v2 & 0.071 & 0.052 & 0.986 & 0.055 & 0.037 & 0.918 \\
+\cline{1-8}
+\multirow[t]{4}{*}{Otsu} & No Reranker & 0.021 & 0.011 & 0.986 & 0.017 & 0.008 & 0.918 \\
+ & GTE ML Reranker Base & 0.018 & 0.009 & \textbf{0.988} & 0.009 & 0.005 & 0.922 \\
+ & Jina Reranker v1 Tiny EN & 0.035 & 0.019 & 0.979 & 0.033 & 0.018 & 0.920 \\
+ & MXBAI Rerank Base v2 & 0.012 & 0.006 & 0.986 & 0.011 & 0.006 & 0.922 \\
+\cline{1-8}
+\multirow[t]{4}{*}{Percentile} & No Reranker & 0.037 & 0.019 & 0.952 & 0.036 & 0.018 & 0.907 \\
+ & GTE ML Reranker Base & 0.038 & 0.019 & 0.974 & 0.035 & 0.018 & 0.900 \\
+ & Jina Reranker v1 Tiny EN & 0.038 & 0.019 & 0.945 & 0.035 & 0.018 & 0.902 \\
+ & MXBAI Rerank Base v2 & 0.037 & 0.019 & 0.971 & 0.035 & 0.018 & 0.902 \\
+\cline{1-8}
+\multirow[t]{4}{*}{2nd Derivative} & No Reranker & 0.254 & 0.199 & 0.721 & 0.262 & 0.198 & 0.776 \\
+ & GTE ML Reranker Base & 0.305 & 0.237 & 0.845 & 0.266 & 0.203 & 0.806 \\
+ & Jina Reranker v1 Tiny EN & 0.222 & 0.177 & 0.881 & 0.235 & 0.184 & 0.820 \\
+ & MXBAI Rerank Base v2 & 0.059 & 0.042 & 0.981 & 0.049 & 0.035 & 0.916 \\
+\cline{1-8}
+\bottomrule
+\end{tabular}
+\end{table*}

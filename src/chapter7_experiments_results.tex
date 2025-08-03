@@ -27,32 +27,7 @@ The performance of the RAG system was evaluated at both the retrieval and genera
 \item \textbf{Generation Quality:} Evaluated using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The key metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{zheng2023judging}.
 \end{itemize}
 
-\section{Experiment 1: Impact of Chunking Techniques}
-\label{sec:exp_chunking}
-This experiment investigated the effect of different document chunking strategies on retrieval performance.
-\subsection{Methods Compared}
-\begin{itemize}
-    \item \textbf{Naive Chunking (Baseline):} Fixed-size chunks of 300 tokens.
-    \item \textbf{Semantic Chunking:} Sentence-level chunking using a natural language processing library to split at sentence boundaries.
-\end{itemize}
-\subsection{Results and Discussion}
-The results, presented in Table \ref{tab:chunking_results}, show that semantic chunking provided a modest but consistent improvement in retrieval metrics over the naive baseline. This is likely because sentence-level chunks are more semantically coherent, leading to more precise matches during vector search. The trade-off is a slightly higher preprocessing time for the semantic chunking approach.
-
-\begin{table}[!htbp]
-\centering
-\caption{Chunking Technique Performance}
-\label{tab:chunking_results}
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Method} & \textbf{Precision@5} & \textbf{Recall@5} \\
-\hline
-Naive Chunking & TBD & TBD \\
-Semantic Chunking & TBD & TBD \\
-\hline
-\end{tabular}
-\end{table}
-
-\section{Experiment 2: Evaluation of Different Embedding Models for Long-Context Retrieval}
+\section{Experiment 1: Embedding Models}
 \label{sec:exp_embedding_models}
 This experiment evaluates the performance of different embedding models on long-context retrieval tasks. The goal is to understand how different architectural and chunking strategies affect retrieval performance on documents of varying lengths and complexity.
 
@@ -79,41 +54,94 @@ The LongEmbed benchmark is composed of six datasets, two of which are synthetic 
 \end{itemize}
 
 \subsection{Results and Discussion}
-The results are presented in the following tables, with each table showing the performance for a specific metric (Recall, Precision, MRR, and nDCG) across all datasets and k-values. The best-performing model for each dataset and k-value combination is highlighted in bold.
+The retrieval performance of the five embedding models across the six datasets is detailed in Tables~\ref{tab:detailed_recall} through~\ref{tab:detailed_nDCG}, with an aggregated summary in Table~\ref{tab:summary}. The results not only highlight a clear winner within our long-context benchmark but also reflect a significant paradigm shift in the broader landscape of text embedding models.
+
+\paragraph{The Rise of Compact, High-Performance Models}
+While our results show \textbf{\texttt{Qwen3-Embedding-0.6B}} as the top performer, its true significance is revealed when contextualized within the global Massive Text Embedding Benchmark (MTEB) leaderboard. As of August 1st, 2025, this model ranks an impressive 4th overall, surpassed only by Google's proprietary \texttt{gemini-embedding-001} and its own, much larger 4B and 8B parameter siblings \autocite{mteb_leaderboard_2025}. With only 595M parameters, its performance is remarkable, demonstrating that architectural innovations and advanced training pipelines can allow smaller, open-source models to outperform far larger competitors. This efficiency is a direct result of its foundation on the Qwen3 architecture \autocite{yang2025qwen3technicalreport} and a sophisticated multi-stage training process that uses the foundation LLM itself to synthesize high-quality training data \autocite{zhang2025qwen3embeddingadvancingtext}.
+
+\paragraph{A New Baseline: The Obsolescence of Ada-002}
+For years, OpenAI's \textbf{\texttt{ada-002}} has been a de facto industry standard. However, these results, combined with its MTEB ranking of 167th, confirm that it has been decisively overcome. Newer models leveraging innovative architectures and specialized training techniques now offer vastly superior performance. The other models in our test also place significantly higher than \texttt{ada-002} on the MTEB leaderboard: \texttt{jina-embeddings-v3} ranks 24th, \texttt{nomic-embed-text} ranks 54th, and even the older \texttt{jina-embeddings-v2-base-en} ranks 154th \autocite{mteb_leaderboard_2025}. This trend signals that the benchmark for state-of-the-art has moved towards more open and efficient models.
+
+\paragraph{The Enduring Value of Specialization}
+Despite the dominance of a strong generalist model like Qwen3, our findings also underscore the continued importance of specialized models. \textbf{\texttt{jina-embeddings-v3}}, with its unique late chunking strategy, remains the top performer on the \texttt{passkey} task, proving the value of its architectural design for retrieving specific facts from structured long documents. Likewise, \textbf{\texttt{nomic-embed-text}}'s superior performance on the \texttt{needle} dataset confirms its status as a premier model for extreme "needle-in-a-haystack" scenarios. This demonstrates that for specific, challenging use cases, a specialized model can still be the optimal choice.
+
+\paragraph{Distance Metrics and Model Compatibility}
+For most models, the choice between L2 and Inner Product (IP) distance metrics yields comparable results, indicating that their embeddings are well-normalized. A critical observation, however, is the performance degradation of \textbf{\texttt{jina-embeddings-v2-base-en}} when using the IP metric. As seen across all tables, its performance collapses with IP; for example, its average Recall@5 drops from 51.85\% (L2) to a mere 12.12\% (IP). This underscores that its embedding vectors are not normalized for cosine similarity, making L2 distance the only viable choice for this model and highlighting the importance of aligning the retrieval metric with the model's output properties.
+
+\paragraph{Conclusion}
+In summary, this experiment illustrates a pivotal moment in the evolution of text embedding models. Our findings lead to the following conclusions:
+\begin{itemize}
+    \item The embedding landscape is no longer dominated by large, proprietary models. The exceptional performance of \textbf{\texttt{Qwen3-Embedding-0.6B}}, a compact 595M parameter model, signals a shift towards more efficient, accessible, and open-source solutions that achieve state-of-the-art results.
+    \item Models like \textbf{\texttt{ada-002}}, while historically important, are now outdated. They have been surpassed by a new generation of models featuring more advanced architectures, training methodologies, and specialized strategies like late chunking.
+    \item While general-purpose models have improved dramatically, \textbf{specialization remains highly valuable}. For niche but critical tasks like extreme long-context fact retrieval, models like \texttt{jina-embeddings-v3} and \texttt{nomic-embed-text} provide targeted performance that can exceed even the best generalists.
+    \item \textbf{Technical implementation details are critical}. The choice of distance metric must be compatible with the model's properties, as the failure of \texttt{jina-embeddings-v2-base-en} with the IP metric demonstrates.
+\end{itemize}
 
 \input{chapter7_tables_embedding_results.tex}
 
-The results show that the \textbf{Qwen3-Embedding-0.6B} model is the strongest performer overall, achieving the highest average recall, precision, MRR, and nDCG across all k-values. This suggests that it is a highly effective and robust general-purpose retriever. The \textbf{jina-embeddings-v3} model, with its late chunking strategy, also performs well, especially on the `passkey` dataset. The \textbf{nomic-embed-text} model excels at the `needle` task, indicating its strength in finding specific facts in long documents. The \textbf{ada-002} and \textbf{jina-embeddings-v2-base-en} models show competitive performance on some datasets but do not consistently match the top performers.
-
-
 \section{Experiment 2: Reranking Strategies}
 \label{sec:exp_reranking}
-This experiment evaluated the benefit of adding a reranking step after the initial retrieval (using Sentence-BERT).
+This experiment evaluated the benefit of adding a reranking step after the initial retrieval.
 \subsection{Reranking Methods Compared}
 \begin{itemize}
     \item \textbf{No Reranking (Baseline)}.
-    \item \textbf{BM25 Reranking:} Using BM25 scores to rerank the top 20 candidates from the initial dense retrieval.
-    \item \textbf{Cross-Encoder Reranking:} Using a powerful cross-encoder model to rerank the top 20 candidates.
+    \item \textbf{Cross-Encoder Reranking:} Compare three cross-encoder models to rerank the top 500 candidates returned by the similarity search.
 \end{itemize}
 \subsection{Results and Discussion}
-The results in Table \ref{tab:reranking_results} demonstrate the significant impact of reranking. The BM25 reranker provided a solid improvement by adding a keyword-based signal. However, the cross-encoder, despite its higher computational cost, yielded the best performance by a clear margin, showcasing the power of deep, token-level comparison for fine-grained relevance assessment.
+\input{reranker/reranker_performance.tex}
+The results in Table \ref{tab:reranker_performance} demonstrate ...
+\input{reranker/reranker_stats_items_docs.tex}
 
-\begin{table}[!htbp]
-\centering
-\caption{Reranking Strategy Performance}
-\label{tab:reranking_results}
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Method} & \textbf{Precision@5} & \textbf{MRR} \\
-\hline
-No Reranking & TBD & TBD \\
-BM25 Reranking & TBD & TBD \\
-Cross-Encoder & \textbf{TBD} & \textbf{TBD} \\
-\hline
-\end{tabular}
-\end{table}
+\begin{figure}[htbp]
+  \centering
+  \makebox[\textwidth][c]{%
+    \begin{minipage}{0.90\paperwidth}
+      \centering
+      % first row: F1 & precision
+      \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{reranker/avg_f1_score_bar_faceted.png}
+        \\[1ex]\footnotesize (a) Average F1 score by facet
+      \end{minipage}
+      \hfill
+      \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{reranker/avg_precision_bar_faceted.png}
+        \\[1ex]\footnotesize (b) Average precision by facet
+      \end{minipage}
 
-\section{Experiment 3: Generative Model and Prompt Evaluation}
+      \vspace{1ex}
+
+      % second row: recall
+      \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{reranker/avg_recall_bar_faceted.png}
+        \\[1ex]\footnotesize (c) Average recall by facet
+      \end{minipage}
+
+      \vspace{1ex}
+
+      % third row: items & retrieved docs
+      \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{reranker/avg_num_items_passed_bar_faceted.png}
+        \\[1ex]\footnotesize (d) Average number of items passed by facet
+      \end{minipage}
+      \hfill
+      \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{reranker/avg_num_retrieved_docs_passed_bar_faceted.png}
+        \\[1ex]\footnotesize (e) Average number of retrieved documents passed by facet
+      \end{minipage}
+    \end{minipage}%
+  }
+  \caption{\footnotesize Comparison of average metrics by model facet:
+    (a) F1 score, (b) precision, (c) recall, (d) number of items passed,
+    and (e) number of retrieved documents passed.}
+  \label{fig:avg_metrics_faceted}
+\end{figure}
+
+\section{Experiment 3: Prompt Engineering to Prevent Hallucination}
 \label{sec:exp_generator_prompt}
 This experiment focuses on the generation part of the RAG pipeline, evaluating a wide range of Large Language Models to serve as the generator. The primary goal was to find the best-performing model and the optimal prompt and temperature configuration for our specific use case.
 
@@ -185,22 +213,3 @@ Gemini 1.5 Pro & P2 & 0.2 & -9.00 \\
 The delta analysis reveals several key insights. Firstly, the top-performing models, such as \textbf{O4 Mini}, \textbf{O1}, and \textbf{Gemini 2.5 Pro}, show a significant improvement over the GPT-4o baseline, with score increases exceeding 30 points. This underscores the rapid advancements in generative models, where newer architectures can yield substantial performance gains.
 
 Secondly, the choice of prompt and temperature settings is evidently crucial. For many models, there is a considerable performance variance between different prompt versions (P1 vs. P2) and temperature settings. For instance, the O1 model with prompt P1 scores much higher than with P2 (403.85 vs 396.16: +7.69 points). This highlights the necessity of meticulous prompt engineering and parameter tuning to unlock a model's full potential.
-
-
-\section{Overall Performance Summary and Analysis}
-\label{sec:overall_analysis}
-By combining the best-performing components from each experiment, we constructed an optimized RAG pipeline: Semantic Chunking (Experiment \ref{sec:exp_chunking}) + Sentence-BERT (Experiment \ref{sec:exp_embedding_models}) + Cross-Encoder Reranking (Experiment \ref{sec:exp_reranking}) + the best performing model from the DeepEval benchmark (Experiment \ref{sec:exp_generator_prompt}). As shown in Table \ref{tab:overall_results}, this optimized configuration dramatically outperformed the initial baseline across all key metrics. This demonstrates that a systematic, component-wise optimization of the RAG pipeline can lead to substantial gains in both retrieval accuracy and generation quality, resulting in a more robust and trustworthy system.
-
-\begin{table}[!htbp]
-\centering
-\caption{Overall Performance: Baseline vs. Optimized}
-\label{tab:overall_results}
-\begin{tabular}{|l|c|c|c|}
-\hline
-\textbf{Configuration} & \textbf{Precision@5} & \textbf{Faithfulness} & \textbf{Hallucination Rate} \\
-\hline
-Baseline & TBD & TBD & TBD \\
-Optimized & \textbf{TBD} & \textbf{TBD} & \textbf{TBD} \\
-\hline
-\end{tabular}
-\end{table}
