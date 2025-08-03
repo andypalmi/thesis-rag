@@ -35,6 +35,8 @@
 \usepackage{geometry}
 \usepackage{array}
 \usepackage{changepage}
+\usepackage{multirow}
+\usepackage{rotating}
 
 % Algorithm
 \usepackage{algorithm}

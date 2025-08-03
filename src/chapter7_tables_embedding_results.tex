@@ -1,0 +1,189 @@
+\begin{sidewaystable}[htbp!]
+\centering
+\footnotesize
+\captionof{table}{Detailed RECALL Performance (in \%). Higher is better. Results are grouped by k-value. Best result per column within each k-value group is in \textbf{bold}.}
+\label{tab:detailed_recall}
+\begin{tabular}{llcccccccccccccc}
+\toprule
+\multirow{2}{*}{k} & \multirow{2}{*}{Model} & \multicolumn{2}{c}{2wikimqa} & \multicolumn{2}{c}{narrativeqa} & \multicolumn{2}{c}{needle} & \multicolumn{2}{c}{passkey} & \multicolumn{2}{c}{qmsum} & \multicolumn{2}{c}{summ screen fd} & \multicolumn{2}{c}{Average} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10} \cmidrule(lr){11-12} \cmidrule(lr){13-14} \cmidrule(lr){15-16}
+& & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP \\
+\midrule
+\multirow{5}{*}{1} & Ada-002 & 79.33 & 81.00 & 54.44 & 54.27 & 2.00 & 1.50 & \textbf{13.25} & \textbf{14.50} & 45.65 & 45.91 & 86.90 & 86.90 & 52.01 & 51.98 \\
+& Jina-V2 & \textbf{91.67} & 24.67 & 41.43 & 2.32 & 3.75 & 0.00 & 12.75 & 8.00 & 40.54 & 11.07 & 81.55 & 32.14 & 41.48 & 4.66 \\
+& Jina-V3 & 90.67 & \textbf{90.67} & 57.54 & 57.46 & 1.25 & 0.75 & 10.50 & 12.50 & 47.22 & 47.22 & 84.23 & 84.23 & 54.69 & 54.67 \\
+& Nomic & 67.33 & 67.33 & 47.51 & 48.15 & \textbf{8.75} & \textbf{9.25} & 5.75 & 3.75 & 21.02 & 21.02 & 52.98 & 52.98 & 42.67 & 43.13 \\
+& Qwen3-0.6B & 89.67 & 89.67 & \textbf{62.99} & \textbf{62.85} & 4.25 & 3.75 & 9.50 & 13.75 & \textbf{50.49} & \textbf{50.49} & \textbf{88.10} & \textbf{88.10} & \textbf{59.45} & \textbf{59.45} \\
+\midrule
+\multirow{5}{*}{5} & Ada-002 & 87.33 & 88.00 & 63.85 & 63.64 & 4.25 & 4.00 & 32.50 & 34.00 & 65.82 & 66.34 & 96.73 & 96.73 & 62.71 & 62.66 \\
+& Jina-V2 & 95.67 & 66.00 & 50.31 & 6.02 & 5.75 & 0.00 & 29.50 & 15.25 & 62.08 & 32.87 & 95.54 & 69.94 & 51.85 & 12.12 \\
+& Jina-V3 & \textbf{96.67} & \textbf{96.67} & 67.40 & 67.42 & 2.00 & 2.00 & \textbf{40.50} & \textbf{44.50} & 67.58 & 67.58 & 97.92 & 97.92 & 66.09 & 66.22 \\
+& Nomic & 79.67 & 79.67 & 58.64 & 59.33 & \textbf{14.50} & \textbf{14.75} & 9.25 & 5.25 & 39.03 & 39.03 & 82.74 & 82.74 & 54.69 & 55.11 \\
+& Qwen3-0.6B & 95.67 & 95.67 & \textbf{73.27} & \textbf{73.16} & 5.50 & 6.50 & 15.75 & 40.75 & \textbf{72.30} & \textbf{72.30} & \textbf{98.21} & \textbf{98.21} & \textbf{70.55} & \textbf{71.23} \\
+\midrule
+\multirow{5}{*}{10} & Ada-002 & 90.00 & 90.67 & 66.35 & 66.22 & 5.25 & 5.00 & 38.75 & 41.00 & 73.94 & 74.46 & \textbf{98.81} & \textbf{98.81} & 65.91 & 65.94 \\
+& Jina-V2 & 97.67 & 77.67 & 53.39 & 7.71 & 6.25 & 0.25 & 31.25 & 16.50 & 72.30 & 45.12 & 97.62 & 81.85 & 55.58 & 15.43 \\
+& Jina-V3 & \textbf{98.33} & \textbf{98.33} & 70.67 & 70.71 & 2.25 & 2.50 & \textbf{53.50} & \textbf{58.75} & 75.05 & 75.05 & \textbf{98.81} & \textbf{98.81} & 69.94 & 70.13 \\
+& Nomic & 85.00 & 85.00 & 62.32 & 62.88 & \textbf{17.25} & \textbf{17.50} & 9.25 & 5.25 & 47.35 & 47.35 & 91.07 & 91.07 & 58.92 & 59.24 \\
+& Qwen3-0.6B & 98.00 & 98.00 & \textbf{76.48} & \textbf{76.18} & 6.25 & 7.00 & 16.00 & 42.25 & \textbf{79.96} & \textbf{79.96} & 98.21 & 98.21 & \textbf{74.00} & \textbf{74.58} \\
+\midrule
+\multirow{5}{*}{25} & Ada-002 & 92.33 & 92.67 & 69.44 & 69.45 & 7.50 & 7.50 & 49.75 & 53.25 & 82.25 & 82.91 & \textbf{99.70} & \textbf{99.70} & 69.74 & 69.93 \\
+& Jina-V2 & 98.67 & 91.67 & 56.97 & 11.65 & 8.50 & 1.50 & 33.25 & 17.75 & 81.99 & 64.37 & 97.92 & 93.45 & 59.63 & 21.37 \\
+& Jina-V3 & \textbf{99.33} & \textbf{99.33} & 74.30 & 74.28 & 5.25 & 5.25 & \textbf{54.25} & \textbf{60.00} & 83.76 & 83.76 & \textbf{99.70} & \textbf{99.70} & 73.92 & 74.08 \\
+& Nomic & 89.33 & 89.33 & 66.78 & 67.31 & \textbf{20.00} & \textbf{19.75} & 9.25 & 5.25 & 62.41 & 62.41 & 96.13 & 96.13 & 64.41 & 64.70 \\
+& Qwen3-0.6B & 98.33 & 98.33 & \textbf{79.88} & \textbf{79.71} & 8.25 & 11.25 & 16.00 & 42.25 & \textbf{89.00} & \textbf{89.00} & \textbf{99.70} & \textbf{99.70} & \textbf{77.79} & \textbf{78.53} \\
+\bottomrule
+\end{tabular}
+\end{sidewaystable}
+\clearpage
+\begin{sidewaystable}[htbp!]
+\centering
+\footnotesize
+\captionof{table}{Detailed PRECISION Performance (in \%). Higher is better. Results are grouped by k-value. Best result per column within each k-value group is in \textbf{bold}.}
+\label{tab:detailed_precision}
+\begin{tabular}{llcccccccccccccc}
+\toprule
+\multirow{2}{*}{k} & \multirow{2}{*}{Model} & \multicolumn{2}{c}{2wikimqa} & \multicolumn{2}{c}{narrativeqa} & \multicolumn{2}{c}{needle} & \multicolumn{2}{c}{passkey} & \multicolumn{2}{c}{qmsum} & \multicolumn{2}{c}{summ screen fd} & \multicolumn{2}{c}{Average} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10} \cmidrule(lr){11-12} \cmidrule(lr){13-14} \cmidrule(lr){15-16}
+& & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP \\
+\midrule
+\multirow{5}{*}{1} & Ada-002 & 79.33 & 81.00 & 54.44 & 54.27 & 2.00 & 1.50 & \textbf{13.25} & \textbf{14.50} & 45.65 & 45.91 & 86.90 & 86.90 & 52.01 & 51.98 \\
+& Jina-V2 & \textbf{91.67} & 24.67 & 41.43 & 2.32 & 3.75 & 0.00 & 12.75 & 8.00 & 40.54 & 11.07 & 81.55 & 32.14 & 41.48 & 4.66 \\
+& Jina-V3 & 90.67 & \textbf{90.67} & 57.54 & 57.46 & 1.25 & 0.75 & 10.50 & 12.50 & 47.22 & 47.22 & 84.23 & 84.23 & 54.69 & 54.67 \\
+& Nomic & 67.33 & 67.33 & 47.51 & 48.15 & \textbf{8.75} & \textbf{9.25} & 5.75 & 3.75 & 21.02 & 21.02 & 52.98 & 52.98 & 42.67 & 43.13 \\
+& Qwen3-0.6B & 89.67 & 89.67 & \textbf{62.99} & \textbf{62.85} & 4.25 & 3.75 & 9.50 & 13.75 & \textbf{50.49} & \textbf{50.49} & \textbf{88.10} & \textbf{88.10} & \textbf{59.45} & \textbf{59.45} \\
+\midrule
+\multirow{5}{*}{5} & Ada-002 & 17.47 & 17.60 & 12.77 & 12.73 & 0.85 & 0.80 & 6.50 & 6.80 & 13.16 & 13.27 & 19.35 & 19.35 & 12.54 & 12.53 \\
+& Jina-V2 & 19.13 & 13.20 & 10.06 & 1.20 & 1.15 & 0.00 & 5.90 & 3.05 & 12.42 & 6.57 & 19.11 & 13.99 & 10.37 & 2.42 \\
+& Jina-V3 & \textbf{19.33} & \textbf{19.33} & 13.48 & 13.48 & 0.40 & 0.40 & \textbf{8.10} & \textbf{8.90} & 13.52 & 13.52 & 19.58 & 19.58 & 13.22 & 13.24 \\
+& Nomic & 15.93 & 15.93 & 11.73 & 11.87 & \textbf{2.90} & \textbf{2.95} & 1.85 & 1.05 & 7.81 & 7.81 & 16.55 & 16.55 & 10.94 & 11.02 \\
+& Qwen3-0.6B & 19.13 & 19.13 & \textbf{14.65} & \textbf{14.63} & 1.10 & 1.30 & 3.15 & 8.15 & \textbf{14.46} & \textbf{14.46} & \textbf{19.64} & \textbf{19.64} & \textbf{14.11} & \textbf{14.25} \\
+\midrule
+\multirow{5}{*}{10} & Ada-002 & 9.00 & 9.07 & 6.64 & 6.62 & 0.53 & 0.50 & 3.87 & 4.10 & 7.39 & 7.45 & \textbf{9.88} & \textbf{9.88} & 6.59 & 6.59 \\
+& Jina-V2 & 9.77 & 7.77 & 5.34 & 0.77 & 0.63 & 0.03 & 3.12 & 1.65 & 7.23 & 4.51 & 9.76 & 8.18 & 5.56 & 1.54 \\
+& Jina-V3 & \textbf{9.83} & \textbf{9.83} & 7.07 & 7.07 & 0.22 & 0.25 & \textbf{5.35} & \textbf{5.88} & 7.50 & 7.50 & \textbf{9.88} & \textbf{9.88} & 6.99 & 7.01 \\
+& Nomic & 8.50 & 8.50 & 6.23 & 6.29 & \textbf{1.72} & \textbf{1.75} & 0.93 & 0.53 & 4.73 & 4.73 & 9.11 & 9.11 & 5.89 & 5.92 \\
+& Qwen3-0.6B & 9.80 & 9.80 & \textbf{7.65} & \textbf{7.62} & 0.63 & 0.70 & 1.60 & 4.22 & \textbf{8.00} & \textbf{8.00} & 9.82 & 9.82 & \textbf{7.40} & \textbf{7.46} \\
+\midrule
+\multirow{5}{*}{25} & Ada-002 & 3.69 & 3.71 & 2.78 & 2.78 & 0.30 & 0.30 & 1.99 & 2.13 & 3.29 & 3.32 & \textbf{3.99} & \textbf{3.99} & 2.79 & 2.80 \\
+& Jina-V2 & 3.95 & 3.67 & 2.28 & 0.47 & 0.34 & 0.06 & 1.33 & 0.71 & 3.28 & 2.57 & 3.92 & 3.74 & 2.39 & 0.85 \\
+& Jina-V3 & \textbf{3.97} & \textbf{3.97} & 2.97 & 2.97 & 0.21 & 0.21 & \textbf{2.17} & \textbf{2.40} & 3.35 & 3.35 & \textbf{3.99} & \textbf{3.99} & 2.96 & 2.96 \\
+& Nomic & 3.57 & 3.57 & 2.67 & 2.69 & \textbf{0.80} & \textbf{0.79} & 0.37 & 0.21 & 2.50 & 2.50 & 3.85 & 3.85 & 2.58 & 2.59 \\
+& Qwen3-0.6B & 3.93 & 3.93 & \textbf{3.20} & \textbf{3.19} & 0.33 & 0.45 & 0.64 & 1.69 & \textbf{3.56} & \textbf{3.56} & \textbf{3.99} & \textbf{3.99} & \textbf{3.11} & \textbf{3.14} \\
+\bottomrule
+\end{tabular}
+\end{sidewaystable}
+\clearpage
+\begin{sidewaystable}[htbp!]
+\centering
+\footnotesize
+\captionof{table}{Detailed MRR Performance (in \%). Higher is better. Results are grouped by k-value. Best result per column within each k-value group is in \textbf{bold}.}
+\label{tab:detailed_mrr}
+\begin{tabular}{llcccccccccccccc}
+\toprule
+\multirow{2}{*}{k} & \multirow{2}{*}{Model} & \multicolumn{2}{c}{2wikimqa} & \multicolumn{2}{c}{narrativeqa} & \multicolumn{2}{c}{needle} & \multicolumn{2}{c}{passkey} & \multicolumn{2}{c}{qmsum} & \multicolumn{2}{c}{summ screen fd} & \multicolumn{2}{c}{Average} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10} \cmidrule(lr){11-12} \cmidrule(lr){13-14} \cmidrule(lr){15-16}
+& & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP \\
+\midrule
+\multirow{5}{*}{1} & Ada-002 & 79.33 & 81.00 & 54.44 & 54.27 & 2.00 & 1.50 & \textbf{13.25} & \textbf{14.50} & 45.65 & 45.91 & 86.90 & 86.90 & 52.01 & 51.98 \\
+& Jina-V2 & \textbf{91.67} & 24.67 & 41.43 & 2.32 & 3.75 & 0.00 & 12.75 & 8.00 & 40.54 & 11.07 & 81.55 & 32.14 & 41.48 & 4.66 \\
+& Jina-V3 & 90.67 & \textbf{90.67} & 57.54 & 57.46 & 1.25 & 0.75 & 10.50 & 12.50 & 47.22 & 47.22 & 84.23 & 84.23 & 54.69 & 54.67 \\
+& Nomic & 67.33 & 67.33 & 47.51 & 48.15 & \textbf{8.75} & \textbf{9.25} & 5.75 & 3.75 & 21.02 & 21.02 & 52.98 & 52.98 & 42.67 & 43.13 \\
+& Qwen3-0.6B & 89.67 & 89.67 & \textbf{62.99} & \textbf{62.85} & 4.25 & 3.75 & 9.50 & 13.75 & \textbf{50.49} & \textbf{50.49} & \textbf{88.10} & \textbf{88.10} & \textbf{59.45} & \textbf{59.45} \\
+\midrule
+\multirow{5}{*}{5} & Ada-002 & 82.28 & 83.57 & 58.14 & 57.90 & 2.81 & 2.49 & 20.36 & 21.56 & 53.30 & 53.62 & 91.11 & 91.11 & 56.17 & 56.08 \\
+& Jina-V2 & 93.13 & 39.76 & 44.87 & 3.62 & 4.55 & 0.00 & 19.76 & 10.88 & 48.47 & 18.67 & 87.17 & 46.11 & 45.47 & 7.31 \\
+& Jina-V3 & \textbf{93.22} & \textbf{93.22} & 61.43 & 61.34 & 1.46 & 1.21 & \textbf{20.45} & 23.56 & 54.77 & 54.77 & 90.10 & 90.10 & 59.09 & 59.11 \\
+& Nomic & 72.21 & 72.21 & 51.83 & 52.49 & \textbf{11.28} & \textbf{11.63} & 7.20 & 4.46 & 27.64 & 27.64 & 64.18 & 64.18 & 47.30 & 47.75 \\
+& Qwen3-0.6B & 92.28 & 92.28 & \textbf{67.02} & \textbf{66.88} & 4.83 & 4.78 & 12.18 & \textbf{24.09} & \textbf{58.59} & \textbf{58.59} & \textbf{92.31} & \textbf{92.31} & \textbf{63.77} & \textbf{64.02} \\
+\midrule
+\multirow{5}{*}{10} & Ada-002 & 82.68 & 83.96 & 58.48 & 58.25 & 2.94 & 2.61 & 21.22 & 22.54 & 54.40 & 54.73 & 91.39 & 91.39 & 56.61 & 56.53 \\
+& Jina-V2 & 93.42 & 41.35 & 45.29 & 3.84 & 4.63 & 0.03 & 20.01 & 11.04 & 49.84 & 20.31 & 87.45 & 47.74 & 45.97 & 7.76 \\
+& Jina-V3 & \textbf{93.44} & \textbf{93.44} & 61.87 & 61.78 & 1.49 & 1.27 & \textbf{22.38} & \textbf{25.70} & 55.79 & 55.79 & 90.23 & 90.23 & 59.61 & 59.64 \\
+& Nomic & 72.96 & 72.96 & 52.33 & 52.97 & \textbf{11.66} & \textbf{12.01} & 7.20 & 4.46 & 28.74 & 28.74 & 65.37 & 65.37 & 47.87 & 48.30 \\
+& Qwen3-0.6B & 92.60 & 92.60 & \textbf{67.45} & \textbf{67.29} & 4.92 & 4.84 & 12.22 & 24.33 & \textbf{59.65} & \textbf{59.65} & \textbf{92.31} & \textbf{92.31} & \textbf{64.24} & \textbf{64.47} \\
+\midrule
+\multirow{5}{*}{25} & Ada-002 & 82.83 & 84.08 & 58.68 & 58.46 & 3.07 & 2.75 & 21.91 & 23.29 & 54.93 & 55.27 & 91.44 & 91.44 & 56.86 & 56.79 \\
+& Jina-V2 & 93.48 & 42.27 & 45.52 & 4.08 & 4.75 & 0.10 & 20.12 & 11.12 & 50.45 & 21.52 & 87.47 & 48.52 & 46.23 & 8.12 \\
+& Jina-V3 & \textbf{93.52} & \textbf{93.52} & 62.10 & 62.01 & 1.68 & 1.43 & \textbf{22.42} & \textbf{25.78} & 56.35 & 56.35 & 90.28 & 90.28 & 59.87 & 59.89 \\
+& Nomic & 73.21 & 73.21 & 52.61 & 53.24 & \textbf{11.86} & \textbf{12.17} & 7.20 & 4.46 & 29.69 & 29.69 & 65.69 & 65.69 & 48.22 & 48.64 \\
+& Qwen3-0.6B & 92.62 & 92.62 & \textbf{67.67} & \textbf{67.52} & 5.05 & 5.13 & 12.22 & 24.33 & \textbf{60.21} & \textbf{60.21} & \textbf{92.41} & \textbf{92.41} & \textbf{64.48} & \textbf{64.73} \\
+\bottomrule
+\end{tabular}
+\end{sidewaystable}
+\clearpage
+\begin{sidewaystable}[htbp!]
+\centering
+\footnotesize
+\captionof{table}{Detailed NDCG Performance (in \%). Higher is better. Results are grouped by k-value. Best result per column within each k-value group is in \textbf{bold}.}
+\label{tab:detailed_nDCG}
+\begin{tabular}{llcccccccccccccc}
+\toprule
+\multirow{2}{*}{k} & \multirow{2}{*}{Model} & \multicolumn{2}{c}{2wikimqa} & \multicolumn{2}{c}{narrativeqa} & \multicolumn{2}{c}{needle} & \multicolumn{2}{c}{passkey} & \multicolumn{2}{c}{qmsum} & \multicolumn{2}{c}{summ screen fd} & \multicolumn{2}{c}{Average} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10} \cmidrule(lr){11-12} \cmidrule(lr){13-14} \cmidrule(lr){15-16}
+& & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP & L2 & IP \\
+\midrule
+\multirow{5}{*}{1} & Ada-002 & 79.33 & 81.00 & 54.44 & 54.27 & 2.00 & 1.50 & \textbf{13.25} & \textbf{14.50} & 45.65 & 45.91 & 86.90 & 86.90 & 52.01 & 51.98 \\
+& Jina-V2 & \textbf{91.67} & 24.67 & 41.43 & 2.32 & 3.75 & 0.00 & 12.75 & 8.00 & 40.54 & 11.07 & 81.55 & 32.14 & 41.48 & 4.66 \\
+& Jina-V3 & 90.67 & \textbf{90.67} & 57.54 & 57.46 & 1.25 & 0.75 & 10.50 & 12.50 & 47.22 & 47.22 & 84.23 & 84.23 & 54.69 & 54.67 \\
+& Nomic & 67.33 & 67.33 & 47.51 & 48.15 & \textbf{8.75} & \textbf{9.25} & 5.75 & 3.75 & 21.02 & 21.02 & 52.98 & 52.98 & 42.67 & 43.13 \\
+& Qwen3-0.6B & 89.67 & 89.67 & \textbf{62.99} & \textbf{62.85} & 4.25 & 3.75 & 9.50 & 13.75 & \textbf{50.49} & \textbf{50.49} & \textbf{88.10} & \textbf{88.10} & \textbf{59.45} & \textbf{59.45} \\
+\midrule
+\multirow{5}{*}{5} & Ada-002 & 83.53 & 84.68 & 59.57 & 59.34 & 3.16 & 2.87 & 23.38 & 24.65 & 56.42 & 56.79 & 92.54 & 92.54 & 57.81 & 57.73 \\
+& Jina-V2 & 93.76 & 46.27 & 46.23 & 4.21 & 4.85 & 0.00 & 22.23 & 11.98 & 51.86 & 22.19 & 89.28 & 52.05 & 47.07 & 8.50 \\
+& Jina-V3 & \textbf{94.09} & \textbf{94.09} & 62.93 & 62.87 & 1.59 & 1.41 & \textbf{25.38} & \textbf{28.73} & 57.96 & 57.96 & 92.10 & 92.10 & 60.84 & 60.89 \\
+& Nomic & 74.07 & 74.07 & 53.54 & 54.21 & \textbf{12.10} & \textbf{12.43} & 7.72 & 4.66 & 30.48 & 30.48 & 68.81 & 68.81 & 49.15 & 49.59 \\
+& Qwen3-0.6B & 93.14 & 93.14 & \textbf{68.59} & \textbf{68.46} & 5.01 & 5.21 & 13.09 & 28.26 & \textbf{62.01} & \textbf{62.01} & \textbf{93.80} & \textbf{93.80} & \textbf{65.47} & \textbf{65.82} \\
+\midrule
+\multirow{5}{*}{10} & Ada-002 & 84.45 & 85.57 & 60.39 & 60.18 & 3.48 & 3.18 & 25.43 & 26.96 & 59.07 & 59.44 & 93.22 & 93.22 & 58.86 & 58.80 \\
+& Jina-V2 & 94.43 & 50.08 & 47.24 & 4.76 & 5.03 & 0.07 & 22.82 & 12.37 & 55.17 & 26.15 & 89.95 & 55.95 & 48.28 & 9.58 \\
+& Jina-V3 & \textbf{94.63} & \textbf{94.63} & 63.99 & 63.93 & 1.67 & 1.56 & \textbf{29.77} & \textbf{33.58} & 60.40 & 60.40 & 92.39 & 92.39 & 62.10 & 62.16 \\
+& Nomic & 75.84 & 75.84 & 54.74 & 55.35 & \textbf{13.01} & \textbf{13.32} & 7.72 & 4.66 & 33.15 & 33.15 & 71.58 & 71.58 & 50.53 & 50.93 \\
+& Qwen3-0.6B & 93.91 & 93.91 & \textbf{69.63} & \textbf{69.44} & 5.23 & 5.37 & 13.17 & 28.79 & \textbf{64.52} & \textbf{64.52} & \textbf{93.80} & \textbf{93.80} & \textbf{66.59} & \textbf{66.91} \\
+\midrule
+\multirow{5}{*}{25} & Ada-002 & 85.01 & 86.06 & 61.15 & 60.97 & 4.02 & 3.77 & 28.11 & 29.93 & 61.11 & 61.52 & 93.43 & 93.43 & 59.80 & 59.78 \\
+& Jina-V2 & 94.67 & 53.55 & 48.11 & 5.70 & 5.55 & 0.37 & 23.28 & 12.69 & 57.53 & 30.86 & 90.03 & 58.85 & 49.27 & 11.02 \\
+& Jina-V3 & \textbf{94.90} & \textbf{94.90} & 64.89 & 64.81 & 2.40 & 2.21 & \textbf{29.95} & \textbf{33.88} & 62.54 & 62.54 & 92.61 & 92.61 & 63.08 & 63.13 \\
+& Nomic & 76.88 & 76.88 & 55.83 & 56.43 & \textbf{13.71} & \textbf{13.90} & 7.72 & 4.66 & 36.83 & 36.83 & 72.83 & 72.83 & 51.87 & 52.26 \\
+& Qwen3-0.6B & 93.99 & 93.99 & \textbf{70.47} & \textbf{70.31} & 5.73 & 6.43 & 13.17 & 28.79 & \textbf{66.71} & \textbf{66.71} & \textbf{94.18} & \textbf{94.18} & \textbf{67.52} & \textbf{67.89} \\
+\bottomrule
+\end{tabular}
+\end{sidewaystable}
+\clearpage
+\begin{table}[htbp!]
+\centering
+\footnotesize
+\caption{Summary of Average Performance Across All Datasets (in \%). Best result per column within each k-group is in \textbf{{bold}}.}
+\label{tab:summary}
+\begin{tabular}{llcccccccc}
+\toprule
+\multirow{2}{*}{k} & \multirow{2}{*}{Model} & \multicolumn{2}{c}{RECALL} & \multicolumn{2}{c}{PRECISION} & \multicolumn{2}{c}{MRR} & \multicolumn{2}{c}{NDCG} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
+& & L2 & IP & L2 & IP & L2 & IP & L2 & IP \\
+\midrule
+\multirow{5}{*}{1} & Ada-002 & 52.01 & 51.98 & 52.01 & 51.98 & 52.01 & 51.98 & 52.01 & 51.98 \\
+& Jina-V2 & 41.48 & 4.66 & 41.48 & 4.66 & 41.48 & 4.66 & 41.48 & 4.66 \\
+& Jina-V3 & 54.69 & 54.67 & 54.69 & 54.67 & 54.69 & 54.67 & 54.69 & 54.67 \\
+& Nomic & 42.67 & 43.13 & 42.67 & 43.13 & 42.67 & 43.13 & 42.67 & 43.13 \\
+& Qwen3-0.6B & \textbf{59.45} & \textbf{59.45} & \textbf{59.45} & \textbf{59.45} & \textbf{59.45} & \textbf{59.45} & \textbf{59.45} & \textbf{59.45} \\
+\midrule
+\multirow{5}{*}{5} & Ada-002 & 62.71 & 62.66 & 12.54 & 12.53 & 56.17 & 56.08 & 57.81 & 57.73 \\
+& Jina-V2 & 51.85 & 12.12 & 10.37 & 2.42 & 45.47 & 7.31 & 47.07 & 8.50 \\
+& Jina-V3 & 66.09 & 66.22 & 13.22 & 13.24 & 59.09 & 59.11 & 60.84 & 60.89 \\
+& Nomic & 54.69 & 55.11 & 10.94 & 11.02 & 47.30 & 47.75 & 49.15 & 49.59 \\
+& Qwen3-0.6B & \textbf{70.55} & \textbf{71.23} & \textbf{14.11} & \textbf{14.25} & \textbf{63.77} & \textbf{64.02} & \textbf{65.47} & \textbf{65.82} \\
+\midrule
+\multirow{5}{*}{10} & Ada-002 & 65.91 & 65.94 & 6.59 & 6.59 & 56.61 & 56.53 & 58.86 & 58.80 \\
+& Jina-V2 & 55.58 & 15.43 & 5.56 & 1.54 & 45.97 & 7.76 & 48.28 & 9.58 \\
+& Jina-V3 & 69.94 & 70.13 & 6.99 & 7.01 & 59.61 & 59.64 & 62.10 & 62.16 \\
+& Nomic & 58.92 & 59.24 & 5.89 & 5.92 & 47.87 & 48.30 & 50.53 & 50.93 \\
+& Qwen3-0.6B & \textbf{74.00} & \textbf{74.58} & \textbf{7.40} & \textbf{7.46} & \textbf{64.24} & \textbf{64.47} & \textbf{66.59} & \textbf{66.91} \\
+\midrule
+\multirow{5}{*}{25} & Ada-002 & 69.74 & 69.93 & 2.79 & 2.80 & 56.86 & 56.79 & 59.80 & 59.78 \\
+& Jina-V2 & 59.63 & 21.37 & 2.39 & 0.85 & 46.23 & 8.12 & 49.27 & 11.02 \\
+& Jina-V3 & 73.92 & 74.08 & 2.96 & 2.96 & 59.87 & 59.89 & 63.08 & 63.13 \\
+& Nomic & 64.41 & 64.70 & 2.58 & 2.59 & 48.22 & 48.64 & 51.87 & 52.26 \\
+& Qwen3-0.6B & \textbf{77.79} & \textbf{78.53} & \textbf{3.11} & \textbf{3.14} & \textbf{64.48} & \textbf{64.73} & \textbf{67.52} & \textbf{67.89} \\
+\bottomrule
+\end{tabular}
+\end{table}

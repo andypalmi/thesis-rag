@@ -23,8 +23,8 @@ To measure the impact of different optimization techniques, a baseline RAG confi
 \subsection{Core Evaluation Metrics}
 The performance of the RAG system was evaluated at both the retrieval and generation stages.
 \begin{itemize}
-\item \textbf{Retrieval Performance:} Assessed using \textit{Precision@k}, \textit{Recall@k}, and \textit{Mean Reciprocal Rank (MRR)}. These metrics are crucial for understanding the effectiveness of the retrieval stage in isolation \autocite{rag_eval_ridgerun_2024}.
-\item \textbf{Generation Quality:} Evaluated using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The key metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{zheng2023judging, rag_eval_qdrant_2024, rag_eval_pinecone}.
+\item \textbf{Retrieval Performance:} Assessed using \textit{Precision@k}, \textit{Recall@k}, and \textit{Mean Reciprocal Rank (MRR)}. These metrics are crucial for understanding the effectiveness of the retrieval stage in isolation.
+\item \textbf{Generation Quality:} Evaluated using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The key metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{zheng2023judging}.
 \end{itemize}
 
 \section{Experiment 1: Impact of Chunking Techniques}
@@ -57,70 +57,36 @@ Semantic Chunking & TBD & TBD \\
 This experiment evaluates the performance of different embedding models on long-context retrieval tasks. The goal is to understand how different architectural and chunking strategies affect retrieval performance on documents of varying lengths and complexity.
 
 \subsection{Models and Methodology}
-We compared three embedding models on the \textbf{LongEmbed} benchmark \autocite{zhu2024longembedextendingembeddingmodels}, a suite of datasets designed to test long-context retrieval. The models evaluated were:
+We compared five embedding models on the \textbf{LongEmbed} benchmark \autocite{zhu2024longembedextendingembeddingmodels}, a suite of datasets designed to test long-context retrieval. The models evaluated were:
 \begin{itemize}
-    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely-used, high-performance proprietary model.
-    \item \textbf{Jina AI \texttt{jina-embeddings-v3}:} A model that implements \textit{late chunking}, where chunks from the same document are tokenized together up to the model's context window of 8192 tokens.
-    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} A model that uses a classical chunking approach with a maximum chunk size of 500 tokens.
+    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely-used, high-performance proprietary model with a vector size of 1536.
+    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} An open-source model with a vector size of 768.
+    \item \textbf{Jina AI \texttt{jina-embeddings-v2-base-en}:} An open-source model with a vector size of 768.
+    \item \textbf{Jina AI \texttt{jina-embeddings-v3}:} A model that implements \textit{late chunking}, where chunks from the same document are tokenized together up to the model's context window of 8192 tokens, with a vector size of 1024.
+    \item \textbf{Qwen \texttt{Qwen3-Embedding-0.6B}:} An open-source model with a vector size of 1024.
 \end{itemize}
-All three models have a context window of 8192 tokens. Performance was measured using Recall@k and Mean Reciprocal Rank (MRR)@k across six datasets from the LongEmbed benchmark.
+For vector storage and retrieval, we used Milvus \autocite{milvus}, a popular open-source vector database. We created an index of type HNSW (Hierarchical Navigable Small World) with the L2 distance metric. The index parameters were set to M=8 and efConstruction=64.
+
+\subsection{Datasets}
+The LongEmbed benchmark is composed of six datasets, two of which are synthetic and four are based on real-world data. The datasets are:
+\begin{itemize}
+    \item \textbf{2WikiMQA:} A multi-hop question-answering dataset.
+    \item \textbf{NarrativeQA:} A question-answering dataset with long stories.
+    \item \textbf{Needle In A Haystack (NIAH):} A synthetic dataset that tests the model's ability to find a specific piece of information ("needle") in a long text ("haystack").
+    \item \textbf{Passkey Retrieval:} A synthetic dataset that tests the model's ability to retrieve a specific key from a long document.
+    \item \textbf{QMSum:} A query-based meeting summarization dataset.
+    \item \textbf{SummScreenFD:} A summarization dataset based on TV show scripts.
+\end{itemize}
 
 \subsection{Results and Discussion}
-The detailed results for Recall@k and MRR@k across all datasets and k values are presented in Table \ref{tab:embedding_results_detailed}.
+The results are presented in the following tables, with each table showing the performance for a specific metric (Recall, Precision, MRR, and nDCG) across all datasets and k-values. The best-performing model for each dataset and k-value combination is highlighted in bold.
 
-\begin{table}[htbp] % Use [htbp] placement specifier for better float positioning
-\centering
-\caption{Detailed Embedding Model Performance on LongEmbed}
-\label{tab:embedding_results_detailed}
-\setlength{\tabcolsep}{4pt} % Adjust space between columns to help it fit
-\small % Use \small or \footnotesize to adjust font size if needed
+\input{chapter7_tables_embedding_results.tex}
 
-\makebox[\linewidth][c]{%
-  % Use a standard `tabular` environment. The @{} removes extra space at the ends.
-  \begin{tabular}{@{}|l|r|*{6}{c}|c|| *{6}{c}|c|@{}} 
-  \toprule
-  \textbf{Model} & \textbf{k} 
-      & \multicolumn{7}{c}{\textbf{Recall@k (\%)}} 
-      & \multicolumn{7}{c}{\textbf{MRR@k (\%)}} \\
-  \cmidrule(lr){3-9} \cmidrule(lr){10-16} % Partial rules under the main headers
-  & & 2Wk & Nar & Ned & Pk & Qm & Su & Avg
-      & 2Wk & Nar & Ned & Pk & Qm & Su & Avg \\
-  \midrule
-  % Data for ada-002
-  \texttt{ada-002} 
-  & 1 & 85.67 & 58.38 & 1.00 & 7.75 & 47.09 & 86.90 & 55.20 & 85.67 & 58.38 & 1.00 & 7.75 & 47.09 & 86.90 & 55.20 \\
-  & 5 & 93.67 & 68.60 & 1.75 & 16.75 & 68.24 & 97.02 & 66.29 & 88.67 & 62.36 & 1.21 & 10.86 & 55.05 & 91.09 & 59.48 \\
-  & 10 & 96.00 & 71.22 & 2.50 & 21.00 & 76.42 & 98.81 & 69.51 & 89.03 & 62.71 & 1.32 & 11.43 & 56.14 & 91.32 & 59.91 \\
-  & 25 & 97.67 & 74.54 & 4.50 & 26.25 & 84.87 & 99.70 & 73.34 & 89.14 & 62.93 & 1.44 & 11.76 & 56.69 & 91.37 & 60.16 \\
-  \midrule
-  % Data for jina-v3
-  \texttt{jina-v3} 
-  & 1 & 80.33 & 38.82 & 3.00 & 10.25 & 34.91 & 88.39 & 38.62 & 80.33 & 38.82 & 3.00 & 10.25 & 34.91 & 88.39 & 38.62 \\
-  & 5 & 87.67 & 42.94 & 5.50 & 16.00 & 48.46 & 94.94 & 43.95 & 82.82 & 40.31 & 4.01 & 12.56 & 39.66 & 90.71 & 40.54 \\
-  & 10 & 90.33 & 45.41 & 7.75 & 16.75 & 58.55 & 96.73 & 47.22 & 83.16 & 40.64 & 4.32 & 12.65 & 40.96 & 90.98 & 40.97 \\
-  & 25 & 94.67 & 48.41 & 9.50 & 17.75 & 69.68 & 98.81 & 51.05 & 83.45 & 40.84 & 4.42 & 12.72 & 41.66 & 91.10 & 41.22 \\
-  \midrule
-  % Data for nomic
-  \texttt{nomic} 
-  & 1 & 63.33 & 48.45 & 3.25 & 6.50 & 25.08 & 72.62 & 44.13 & 63.33 & 48.45 & 3.25 & 6.50 & 25.08 & 72.62 & 44.13 \\
-  & 5 & 75.00 & 61.36 & 6.50 & 8.25 & 42.83 & 87.80 & 57.00 & 68.09 & 53.47 & 4.41 & 7.31 & 31.40 & 78.77 & 49.08 \\
-  & 10 & 80.33 & 65.30 & 7.00 & 8.25 & 53.11 & 91.37 & 61.46 & 68.75 & 54.01 & 4.47 & 7.31 & 32.79 & 79.28 & 49.69 \\
-  & 25 & 87.67 & 70.40 & 10.25 & 8.50 & 64.44 & 94.05 & 67.06 & 69.25 & 54.34 & 4.67 & 7.34 & 33.53 & 79.45 & 50.05 \\
-  \midrule
-  % The abbreviations row is just a regular row using \multicolumn
-  \multicolumn{16}{@{}l}{\footnotesize Datasets abbreviations: 2Wk=2wiki, Nar=narrative, Ned=needle, Pk=passkey, Qm=qmsum, Su=summ.} \\
-  \bottomrule
-  \end{tabular}%
-}
-\end{table}
+The results show that the \textbf{Qwen3-Embedding-0.6B} model is the strongest performer overall, achieving the highest average recall, precision, MRR, and nDCG across all k-values. This suggests that it is a highly effective and robust general-purpose retriever. The \textbf{jina-embeddings-v3} model, with its late chunking strategy, also performs well, especially on the `passkey` dataset. The \textbf{nomic-embed-text} model excels at the `needle` task, indicating its strength in finding specific facts in long documents. The \textbf{ada-002} and \textbf{jina-embeddings-v2-base-en} models show competitive performance on some datasets but do not consistently match the top performers.
 
-The results show that \textbf{OpenAI's \texttt{text-embedding-ada-002} is the strongest performer overall}, achieving the highest average recall and MRR across most datasets and k-values. This suggests that it is a highly effective and robust general-purpose retriever.
 
-However, the performance on the synthetic tasks within LongEmbed reveals a more nuanced picture. On the \texttt{needle} task (a "needle-in-a-haystack" scenario), both \texttt{jina-embeddings-v3} and \texttt{nomic-embed-text} significantly outperform \texttt{ada-002}, particularly at smaller values of k. This indicates their potential strength in locating highly specific, isolated facts within long documents. Conversely, \texttt{ada-002} is the top performer on the \texttt{passkey} task, which tests the model's ability to retrieve a specific key from a long document.
-
-The \textbf{late chunking} strategy of the \texttt{jina-embeddings-v3} model did not translate into a general performance advantage in this evaluation. Its lower overall scores, particularly on real-world question-answering datasets like \texttt{2wikimqa} and \texttt{narrativeqa}, suggest that while advanced chunking techniques are promising, their effectiveness is highly task-dependent. The \texttt{nomic-embed-text} model shows competitive performance, often outperforming \texttt{jina-embeddings-v3}, but it does not consistently match the high performance of \texttt{ada-002} on the real-world datasets.
-
-\section{Experiment 3: Reranking Strategies}
+\section{Experiment 2: Reranking Strategies}
 \label{sec:exp_reranking}
 This experiment evaluated the benefit of adding a reranking step after the initial retrieval (using Sentence-BERT).
 \subsection{Reranking Methods Compared}
@@ -147,7 +113,7 @@ Cross-Encoder & \textbf{TBD} & \textbf{TBD} \\
 \end{tabular}
 \end{table}
 
-\section{Experiment 4: Generative Model and Prompt Evaluation}
+\section{Experiment 3: Generative Model and Prompt Evaluation}
 \label{sec:exp_generator_prompt}
 This experiment focuses on the generation part of the RAG pipeline, evaluating a wide range of Large Language Models to serve as the generator. The primary goal was to find the best-performing model and the optimal prompt and temperature configuration for our specific use case.
 
@@ -174,107 +140,7 @@ The comprehensive results are presented in Table \ref{tab:deepeval_results}. The
 
 For instance, the \textbf{O4 Mini} model using prompt \texttt{P2} and a temperature of \texttt{0.2} achieved the highest total score of \textbf{403.86}. This demonstrates the value of continuous evaluation, as it allowed us to identify a model that not only performs better than the original baseline but also to determine the ideal prompt (\texttt{P2}) and temperature (\texttt{0.2}) for it. These findings are critical for deploying a RAG system that is not only accurate and faithful but also robust in handling queries that cannot be answered from the available context.
 
-\clearpage
-\newgeometry{
-  inner=1.5cm,     % left margin on even pages
-  outer=1.5cm,     % right margin on odd pages
-  top=1cm,
-  bottom=1cm,
-  bindingoffset=0cm
-}
-\pagestyle{empty}
-\begin{landscape}
-    \small
-    \setlength{\tabcolsep}{3pt}       % default is ~6pt
-    \renewcommand{\arraystretch}{0.9}  % tighten row height
-    \setlength{\LTleft}{0pt}          % left align longtable
-    \setlength{\LTright}{0pt}         % right align longtable
-    \begin{longtable}{|l|c|c|ccccc|c|ccccc|ccccc|}
-        \caption{DeepEval Generative Model and Prompt Evaluation Results}
-        \label{tab:deepeval_results} \\
-
-        \toprule
-        \textbf{Model} & \textbf{Prompt} & \textbf{Temp} & \multicolumn{5}{c|}{\textbf{Avg. Scores}} & \textbf{Total} & \multicolumn{5}{c|}{\textbf{GPT-4o}} & \multicolumn{5}{c|}{\textbf{Claude 3.5}} \\
-        & & & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} \\
-        \midrule
-        \endfirsthead
-
-        \multicolumn{19}{c}{\tablename\ \thetable{} -- continued from previous page} \\
-        \midrule
-        \textbf{Model} & \textbf{Prompt} & \textbf{Temp} & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} & \textbf{AR} & \textbf{C} & \textbf{F} & \textbf{H} & \textbf{SIA} \\
-        \midrule
-        \endhead
-
-        \midrule
-        \multicolumn{19}{l}{\footnotesize{\textbf{AR}: Answer Relevancy, \textbf{C}: Correctness, \textbf{F}: Faithfulness, \textbf{H}: Hallucination, \textbf{SIA}: Specific Information Accuracy}} \\
-        \multicolumn{19}{r}{Continued on next page} \\
-        \endfoot
-
-        \bottomrule
-        \multicolumn{19}{l}{\footnotesize{\textbf{AR}: Answer Relevancy, \textbf{C}: Correctness, \textbf{F}: Faithfulness, \textbf{H}: Hallucination, \textbf{SIA}: Specific Information Accuracy}}
-        \endlastfoot
-        Claude 3 Haiku & P1 & 0.0 & 57.70 & 66.66 & 87.18 & 69.23 & 74.36 & 355.13 & 61.54 & 69.23 & 84.62 & 64.10 & 79.49 & 53.85 & 64.10 & 89.74 & 74.36 & 69.23 \\
-        Claude 3 Haiku & P1 & 0.2 & 62.82 & 61.54 & 87.18 & 65.38 & 67.94 & 344.86 & 61.54 & 53.85 & 84.62 & 58.97 & 64.10 & 64.10 & 69.23 & 89.74 & 71.79 & 71.79 \\
-        Claude 3 Haiku & P2 & 0.0 & 66.66 & 62.82 & 89.74 & 67.94 & 74.36 & 361.52 & 64.10 & 56.41 & 89.74 & 64.10 & 82.05 & 69.23 & 69.23 & 89.74 & 71.79 & 66.67 \\
-        Claude 3 Haiku & P2 & 0.2 & 62.82 & 61.53 & 79.49 & 65.38 & 73.07 & 342.29 & 61.54 & 58.97 & 79.49 & 58.97 & 82.05 & 64.10 & 64.10 & 79.49 & 71.79 & 64.10 \\
-        Claude 3.5 Sonnet & P1 & 0.0 & 58.97 & 76.93 & 92.31 & 74.35 & 71.79 & 374.35 & 61.54 & 69.23 & 97.44 & 58.97 & 71.79 & 56.41 & 84.62 & 87.18 & 89.74 & 71.79 \\
-        Claude 3.5 Sonnet v2 & P1 & 0.0 & 48.72 & 75.65 & 96.16 & 66.66 & 67.95 & 355.14 & 48.72 & 66.67 & 92.31 & 51.28 & 69.23 & 48.72 & 84.62 & 100.00 & 82.05 & 66.67 \\
-        Claude 3.5 Sonnet v2 & P1 & 0.2 & 52.56 & 69.23 & 96.16 & 71.80 & 69.23 & 358.98 & 53.85 & 53.85 & 94.87 & 56.41 & 76.92 & 51.28 & 84.62 & 97.44 & 87.18 & 61.54 \\
-        Claude 3.5 Sonnet v2 & P2 & 0.0 & 62.82 & 70.52 & 91.03 & 78.20 & 84.62 & 387.19 & 64.10 & 61.54 & 89.74 & 61.54 & 84.62 & 61.54 & 79.49 & 92.31 & 94.87 & 84.62 \\
-        Claude 3.5 Sonnet v2 & P2 & 0.2 & 64.10 & 75.64 & 94.87 & 76.92 & 88.46 & 399.99 & 71.79 & 74.36 & 94.87 & 61.54 & 89.74 & 56.41 & 76.92 & 94.87 & 92.31 & 87.18 \\
-        Claude 3.7 Sonnet & P1 & 0.0 & 48.72 & 82.05 & 88.47 & 71.80 & 78.20 & 369.24 & 48.72 & 69.23 & 92.31 & 56.41 & 74.36 & 48.72 & 94.87 & 84.62 & 87.18 & 82.05 \\
-        Claude 3.7 Sonnet & P1 & 0.2 & 44.87 & 88.46 & 88.46 & 73.08 & 88.46 & 383.33 & 46.15 & 87.18 & 94.87 & 58.97 & 94.87 & 43.59 & 89.74 & 82.05 & 87.18 & 82.05 \\
-        Claude 3.7 Sonnet & P2 & 0.0 & 48.72 & 78.21 & 93.59 & 78.20 & 85.90 & 384.62 & 53.85 & 71.79 & 94.87 & 61.54 & 79.49 & 43.59 & 84.62 & 92.31 & 94.87 & 92.31 \\
-        Claude 3.7 Sonnet & P2 & 0.2 & 43.59 & 84.62 & 89.74 & 79.49 & 92.31 & 389.75 & 46.15 & 82.05 & 89.74 & 66.67 & 92.31 & 41.03 & 87.18 & 89.74 & 92.31 & 92.31 \\
-        Claude 4.0 Sonnet & P1 & 0.2 & 38.46 & 83.34 & 89.75 & 76.92 & 83.33 & 371.80 & 38.46 & 79.49 & 87.18 & 61.54 & 89.74 & 38.46 & 87.18 & 92.31 & 92.31 & 76.92 \\
-        Claude 4.0 Sonnet & P2 & 0.2 & 42.31 & 84.62 & 91.03 & 79.49 & 91.03 & 388.48 & 41.03 & 84.62 & 97.44 & 66.67 & 94.87 & 43.59 & 84.62 & 84.62 & 92.31 & 87.18 \\
-        GPT-4 Omni & P1 & 0.0 & 56.41 & 65.38 & 93.59 & 70.52 & 67.94 & 353.84 & 53.85 & 58.97 & 92.31 & 56.41 & 71.79 & 58.97 & 71.79 & 94.87 & 84.62 & 64.10 \\
-        GPT-4 Omni & P1 & 0.2 & 60.26 & 78.20 & 92.31 & 67.95 & 71.80 & 370.52 & 53.85 & 74.36 & 94.87 & 51.28 & 69.23 & 66.67 & 82.05 & 89.74 & 84.62 & 74.36 \\
-        GPT-4 Omni & P2 & 0.0 & 56.41 & 74.36 & 92.31 & 61.54 & 78.20 & 362.82 & 51.28 & 64.10 & 92.31 & 48.72 & 76.92 & 61.54 & 84.62 & 92.31 & 74.36 & 79.49 \\
-        GPT-4 Omni & P2 & 0.2 & 58.97 & 73.08 & 92.31 & 67.95 & 79.48 & 371.79 & 53.85 & 61.54 & 92.31 & 56.41 & 82.05 & 64.10 & 84.62 & 92.31 & 79.49 & 76.92 \\
-        GPT-4 Omni Mini & P1 & 0.0 & 61.54 & 73.08 & 91.03 & 70.52 & 66.66 & 362.83 & 51.28 & 71.79 & 89.74 & 56.41 & 69.23 & 71.79 & 74.36 & 92.31 & 84.62 & 64.10 \\
-        GPT-4 Omni Mini & P1 & 0.2 & 61.54 & 71.80 & 94.88 & 69.23 & 70.52 & 367.97 & 56.41 & 69.23 & 92.31 & 53.85 & 74.36 & 66.67 & 74.36 & 97.44 & 84.62 & 66.67 \\
-        GPT-4 Omni Mini & P2 & 0.0 & 65.38 & 74.36 & 92.31 & 57.69 & 75.64 & 365.38 & 66.67 & 69.23 & 92.31 & 43.59 & 79.49 & 64.10 & 79.49 & 92.31 & 71.79 & 71.79 \\
-        GPT-4 Omni Mini & P2 & 0.2 & 64.10 & 76.92 & 91.03 & 58.97 & 80.77 & 371.79 & 64.10 & 71.79 & 87.18 & 46.15 & 82.05 & 64.10 & 82.05 & 94.87 & 71.79 & 79.49 \\
-        GPT-4.1 & P1 & 0.2 & 65.38 & 82.05 & 93.59 & 73.07 & 85.89 & 399.98 & 64.10 & 82.05 & 97.44 & 56.41 & 89.74 & 66.67 & 82.05 & 89.74 & 89.74 & 82.05 \\
-        GPT-4.1 & P2 & 0.2 & 62.82 & 80.77 & 93.59 & 70.52 & 89.74 & 397.44 & 61.54 & 76.92 & 94.87 & 61.54 & 89.74 & 64.10 & 84.62 & 92.31 & 79.49 & 89.74 \\
-        GPT-4.1 Nano & P1 & 0.2 & 56.41 & 69.23 & 93.59 & 75.64 & 73.08 & 367.95 & 58.97 & 61.54 & 92.31 & 58.97 & 71.79 & 53.85 & 76.92 & 94.87 & 92.31 & 74.36 \\
-        GPT-4.1 Nano & P2 & 0.2 & 65.38 & 57.69 & 87.18 & 69.23 & 78.20 & 357.68 & 64.10 & 51.28 & 89.74 & 58.97 & 79.49 & 66.67 & 64.10 & 84.62 & 79.49 & 76.92 \\
-        Gemini 1.5 Flash & P1 & 0.0 & 73.08 & 61.53 & 93.59 & 62.82 & 65.39 & 356.41 & 69.23 & 58.97 & 92.31 & 51.28 & 61.54 & 76.92 & 64.10 & 94.87 & 74.36 & 69.23 \\
-        Gemini 1.5 Flash & P1 & 0.2 & 73.08 & 57.69 & 96.16 & 61.54 & 67.95 & 356.42 & 71.79 & 51.28 & 94.87 & 48.72 & 69.23 & 74.36 & 64.10 & 97.44 & 74.36 & 66.67 \\
-        Gemini 1.5 Flash & P2 & 0.0 & 78.20 & 52.56 & 96.16 & 69.23 & 67.95 & 364.10 & 76.92 & 51.28 & 97.44 & 53.85 & 66.67 & 79.49 & 53.85 & 94.87 & 84.62 & 69.23 \\
-        Gemini 1.5 Flash & P2 & 0.2 & 78.20 & 67.95 & 92.31 & 69.23 & 82.06 & 389.75 & 82.05 & 66.67 & 92.31 & 53.85 & 79.49 & 74.36 & 69.23 & 92.31 & 84.62 & 84.62 \\
-        Gemini 1.5 Pro & P1 & 0.0 & 74.36 & 60.26 & 93.59 & 65.39 & 56.41 & 350.01 & 74.36 & 53.85 & 100.00 & 43.59 & 53.85 & 74.36 & 66.67 & 87.18 & 87.18 & 58.97 \\
-        Gemini 1.5 Pro & P1 & 0.2 & 75.64 & 52.56 & 91.03 & 64.11 & 55.13 & 338.47 & 74.36 & 48.72 & 94.87 & 43.59 & 56.41 & 76.92 & 56.41 & 87.18 & 84.62 & 53.85 \\
-        Gemini 1.5 Pro & P2 & 0.0 & 67.94 & 56.41 & 97.44 & 65.38 & 65.38 & 352.55 & 64.10 & 51.28 & 97.44 & 51.28 & 71.79 & 71.79 & 61.54 & 97.44 & 79.49 & 58.97 \\
-        Gemini 1.5 Pro & P2 & 0.2 & 74.36 & 58.97 & 93.59 & 60.25 & 74.36 & 361.53 & 71.79 & 58.97 & 92.31 & 46.15 & 74.36 & 76.92 & 58.97 & 94.87 & 74.36 & 74.36 \\
-        Gemini 2.0 Flash & P1 & 0.0 & 48.72 & 48.72 & 97.44 & 65.39 & 53.84 & 314.11 & 51.28 & 46.15 & 97.44 & 43.59 & 48.72 & 46.15 & 51.28 & 97.44 & 87.18 & 58.97 \\
-        Gemini 2.0 Flash & P1 & 0.2 & 47.44 & 46.16 & 100.00 & 58.98 & 56.41 & 308.99 & 46.15 & 41.03 & 100.00 & 33.33 & 48.72 & 48.72 & 51.28 & 100.00 & 84.62 & 64.10 \\
-        Gemini 2.0 Flash & P2 & 0.0 & 66.66 & 61.53 & 93.59 & 67.95 & 74.36 & 364.09 & 64.10 & 58.97 & 92.31 & 56.41 & 71.79 & 69.23 & 64.10 & 94.87 & 79.49 & 76.92 \\
-        Gemini 2.0 Flash & P2 & 0.2 & 73.08 & 56.41 & 92.31 & 65.38 & 75.64 & 362.82 & 71.79 & 51.28 & 92.31 & 51.28 & 74.36 & 74.36 & 61.54 & 92.31 & 79.49 & 76.92 \\
-        Gemini 2.5 Flash & P2 & 0.2 & 55.12 & 74.36 & 91.03 & 69.23 & 85.90 & 375.64 & 51.28 & 66.67 & 92.31 & 56.41 & 87.18 & 58.97 & 82.05 & 89.74 & 82.05 & 84.62 \\
-        Gemini 2.5 Flash & P2 & 0.2 & 57.70 & 75.64 & 91.03 & 74.35 & 87.18 & 385.90 & 53.85 & 74.36 & 94.87 & 58.97 & 89.74 & 61.54 & 76.92 & 87.18 & 89.74 & 84.62 \\
-        Gemini 2.5 Flash & P2 & 0.2 & 62.82 & 78.20 & 91.03 & 70.52 & 87.18 & 389.75 & 58.97 & 76.92 & 92.31 & 56.41 & 89.74 & 66.67 & 79.49 & 89.74 & 84.62 & 84.62 \\
-        Gemini 2.5 Flash & P2 & 0.2 & 66.66 & 74.36 & 89.75 & 69.23 & 88.46 & 388.46 & 58.97 & 66.67 & 92.31 & 53.85 & 87.18 & 74.36 & 82.05 & 87.18 & 84.62 & 89.74 \\
-        Gemini 2.5 Pro & P2 & 0.2 & 62.82 & 82.05 & 93.59 & 73.08 & 91.03 & 402.57 & 61.54 & 74.36 & 94.87 & 61.54 & 94.87 & 64.10 & 89.74 & 92.31 & 84.62 & 87.18 \\
-        Gemini 2.5 Pro & P2 & 0.2 & 62.82 & 82.05 & 89.74 & 71.80 & 88.46 & 394.87 & 66.67 & 71.79 & 89.74 & 58.97 & 89.74 & 58.97 & 92.31 & 89.74 & 84.62 & 87.18 \\
-        Gemini 2.5 Pro & P2 & 0.2 & 57.69 & 76.93 & 92.31 & 75.64 & 87.18 & 389.75 & 58.97 & 69.23 & 97.44 & 61.54 & 87.18 & 56.41 & 84.62 & 87.18 & 89.74 & 87.18 \\
-        Gemini 2.5 Pro & P2 & 0.2 & 62.82 & 78.21 & 88.47 & 76.92 & 87.18 & 393.60 & 58.97 & 69.23 & 92.31 & 64.10 & 89.74 & 66.67 & 87.18 & 84.62 & 89.74 & 84.62 \\
-        O1 & P1 & 0.0 & 66.67 & 82.05 & 93.59 & 76.92 & 84.62 & 403.85 & 71.79 & 76.92 & 94.87 & 56.41 & 87.18 & 61.54 & 87.18 & 92.31 & 97.44 & 82.05 \\
-        O1 & P2 & 0.0 & 70.52 & 71.79 & 97.44 & 62.82 & 93.59 & 396.16 & 66.67 & 64.10 & 97.44 & 46.15 & 92.31 & 74.36 & 79.49 & 97.44 & 79.49 & 94.87 \\
-        O3 & P1 & 0.2 & 75.64 & 66.67 & 88.47 & 69.23 & 78.20 & 378.21 & 76.92 & 74.36 & 61.54 & 71.79 & 84.62 & 92.31 & 53.85 & 84.62 & 76.92 & 79.49 \\
-        O3 & P2 & 0.2 & 70.51 & 80.77 & 91.03 & 73.07 & 85.89 & 401.27 & 71.79 & 71.79 & 89.74 & 56.41 & 82.05 & 69.23 & 89.74 & 92.31 & 89.74 & 89.74 \\
-        O3 Mini & P1 & 0.0 & 70.52 & 67.95 & 96.16 & 74.36 & 62.82 & 371.81 & 74.36 & 56.41 & 94.87 & 61.54 & 66.67 & 66.67 & 79.49 & 97.44 & 87.18 & 58.97 \\
-        O3 Mini & P1 & 0.2 & 60.25 & 65.38 & 93.59 & 67.95 & 65.39 & 352.56 & 64.10 & 48.72 & 94.87 & 51.28 & 61.54 & 56.41 & 82.05 & 92.31 & 84.62 & 69.23 \\
-        O3 Mini & P2 & 0.0 & 64.11 & 74.36 & 92.31 & 74.36 & 75.64 & 380.78 & 61.54 & 69.23 & 89.74 & 66.67 & 74.36 & 66.67 & 79.49 & 94.87 & 82.05 & 76.92 \\
-        O3 Mini & P2 & 0.2 & 65.38 & 71.80 & 96.16 & 69.23 & 79.49 & 382.06 & 66.67 & 61.54 & 94.87 & 56.41 & 79.49 & 64.10 & 82.05 & 97.44 & 82.05 & 79.49 \\
-        O4 Mini & P1 & 0.2 & 67.95 & 75.64 & 93.59 & 73.07 & 83.34 & 393.59 & 69.23 & 66.67 & 76.92 & 74.36 & 94.87 & 92.31 & 56.41 & 89.74 & 84.62 & 82.05 \\
-        O4 Mini & P2 & 0.2 & 74.36 & 83.34 & 93.59 & 66.67 & 85.90 & 403.86 & 71.79 & 79.49 & 92.31 & 48.72 & 87.18 & 76.92 & 87.18 & 94.87 & 84.62 & 84.62 \\
-    \end{longtable}
-\end{landscape}
-\clearpage
-\restoregeometry
-\pagestyle{headings}
+\input{chapter7_tables_prompt_engineering.tex}
 
 \subsection{Comparative Analysis Against GPT-4o}
 \label{sec:comparative_analysis_gpt4o}
@@ -283,6 +149,7 @@ To better understand the relative performance of each model, we calculated the d
 
 \begin{table}[!htbp]
 \centering
+\small
 \caption{Total Score Delta vs. GPT-4o (Highest Scores)}
 \label{tab:deepeval_delta_results}
 \begin{tabular}{|l|c|c|c|}
