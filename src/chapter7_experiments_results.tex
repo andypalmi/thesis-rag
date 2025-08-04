@@ -34,11 +34,11 @@ This experiment evaluates the performance of different embedding models on long-
 \subsection{Models and Methodology}
 We compared five embedding models on the \textbf{LongEmbed} benchmark \autocite{zhu2024longembedextendingembeddingmodels}, a suite of datasets designed to test long-context retrieval. The models evaluated were:
 \begin{itemize}
-    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely-used, high-performance proprietary model with a vector size of 1536.
-    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} An open-source model with a vector size of 768.
-    \item \textbf{Jina AI \texttt{jina-embeddings-v2-base-en}:} An open-source model with a vector size of 768.
-    \item \textbf{Jina AI \texttt{jina-embeddings-v3}:} A model that implements \textit{late chunking}, where chunks from the same document are tokenized together up to the model's context window of 8192 tokens, with a vector size of 1024.
-    \item \textbf{Qwen \texttt{Qwen3-Embedding-0.6B}:} An open-source model with a vector size of 1024.
+    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely-used, high-performance proprietary model with a vector size of 1536. This model does not require any specific task instruction.
+    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} An open-source model with a vector size of 768. This model uses a prefix for different tasks. For our retrieval task, we used `search\_query:` for queries and `search\_document:` for documents.
+    \item \textbf{Jina AI \texttt{jina-embeddings-v2-base-en}:} An open-source model with a vector size of 768. This model, like Ada-002, does not require a task instruction.
+    \item \textbf{Jina AI \texttt{jina-embeddings-v3}:} A model that implements \textit{late chunking}, where chunks from the same document are tokenized together up to the model's context window of 8192 tokens, with a vector size of 1024. It requires a `task` argument, for which we used `retrieval.query` and `retrieval.passage` for queries and documents respectively.
+    \item \textbf{Qwen \texttt{Qwen3-Embedding-0.6B}:} An open-source model with a vector size of 1024. This model benefits from a prompt for queries, for which we used the recommended `query` prompt name.
 \end{itemize}
 For vector storage and retrieval, we used Milvus \autocite{milvus}, a popular open-source vector database. We created an index of type HNSW (Hierarchical Navigable Small World) with the L2 distance metric. The index parameters were set to M=8 and efConstruction=64.
 
@@ -81,15 +81,28 @@ In summary, this experiment illustrates a pivotal moment in the evolution of tex
 
 \section{Experiment 2: Reranking Strategies}
 \label{sec:exp_reranking}
-This experiment evaluated the benefit of adding a reranking step after the initial retrieval.
-\subsection{Reranking Methods Compared}
+This experiment evaluated the benefit of adding a reranking step after the initial retrieval. A reranker, typically a cross-encoder model, re-evaluates the top-k documents returned by the initial retriever, providing a more accurate relevance score. This allows for the rescue of relevant documents that may have been ranked lower by the initial semantic search.
+
+\subsection{Reranking Models Compared}
+We compared three cross-encoder models to rerank the top 500 candidates returned by the similarity search:
 \begin{itemize}
-    \item \textbf{No Reranking (Baseline)}.
-    \item \textbf{Cross-Encoder Reranking:} Compare three cross-encoder models to rerank the top 500 candidates returned by the similarity search.
+    \item \textbf{No Reranker (Baseline):} The initial retrieval order is used.
+    \item \textbf{GTE ML Reranker Base:} A powerful reranker based on the DeBERTa-v3 architecture, known for its strong performance on various reranking tasks \autocite{li2024generative}.
+    \item \textbf{Jina Reranker v1 Tiny EN:} A lightweight and efficient reranker from Jina AI, designed for speed and scalability \autocite{jina-reranker-v1-tiny-en}.
+    \item \textbf{MXBAI Rerank Base v2:} A multilingual reranker that has shown competitive performance on diverse datasets \autocite{pradeep2024reranking}.
 \end{itemize}
+
 \subsection{Results and Discussion}
 \input{reranker/reranker_performance.tex}
-The results in Table \ref{tab:reranker_performance} demonstrate ...
+The results in Table \ref{tab:reranker_performance} and the visualizations in Figure \ref{fig:avg_metrics_faceted} reveal a complex interplay between reranking models, chunking strategies, and thresholding methods. The key takeaway is that the effectiveness of a reranker is not absolute but is highly dependent on the subsequent thresholding strategy used to select the final documents.
+
+When no intelligent thresholding is applied (Baseline) or when suboptimal methods like GMM or Otsu are used, the performance gains from reranking are minimal or even negative. These methods often pass too many documents (as seen in Table \ref{tab:merged_retrieval_stats}), diluting the context with noise and negating the precision benefits of the reranker. For instance, with the Baseline threshold, the F1 scores remain low (0.021-0.062) across all models because the high recall is undermined by extremely low precision.
+
+However, the true power of reranking is unlocked when combined with an effective thresholding method like \textbf{Max Gap}. With this method, the \textbf{GTE ML Reranker Base} model achieves the highest F1 score (\textbf{0.654} for Full Page, \textbf{0.646} for Page Split), demonstrating a dramatic improvement over the No Reranker baseline (0.456 and 0.598). This is because the Max Gap method is highly effective at identifying the point of diminishing returns in the reranked list, selecting a small, highly relevant set of documents. As shown in Table \ref{tab:merged_retrieval_stats}, the GTE reranker with Max Gap passes an average of only 4.76 items, leading to a high precision of 0.594.
+
+Conversely, the \textbf{MXBAI Rerank Base v2} model shows poor performance with aggressive thresholding methods like Knee and Max Gap. This is because the model's score distribution is very flat, making it difficult for these methods to find a clear cutoff point. As a result, it passes too few documents (e.g., only 4.38 items with Knee), leading to a collapse in recall (0.388) and a low F1 score (0.105).
+
+In conclusion, this experiment demonstrates that simply adding a reranker is not enough. The combination of a powerful reranker like \textbf{GTE ML Reranker Base} with an aggressive, well-suited thresholding method like \textbf{Max Gap} is what yields the best performance, maximizing precision without sacrificing essential recall.
 \input{reranker/reranker_stats_items_docs.tex}
 
 \begin{figure}[htbp]
@@ -133,7 +146,7 @@ The results in Table \ref{tab:reranker_performance} demonstrate ...
         \includegraphics[width=\textwidth]{reranker/avg_num_retrieved_docs_passed_bar_faceted.png}
         \\[1ex]\footnotesize (e) Average number of retrieved documents passed by facet
       \end{minipage}
-    \end{minipage}%
+    \end{minipage}% 
   }
   \caption{\footnotesize Comparison of average metrics by model facet:
     (a) F1 score, (b) precision, (c) recall, (d) number of items passed,

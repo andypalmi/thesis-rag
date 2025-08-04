@@ -16,12 +16,12 @@ In a RAG pipeline, the LLM's role is not to recall facts from its internal param
 Different LLMs exhibit varying levels of proficiency in these areas. The performance of a RAG system is therefore highly dependent on the specific model chosen for the generation step. This section evaluates various models based on these criteria.
 
 \subsection{Comparing LLM Families}
-We can categorize LLMs into several families, each with its own characteristics:
+We can categorize LLMs into several families, each with its own characteristics. Our experiments evaluated models from the following prominent families:
 \begin{itemize}
-    \item \textbf{GPT (Generative Pre-trained Transformer) Series (e.g., GPT-4):} Developed by OpenAI, these models are known for their strong reasoning and instruction-following capabilities. GPT-4, in particular, has shown a high degree of faithfulness and an ability to synthesize complex information, making it a popular choice for high-quality RAG systems.
-    \item \textbf{Llama Series (e.g., Llama 2, Llama 3):} Developed by Meta, these are powerful open-source models that have become highly competitive with their proprietary counterparts. They offer a strong balance of performance and customizability, allowing for fine-tuning on specific domains.
-    \item \textbf{Claude Series (e.g., Claude 3 Sonnet, Opus):} Developed by Anthropic, these models are particularly noted for their large context windows and strong performance on tasks requiring complex reasoning and a deep understanding of long documents.
-    \item \textbf{Specialized Models (e.g., Flan-T5):} These models are often fine-tuned specifically for instruction-following tasks, which can make them very effective and efficient generators in a RAG pipeline, even if their overall size is smaller than the frontier models.
+    \item \textbf{GPT (Generative Pre-trained Transformer) Series (e.g., GPT-4, GPT-4o):} Developed by OpenAI, these models are known for their strong reasoning and instruction-following capabilities. GPT-4, in particular, has shown a high degree of faithfulness and an ability to synthesize complex information, making it a popular choice for high-quality RAG systems \autocite{openai2024gpt4technicalreport}.
+    \item \textbf{Llama Series (e.g., Llama 2, Llama 3):} Developed by Meta, these are powerful open-source models that have become highly competitive with their proprietary counterparts. They offer a strong balance of performance and customizability, allowing for fine-tuning on specific domains. While not evaluated in our final experiments, the Llama series represents a critical open-source alternative and a benchmark for performance in the field \autocite{touvron2023llama}.
+    \item \textbf{Claude Series (e.g., Claude 3 Sonnet, Opus):} Developed by Anthropic, these models are particularly noted for their large context windows and strong performance on tasks requiring complex reasoning and a deep understanding of long documents \\cite{anthropic2024claude3}.
+    \item \textbf{Gemini Series (e.g., Gemini 1.5 Pro, Gemini 2.5 Pro):} Developed by Google, the Gemini models are inherently multimodal and designed for high performance across a wide range of tasks. They have demonstrated strong results in both retrieval and generation, making them a versatile choice for RAG systems \autocite{gemini2023}.
 \end{itemize}
 
 \subsection{The Impact of Context Window Size}
