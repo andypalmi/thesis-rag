@@ -1,41 +1,41 @@
 \chapter{Experiments and Results}
 \label{chap:experiments_results}
 
-This chapter details the experimental methodologies and presents the findings from a series of evaluations designed to assess various components and strategies within Retrieval-Augmented Generation systems. The experiments cover a range of techniques from fundamental retrieval and chunking methods to advanced reranking, prompt engineering, and the impact of different embedding and generative models. The overarching goal is to identify optimal configurations for robust and effective RAG pipelines.
+This chapter delineates the experimental methodologies and presents the findings from a series of evaluations conducted to assess various components and strategies within Retrieval-Augmented Generation systems. The experiments encompass a spectrum of techniques, ranging from fundamental retrieval and chunking methods to advanced reranking, prompt engineering, and the influence of different embedding and generative models. The overarching objective is to identify optimal configurations for robust and effective RAG pipelines.
 
 \section{General Experimental Setup}
 \label{sec:general_setup}
-To ensure a systematic and reproducible evaluation, all experiments were conducted using a consistent setup.
+To ensure a systematic and reproducible evaluation, all experiments were conducted employing a consistent setup.
 
 \subsection{Dataset(s)}
-The primary dataset used for these experiments is a curated collection of academic papers and articles related to the field of artificial intelligence. This dataset was chosen for its complexity, technical vocabulary, and the need for precise, fact-based answers. For question generation and evaluation, a set of 100 questions was manually crafted, covering a range of topics within the dataset. Each question is designed to have a verifiable answer within the document corpus.
+The primary dataset utilized for these experiments comprises a curated collection of academic papers and articles pertaining to the field of artificial intelligence. This dataset was selected due to its inherent complexity, specialized technical vocabulary, and the requirement for precise, fact-based answers. For question generation and evaluation, a set of 100 questions was meticulously crafted, encompassing a range of topics within the dataset. Each question is formulated to possess a verifiable answer within the document corpus.
 
 \subsection{Baseline Configuration}
-To measure the impact of different optimization techniques, a baseline RAG configuration was established:
+To quantify the impact of various optimization techniques, a baseline RAG configuration was established:
 \begin{itemize}
-    \item \textbf{Embedding Model:} OpenAI \texttt{text-embedding-ada-002}, a widely used and strong baseline model.
-    \item \textbf{Chunking Strategy:} Naive fixed-size chunking with a chunk size of 300 tokens and an overlap of 50 tokens.
-    \item \textbf{Retrieval Strategy:} Basic cosine similarity search with a fixed retrieval of the top 5 most similar chunks (Top-N).
+    \item \textbf{Embedding Model:} OpenAI \texttt{text-embedding-ada-002}, a widely adopted and robust baseline model.
+    \item \textbf{Chunking Strategy:} Naive fixed-size chunking, employing a chunk size of 300 tokens and an overlap of 50 tokens.
+    \item \textbf{Retrieval Strategy:} Basic cosine similarity search, with a predetermined retrieval of the top 5 most similar chunks (Top-N).
     \item \textbf{Generator LLM:} \texttt{GPT-4}.
-    \item \textbf{Prompt Template:} A standard zero-shot prompt instructing the LLM to answer the question based on the provided context.
+    \item \textbf{Prompt Template:} A standard zero-shot prompt directing the LLM to formulate its answer based on the provided context.
 \end{itemize}
 
 \subsection{Core Evaluation Metrics}
-The performance of the RAG system was evaluated at both the retrieval and generation stages.
+The performance of the RAG system was assessed at both the retrieval and generation stages.
 \begin{itemize}
-\item \textbf{Retrieval Performance:} Assessed using \textit{Precision@k}, \textit{Recall@k}, and \textit{Mean Reciprocal Rank (MRR)}. These metrics are crucial for understanding the effectiveness of the retrieval stage in isolation.
-\item \textbf{Generation Quality:} Evaluated using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The key metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{zheng2023judging}.
+\item \textbf{Retrieval Performance:} Evaluated using \textit{Precision@k}, \textit{Recall@k}, and \textit{Mean Reciprocal Rank (MRR)}. These metrics are paramount for comprehending the effectiveness of the retrieval stage in isolation.
+\item \textbf{Generation Quality:} Assessed using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The primary metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{zheng2023judging}.
 \end{itemize}
 
 \section{Experiment 1: Embedding Models}
 \label{sec:exp_embedding_models}
-This experiment evaluates the performance of different embedding models on long-context retrieval tasks. The goal is to understand how different architectural and chunking strategies affect retrieval performance on documents of varying lengths and complexity.
+This experiment assesses the performance of various embedding models on long-context retrieval tasks. The objective is to comprehend how diverse architectural and chunking strategies influence retrieval performance on documents of varying lengths and complexity.
 
 \subsection{Models and Methodology}
-We compared five embedding models on the \textbf{LongEmbed} benchmark \autocite{zhu2024longembedextendingembeddingmodels}, a suite of datasets designed to test long-context retrieval. The models evaluated were:
+We compared five embedding models on the \textbf{LongEmbed} benchmark \autocite{zhu2024longembedextendingembeddingmodels}, a suite of datasets formulated to evaluate long-context retrieval. The models assessed were:
 \begin{itemize}
-    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely-used, high-performance proprietary model with a vector size of 1536. This model does not require any specific task instruction.
-    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} An open-source model with a vector size of 768. This model uses a prefix for different tasks. For our retrieval task, we used `search\_query:` for queries and `search\_document:` for documents.
+    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely adopted, high-performance proprietary model with a vector size of 1536. This model does not necessitate any specific task instruction.
+    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} An open-source model possessing a vector size of 768. This model employs a prefix for distinct tasks. For our retrieval task, we used `search\_query:` for queries and `search\_document:` for documents.
     \item \textbf{Jina AI \texttt{jina-embeddings-v2-base-en}:} An open-source model with a vector size of 768. This model, like Ada-002, does not require a task instruction.
     \item \textbf{Jina AI \texttt{jina-embeddings-v3}:} A model that implements \textit{late chunking}, where chunks from the same document are tokenized together up to the model's context window of 8192 tokens, with a vector size of 1024. It requires a `task` argument, for which we used `retrieval.query` and `retrieval.passage` for queries and documents respectively.
     \item \textbf{Qwen \texttt{Qwen3-Embedding-0.6B}:} An open-source model with a vector size of 1024. This model benefits from a prompt for queries, for which we used the recommended `query` prompt name.
@@ -43,66 +43,66 @@ We compared five embedding models on the \textbf{LongEmbed} benchmark \autocite{
 For vector storage and retrieval, we used Milvus \autocite{milvus}, a popular open-source vector database. We created an index of type HNSW (Hierarchical Navigable Small World) with the L2 distance metric. The index parameters were set to M=8 and efConstruction=64.
 
 \subsection{Datasets}
-The LongEmbed benchmark is composed of six datasets, two of which are synthetic and four are based on real-world data. The datasets are:
+The LongEmbed benchmark comprises six datasets, two of which are synthetic and four are derived from real-world data. The datasets are:
 \begin{itemize}
     \item \textbf{2WikiMQA:} A multi-hop question-answering dataset.
-    \item \textbf{NarrativeQA:} A question-answering dataset with long stories.
-    \item \textbf{Needle In A Haystack (NIAH):} A synthetic dataset that tests the model's ability to find a specific piece of information ("needle") in a long text ("haystack").
-    \item \textbf{Passkey Retrieval:} A synthetic dataset that tests the model's ability to retrieve a specific key from a long document.
+    \item \textbf{NarrativeQA:} A question-answering dataset featuring extended narratives.
+    \item \textbf{Needle In A Haystack (NIAH):} A synthetic dataset designed to evaluate the model's capacity to locate a specific piece of information ("needle") in an extensive text ("haystack").
+    \item \textbf{Passkey Retrieval:} A synthetic dataset designed to assess the model's ability to retrieve a specific key from an extended document.
     \item \textbf{QMSum:} A query-based meeting summarization dataset.
-    \item \textbf{SummScreenFD:} A summarization dataset based on TV show scripts.
+    \item \textbf{SummScreenFD:} A summarization dataset derived from television show scripts.
 \end{itemize}
 
 \subsection{Results and Discussion}
-The retrieval performance of the five embedding models across the six datasets is detailed in Tables~\ref{tab:detailed_recall} through~\ref{tab:detailed_nDCG}, with an aggregated summary in Table~\ref{tab:summary}. The results not only highlight a clear winner within our long-context benchmark but also reflect a significant paradigm shift in the broader landscape of text embedding models.
+The retrieval performance of the five embedding models across the six datasets is presented in detail in Tables~ef{tab:detailed_recall} through~ef{tab:detailed_nDCG}, with an aggregated summary provided in Table~ef{tab:summary}. The results not only underscore a clear superior performer within our long-context benchmark but also indicate a significant paradigm shift in the broader landscape of text embedding models.
 
 \paragraph{The Rise of Compact, High-Performance Models}
-While our results show \textbf{\texttt{Qwen3-Embedding-0.6B}} as the top performer, its true significance is revealed when contextualized within the global Massive Text Embedding Benchmark (MTEB) leaderboard. As of August 1st, 2025, this model ranks an impressive 4th overall, surpassed only by Google's proprietary \texttt{gemini-embedding-001} and its own, much larger 4B and 8B parameter siblings \autocite{mteb_leaderboard_2025}. With only 595M parameters, its performance is remarkable, demonstrating that architectural innovations and advanced training pipelines can allow smaller, open-source models to outperform far larger competitors. This efficiency is a direct result of its foundation on the Qwen3 architecture \autocite{yang2025qwen3technicalreport} and a sophisticated multi-stage training process that uses the foundation LLM itself to synthesize high-quality training data \autocite{zhang2025qwen3embeddingadvancingtext}.
+While our results identify \textbf{\texttt{Qwen3-Embedding-0.6B}} as the leading performer, its true significance becomes apparent when contextualized within the global Massive Text Embedding Benchmark (MTEB) leaderboard. As of August 1st, 2025, this model occupies an impressive 4th rank overall, surpassed solely by Google's proprietary \texttt{gemini-embedding-001} and its own, substantially larger 4B and 8B parameter siblings \autocite{mteb_leaderboard_2025}. With merely 595M parameters, its performance is noteworthy, demonstrating that architectural innovations and advanced training pipelines can enable smaller, open-source models to surpass the performance of significantly larger competitors. This efficiency stems directly from its foundation on the Qwen3 architecture \autocite{yang2025qwen3technicalreport} and a sophisticated multi-stage training process that leverages the foundational LLM itself to synthesize high-quality training data \autocite{zhang2025qwen3embeddingadvancingtext}.
 
 \paragraph{A New Baseline: The Obsolescence of Ada-002}
-For years, OpenAI's \textbf{\texttt{ada-002}} has been a de facto industry standard. However, these results, combined with its MTEB ranking of 167th, confirm that it has been decisively overcome. Newer models leveraging innovative architectures and specialized training techniques now offer vastly superior performance. The other models in our test also place significantly higher than \texttt{ada-002} on the MTEB leaderboard: \texttt{jina-embeddings-v3} ranks 24th, \texttt{nomic-embed-text} ranks 54th, and even the older \texttt{jina-embeddings-v2-base-en} ranks 154th \autocite{mteb_leaderboard_2025}. This trend signals that the benchmark for state-of-the-art has moved towards more open and efficient models.
+For years, OpenAI's \textbf{\texttt{ada-002}} served as a de facto industry standard. However, these results, coupled with its MTEB ranking of 167th, confirm that it has been decisively superseded. Newer models, leveraging innovative architectures and specialized training techniques, now provide substantially superior performance. The other models in our evaluation also rank significantly higher than \texttt{ada-002} on the MTEB leaderboard: \texttt{jina-embeddings-v3} ranks 24th, \texttt{nomic-embed-text} ranks 54th, and even the earlier \texttt{jina-embeddings-v2-base-en} ranks 154th \autocite{mteb_leaderboard_2025}. This trend indicates that the benchmark for state-of-the-art has shifted towards more open and efficient models.
 
 \paragraph{The Enduring Value of Specialization}
-Despite the dominance of a strong generalist model like Qwen3, our findings also underscore the continued importance of specialized models. \textbf{\texttt{jina-embeddings-v3}}, with its unique late chunking strategy, remains the top performer on the \texttt{passkey} task, proving the value of its architectural design for retrieving specific facts from structured long documents. Likewise, \textbf{\texttt{nomic-embed-text}}'s superior performance on the \texttt{needle} dataset confirms its status as a premier model for extreme "needle-in-a-haystack" scenarios. This demonstrates that for specific, challenging use cases, a specialized model can still be the optimal choice.
+Despite the prevalence of a robust generalist model like Qwen3, our findings also emphasize the persistent importance of specialized models. \textbf{\texttt{jina-embeddings-v3}}, with its unique late chunking strategy, maintains its position as the leading performer on the \texttt{passkey} task, thereby validating the efficacy of its architectural design for retrieving specific facts from structured long documents. Similarly, \textbf{\texttt{nomic-embed-text}}'s superior performance on the \texttt{needle} dataset affirms its designation as a premier model for extreme "needle-in-a-haystack" scenarios. This demonstrates that for specific, challenging use cases, a specialized model can remain the optimal choice.
 
 \paragraph{Distance Metrics and Model Compatibility}
-For most models, the choice between L2 and Inner Product (IP) distance metrics yields comparable results, indicating that their embeddings are well-normalized. A critical observation, however, is the performance degradation of \textbf{\texttt{jina-embeddings-v2-base-en}} when using the IP metric. As seen across all tables, its performance collapses with IP; for example, its average Recall@5 drops from 51.85\% (L2) to a mere 12.12\% (IP). This underscores that its embedding vectors are not normalized for cosine similarity, making L2 distance the only viable choice for this model and highlighting the importance of aligning the retrieval metric with the model's output properties.
+For most models, the selection between L2 and Inner Product (IP) distance metrics yields comparable results, indicating that their embeddings are adequately normalized. A crucial observation, however, pertains to the performance degradation of \textbf{\texttt{jina-embeddings-v2-base-en}} when employing the IP metric. As observed across all tables, its performance significantly diminishes with IP; for instance, its average Recall@5 decreases from 51.85\% (L2) to a mere 12.12\% (IP). This underscores that its embedding vectors are not normalized for cosine similarity, rendering L2 distance the sole viable choice for this model and emphasizing the importance of aligning the retrieval metric with the model's output properties.
 
 \paragraph{Conclusion}
-In summary, this experiment illustrates a pivotal moment in the evolution of text embedding models. Our findings lead to the following conclusions:
+In summary, this experiment exemplifies a pivotal moment in the evolution of text embedding models. Our findings lead to the following conclusions:
 \begin{itemize}
-    \item The embedding landscape is no longer dominated by large, proprietary models. The exceptional performance of \textbf{\texttt{Qwen3-Embedding-0.6B}}, a compact 595M parameter model, signals a shift towards more efficient, accessible, and open-source solutions that achieve state-of-the-art results.
-    \item Models like \textbf{\texttt{ada-002}}, while historically important, are now outdated. They have been surpassed by a new generation of models featuring more advanced architectures, training methodologies, and specialized strategies like late chunking.
-    \item While general-purpose models have improved dramatically, \textbf{specialization remains highly valuable}. For niche but critical tasks like extreme long-context fact retrieval, models like \texttt{jina-embeddings-v3} and \texttt{nomic-embed-text} provide targeted performance that can exceed even the best generalists.
-    \item \textbf{Technical implementation details are critical}. The choice of distance metric must be compatible with the model's properties, as the failure of \texttt{jina-embeddings-v2-base-en} with the IP metric demonstrates.
+    \item The embedding landscape is no longer dominated by large, proprietary models. The exceptional performance of \textbf{\texttt{Qwen3-Embedding-0.6B}}, a compact 595M parameter model, indicates a shift towards more efficient, accessible, and open-source solutions that attain state-of-the-art results.
+    \item Models such as \textbf{\texttt{ada-002}}, while historically significant, are now considered obsolete. They have been superseded by a new generation of models featuring more advanced architectures, training methodologies, and specialized strategies such as late chunking.
+    \item While general-purpose models have improved substantially, \textbf{specialization remains highly valuable}. For niche but critical tasks such as extreme long-context fact retrieval, models like \texttt{jina-embeddings-v3} and \texttt{nomic-embed-text} offer targeted performance that can surpass even the most proficient generalists.
+    \item \textbf{Technical implementation details are paramount}. The selection of the distance metric must be compatible with the model's properties, as the suboptimal performance of \texttt{jina-embeddings-v2-base-en} with the IP metric illustrates.
 \end{itemize}
 
 \input{chapter7_tables_embedding_results.tex}
 
 \section{Experiment 2: Reranking Strategies}
 \label{sec:exp_reranking}
-This experiment evaluated the benefit of adding a reranking step after the initial retrieval. A reranker, typically a cross-encoder model, re-evaluates the top-k documents returned by the initial retriever, providing a more accurate relevance score. This allows for the rescue of relevant documents that may have been ranked lower by the initial semantic search.
+This experiment assessed the benefit of incorporating a reranking step subsequent to the initial retrieval. A reranker, typically a cross-encoder model, re-evaluates the top-k documents returned by the initial retriever, thereby furnishing a more accurate relevance score. This facilitates the recovery of relevant documents that may have been ranked lower by the initial semantic search.
 
 \subsection{Reranking Models Compared}
-We compared three cross-encoder models to rerank the top 500 candidates returned by the similarity search:
+We compared three cross-encoder models to rerank the top 500 candidates yielded by the similarity search:
 \begin{itemize}
-    \item \textbf{No Reranker (Baseline):} The initial retrieval order is used.
-    \item \textbf{GTE ML Reranker Base:} A powerful reranker based on the DeBERTa-v3 architecture, known for its strong performance on various reranking tasks \autocite{li2024generative}.
-    \item \textbf{Jina Reranker v1 Tiny EN:} A lightweight and efficient reranker from Jina AI, designed for speed and scalability \autocite{jina-reranker-v1-tiny-en}.
-    \item \textbf{MXBAI Rerank Base v2:} A multilingual reranker that has shown competitive performance on diverse datasets \autocite{pradeep2024reranking}.
+    \item \textbf{No Reranker (Baseline):} The initial retrieval order is employed.
+    \item \textbf{GTE ML Reranker Base:} A robust reranker based on the DeBERTa-v3 architecture, recognized for its strong performance on various reranking tasks \autocite{li2024generative}.
+    \item \textbf{Jina Reranker v1 Tiny EN:} A lightweight and efficient reranker from Jina AI, engineered for rapid processing and scalability \autocite{jina-reranker-v1-tiny-en}.
+    \item \textbf{MXBAI Rerank Base v2:} A multilingual reranker that has demonstrated competitive performance on diverse datasets \autocite{pradeep2024reranking}.
 \end{itemize}
 
 \subsection{Results and Discussion}
 \input{reranker/reranker_performance.tex}
-The results in Table \ref{tab:reranker_performance} and the visualizations in Figure \ref{fig:avg_metrics_faceted} reveal a complex interplay between reranking models, chunking strategies, and thresholding methods. The key takeaway is that the effectiveness of a reranker is not absolute but is highly dependent on the subsequent thresholding strategy used to select the final documents.
+The results presented in Table \ref{tab:reranker_performance} and the visualizations in Figure \ref{fig:avg_metrics_faceted} unveil a complex interplay among reranking models, chunking strategies, and thresholding methods. The principal finding is that the effectiveness of a reranker is not absolute but is highly contingent on the subsequent thresholding strategy employed to select the final documents.
 
-When no intelligent thresholding is applied (Baseline) or when suboptimal methods like GMM or Otsu are used, the performance gains from reranking are minimal or even negative. These methods often pass too many documents (as seen in Table \ref{tab:merged_retrieval_stats}), diluting the context with noise and negating the precision benefits of the reranker. For instance, with the Baseline threshold, the F1 scores remain low (0.021-0.062) across all models because the high recall is undermined by extremely low precision.
+When no intelligent thresholding is applied (Baseline) or when suboptimal methods such as GMM or Otsu are utilized, the performance gains from reranking are minimal or even negative. These methods frequently include an excessive number of documents (as observed in Table \ref{tab:merged_retrieval_stats}), thereby diluting the context with noise and negating the precision benefits of the reranker. For instance, with the Baseline threshold, the F1 scores remain low (0.021-0.062) across all models due to the high recall being compromised by extremely low precision.
 
-However, the true power of reranking is unlocked when combined with an effective thresholding method like \textbf{Max Gap}. With this method, the \textbf{GTE ML Reranker Base} model achieves the highest F1 score (\textbf{0.654} for Full Page, \textbf{0.646} for Page Split), demonstrating a dramatic improvement over the No Reranker baseline (0.456 and 0.598). This is because the Max Gap method is highly effective at identifying the point of diminishing returns in the reranked list, selecting a small, highly relevant set of documents. As shown in Table \ref{tab:merged_retrieval_stats}, the GTE reranker with Max Gap passes an average of only 4.76 items, leading to a high precision of 0.594.
+However, the full potential of reranking is realized when combined with an effective thresholding method such as \textbf{Max Gap}. Utilizing this method, the \textbf{GTE ML Reranker Base} model attains the highest F1 score (\textbf{0.654} for Full Page, \textbf{0.646} for Page Split), thereby demonstrating a substantial improvement over the No Reranker baseline (0.456 and 0.598). This is attributable to the Max Gap method's high efficacy in identifying the point of diminishing returns within the reranked list, enabling the selection of a compact, highly relevant set of documents. As depicted in Table \ref{tab:merged_retrieval_stats}, the GTE reranker with Max Gap processes an average of only 4.76 items, resulting in a high precision of 0.594.
 
-Conversely, the \textbf{MXBAI Rerank Base v2} model shows poor performance with aggressive thresholding methods like Knee and Max Gap. This is because the model's score distribution is very flat, making it difficult for these methods to find a clear cutoff point. As a result, it passes too few documents (e.g., only 4.38 items with Knee), leading to a collapse in recall (0.388) and a low F1 score (0.105).
+Conversely, the \textbf{MXBAI Rerank Base v2} model exhibits suboptimal performance with aggressive thresholding methods such as Knee and Max Gap. This is due to the model's score distribution being notably flat, which impedes these methods from identifying a distinct cutoff point. Consequently, it processes an insufficient number of documents (e.g., only 4.38 items with Knee), leading to a significant reduction in recall (0.388) and a low F1 score (0.105).
 
-In conclusion, this experiment demonstrates that simply adding a reranker is not enough. The combination of a powerful reranker like \textbf{GTE ML Reranker Base} with an aggressive, well-suited thresholding method like \textbf{Max Gap} is what yields the best performance, maximizing precision without sacrificing essential recall.
+In conclusion, this experiment demonstrates that merely incorporating a reranker is insufficient. The combination of a robust reranker such as \textbf{GTE ML Reranker Base} with an aggressive, well-suited thresholding method like \textbf{Max Gap} yields optimal performance, maximizing precision without compromising essential recall.
 \input{reranker/reranker_stats_items_docs.tex}
 
 \begin{figure}[htbp]
@@ -156,30 +156,30 @@ In conclusion, this experiment demonstrates that simply adding a reranker is not
 
 \section{Experiment 3: Prompt Engineering to Prevent Hallucination}
 \label{sec:exp_generator_prompt}
-This experiment focuses on the generation part of the RAG pipeline, evaluating a wide range of Large Language Models to serve as the generator. The primary goal was to find the best-performing model and the optimal prompt and temperature configuration for our specific use case.
+This experiment centers on the generation component of the RAG pipeline, assessing a broad spectrum of Large Language Models to function as the generator. The primary objective was to identify the optimal-performing model and the most suitable prompt and temperature configuration for our specific use case.
 
 \subsection{Motivation and Baseline}
-The evaluation started with a baseline configuration of \textbf{GPT-4o} using prompt \texttt{P1} and a temperature of \texttt{0.2}. As new and more powerful models were released during the course of this research, they were systematically evaluated against this baseline. This continuous evaluation process allowed us to stay at the cutting edge and select the most suitable model for integration into a production RAG system, ensuring that any replacement would offer superior performance.
+The evaluation commenced with a baseline configuration of \textbf{GPT-4o} employing prompt \texttt{P1} and a temperature of \texttt{0.2}. As novel and more powerful models were introduced during the course of this research, they were systematically evaluated against this baseline. This continuous evaluation process enabled us to remain at the forefront of research and select the most suitable model for integration into a production RAG system, thereby ensuring that any replacement would provide superior performance.
 
 \subsection{Evaluation Methodology}
-We used the \textbf{DeepEval} framework \autocite{deepeval2023}, which employs an LLM-as-a-Judge approach to score the generator's output. For subjective, use-case-specific evaluations, we utilized DeepEval's \textbf{G-Eval} functionality, which is inspired by the G-Eval framework \autocite{liu2023geval} and uses a chain-of-thought process to evaluate outputs against custom criteria. We defined two such metrics:
+We utilized the \textbf{DeepEval} framework \autocite{deepeval2023}, which employs an LLM-as-a-Judge approach to assess the generator's output. For subjective, use-case-specific evaluations, we employed DeepEval's \textbf{G-Eval} functionality, which draws inspiration from the G-Eval framework \autocite{liu2023geval} and utilizes a chain-of-thought process to evaluate outputs against custom criteria. We delineated two such metrics:
 \begin{itemize}
-    \item \textbf{Correctness (C):} This metric determines whether the actual output is factually correct based on the expected output. It heavily penalizes the omission of key details and the inclusion of information that contradicts the expected output.
-    \item \textbf{Specific Information Accuracy (SIA):} This metric evaluates whether the model's response appropriately uses information from the context without introducing specific details (names, places, numbers) that are not explicitly provided. It is particularly important for testing the model's ability to recognize when a question cannot be answered from the given context. For example, a high SIA score is awarded if the model correctly states it cannot answer a question like "Who is Cinderella?" when given an anonymized version of the story, as this demonstrates it is not relying on its own parametric knowledge.
+    \item \textbf{Correctness (C):} This metric ascertains whether the actual output is factually correct based on the expected output. It heavily penalizes the omission of crucial details and the inclusion of information that contradicts the expected output.
+    \item \textbf{Specific Information Accuracy (SIA):} This metric evaluates whether the model's response appropriately utilizes information from the context without introducing specific details (names, places, numbers) that are not explicitly provided. It is particularly important for assessing the model's capacity to discern when a question cannot be answered from the provided context. For example, a high SIA score is conferred if the model accurately indicates its inability to answer a question such as "Who is Cinderella?" when presented with an anonymized version of the story, as this demonstrates its non-reliance on its internal parametric knowledge.
 \end{itemize}
 
-In addition to our custom G-Eval metrics, we used several of DeepEval's standard metrics to assess other critical qualities of the generated output:
+In addition to our custom G-Eval metrics, we employed several of DeepEval's standard metrics to assess other critical qualities of the generated output:
 \begin{itemize}
-    \item \textbf{Answer Relevancy (AR):} This metric measures how relevant the generated output is to the user's input query. It ensures that the model's response is on-topic and directly addresses the question asked \autocite{deepeval2023}.
-    \item \textbf{Faithfulness (F):} This metric evaluates whether the generated output factually aligns with the information present in the retrieved context. A high score indicates that the model did not invent facts and stayed true to the source material \autocite{deepeval2023}.
-    \item \textbf{Hallucination (H):} This metric determines if the model generates factually incorrect information by comparing the output to the provided context. It is a crucial measure for ensuring the trustworthiness of the RAG system \autocite{deepeval2023}.
+    \item \textbf{Answer Relevancy (AR):} This metric quantifies the relevance of the generated output to the user's input query. It ensures that the model's response is pertinent and directly addresses the posed question \autocite{deepeval2023}.
+    \item \textbf{Faithfulness (F):} This metric evaluates whether the generated output factually corresponds with the information present in the retrieved context. A high score indicates that the model did not fabricate facts and adhered faithfully to the source material \autocite{deepeval2023}.
+    \item \textbf{Hallucination (H):} This metric ascertains if the model generates factually incorrect information by comparing the output to the provided context. It is a critical measure for ensuring the trustworthiness of the RAG system \autocite{deepeval2023}.
 \end{itemize}
 
 
 \subsection{Results and Discussion}
-The comprehensive results are presented in Table \ref{tab:deepeval_results}. The baseline configuration (GPT-4o, P1, Temp 0.2) achieved a total score of 370.52. The results show that several newer models and prompt configurations were able to significantly outperform this baseline.
+The comprehensive results are delineated in Table \ref{tab:deepeval_results}. The baseline configuration (GPT-4o, P1, Temp 0.2) yielded a total score of 370.52. The results indicate that several newer models and prompt configurations were capable of significantly outperforming this baseline.
 
-For instance, the \textbf{O4 Mini} model using prompt \texttt{P2} and a temperature of \texttt{0.2} achieved the highest total score of \textbf{403.86}. This demonstrates the value of continuous evaluation, as it allowed us to identify a model that not only performs better than the original baseline but also to determine the ideal prompt (\texttt{P2}) and temperature (\texttt{0.2}) for it. These findings are critical for deploying a RAG system that is not only accurate and faithful but also robust in handling queries that cannot be answered from the available context.
+For instance, the \textbf{O4 Mini} model employing prompt \texttt{P2} and a temperature of \texttt{0.2} attained the highest total score of \textbf{403.86}. This demonstrates the utility of continuous evaluation, as it enabled us to identify a model that not only performs superiorly to the original baseline but also to ascertain the optimal prompt (\texttt{P2}) and temperature (\texttt{0.2}) for it. These findings are crucial for deploying a RAG system that is not only accurate and faithful but also robust in addressing queries that cannot be answered from the available context.
 
 \input{chapter7_tables_prompt_engineering.tex}
 

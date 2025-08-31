@@ -1,44 +1,44 @@
 \chapter{Comparative Analysis of Different LLMs}
 \label{chap:llm_comparison}
 
-The Large Language Model serves as the generative component of the RAG system, responsible for synthesizing the retrieved information and generating the final response. The choice of the generator LLM is a critical decision that significantly impacts the system's overall performance, cost, and speed. This chapter provides a comparative analysis of different LLMs in the context of RAG, focusing on how their architectural differences, context window sizes, and inherent capabilities affect their suitability for the generation task.
+The Large Language Model functions as the generative component within the RAG system, tasked with synthesizing retrieved information and producing the final response. The selection of the generator LLM represents a pivotal decision that profoundly influences the system's overall performance, cost, and latency. This chapter presents a comparative analysis of various LLMs within the RAG context, examining how their architectural distinctions, context window capacities, and intrinsic capabilities influence their suitability for the generation task.
 
 \section{The Role of the Generator LLM}
-In a RAG pipeline, the LLM's role is not to recall facts from its internal parametric memory but to reason over the provided context. As highlighted by Gao et al. (2024) \autocite{gao2024retrievalaugmented}, the ideal generator LLM should excel at:
+Within a RAG pipeline, the LLM's function is not to retrieve facts from its internal parametric memory but rather to reason upon the provided context. As emphasized by Gao et al. (2024) \autocite{gao2024retrievalaugmented}, the optimal generator LLM should demonstrate proficiency in:
 \begin{itemize}
-    \item \textbf{Context Adherence (Faithfulness):} Strictly basing its answer on the provided context and avoiding the introduction of outside information.
-    \item \textbf{Information Synthesis:} Weaving together facts from multiple retrieved chunks into a single, coherent answer.
-    \item \textbf{Instruction Following:} Accurately following the instructions in the prompt, such as adhering to a specific output format or persona.
-    \item \textbf{Noise Resistance:} Ignoring irrelevant or contradictory information within the context and focusing on the most relevant facts.
+    \item \textbf{Context Adherence (Faithfulness):} Strictly grounding its response in the provided context and precluding the introduction of extraneous information.
+    \item \textbf{Information Synthesis:} Synthesizing facts from multiple retrieved chunks into a singular, coherent answer.
+    \item \textbf{Instruction Following:} Precisely adhering to the instructions within the prompt, including compliance with a specified output format or persona.
+    \item \textbf{Noise Resistance:} Disregarding irrelevant or contradictory information within the context and prioritizing the most pertinent facts.
 \end{itemize}
 
 \section{Performance Evaluation based on Model and Context Window Size}
-Different LLMs exhibit varying levels of proficiency in these areas. The performance of a RAG system is therefore highly dependent on the specific model chosen for the generation step. This section evaluates various models based on these criteria.
+Different LLMs demonstrate diverse levels of proficiency across these dimensions. The performance of a RAG system is consequently highly contingent upon the specific model selected for the generation step. This section assesses various models against these criteria.
 
 \subsection{Comparing LLM Families}
-We can categorize LLMs into several families, each with its own characteristics. Our experiments evaluated models from the following prominent families:
+LLMs can be categorized into several families, each possessing distinct characteristics. Our experiments assessed models from the following prominent families:
 \begin{itemize}
-    \item \textbf{GPT (Generative Pre-trained Transformer) Series (e.g., GPT-4, GPT-4o):} Developed by OpenAI, these models are known for their strong reasoning and instruction-following capabilities. GPT-4, in particular, has shown a high degree of faithfulness and an ability to synthesize complex information, making it a popular choice for high-quality RAG systems \autocite{openai2024gpt4technicalreport}.
-    \item \textbf{Llama Series (e.g., Llama 2, Llama 3):} Developed by Meta, these are powerful open-source models that have become highly competitive with their proprietary counterparts. They offer a strong balance of performance and customizability, allowing for fine-tuning on specific domains. While not evaluated in our final experiments, the Llama series represents a critical open-source alternative and a benchmark for performance in the field \autocite{touvron2023llama}.
-    \item \textbf{Claude Series (e.g., Claude 3 Sonnet, Opus):} Developed by Anthropic, these models are particularly noted for their large context windows and strong performance on tasks requiring complex reasoning and a deep understanding of long documents \\cite{anthropic2024claude3}.
-    \item \textbf{Gemini Series (e.g., Gemini 1.5 Pro, Gemini 2.5 Pro):} Developed by Google, the Gemini models are inherently multimodal and designed for high performance across a wide range of tasks. They have demonstrated strong results in both retrieval and generation, making them a versatile choice for RAG systems \autocite{gemini2023}.
+    \item \textbf{GPT (Generative Pre-trained Transformer) Series (e.g., GPT-4, GPT-4o):} Developed by OpenAI, these models are recognized for their robust reasoning and instruction-following capabilities. GPT-4, in particular, has demonstrated a high degree of faithfulness and a capacity to synthesize complex information, rendering it a favored selection for high-quality RAG systems \autocite{openai2024gpt4technicalreport}.
+    \item \textbf{Llama Series (e.g., Llama 2, Llama 3):} Developed by Meta, these constitute potent open-source models that have achieved substantial competitiveness with their proprietary counterparts. They provide a robust equilibrium between performance and customizability, thereby enabling fine-tuning on specific domains. While not assessed in our conclusive experiments, the Llama series constitutes a critical open-source alternative and a benchmark for performance within the domain \autocite{touvron2023llama}.
+    \item \textbf{Claude Series (e.g., Claude 3 Sonnet, Opus):} Developed by Anthropic, these models are particularly distinguished by their extensive context windows and robust performance on tasks necessitating complex reasoning and a profound comprehension of lengthy documents \cite{anthropic2024claude3}.
+    \item \textbf{Gemini Series (e.g., Gemini 1.5 Pro, Gemini 2.5 Pro):} Developed by Google, the Gemini models are intrinsically multimodal and engineered for high performance across a broad spectrum of tasks. They have exhibited robust performance in both retrieval and generation, establishing them as a versatile option for RAG systems \autocite{gemini2023}.
 \end{itemize}
 
 \subsection{The Impact of Context Window Size}
-The \textbf{context window size} of an LLM defines the maximum amount of text (prompt + retrieved context + generated response) that the model can handle at one time. This has several implications for RAG, as discussed by Gao et al. (2024) \autocite{gao2024retrievalaugmented}:
+The \textbf{context window size} of an LLM delineates the maximum volume of text (prompt + retrieved context + generated response) that the model can process concurrently. This carries several implications for RAG, as elucidated by Gao et al. (2024) \autocite{gao2024retrievalaugmented}:
 \begin{itemize}
-    \item \textbf{Information Density:} A larger context window allows for more retrieved chunks to be passed to the LLM, potentially increasing the comprehensiveness of the answer. However, this also increases the risk of the "lost in the middle" problem, where the model may overlook relevant information buried in a long context \autocite{liu2023lost}.
-    \item \textbf{Cost and Latency:} Processing larger contexts is more computationally expensive, leading to higher operational costs and slower response times.
-    \item \textbf{Architectural Differences:} Newer models with very large context windows (e.g., Claude 3) are designed to be more effective at finding and using information within long documents, which can be a significant advantage for certain RAG applications.
+    \item \textbf{Information Density:} A larger context window facilitates the inclusion of a greater number of retrieved chunks to the LLM, potentially enhancing the comprehensiveness of the generated answer. However, this concurrently elevates the risk of the "lost in the middle" problem, wherein the model may disregard pertinent information embedded within an extensive context \autocite{liu2023lost}.
+    \item \textbf{Cost and Latency:} Processing larger contexts incurs greater computational expense, resulting in elevated operational costs and prolonged response times.
+    \item \textbf{Architectural Differences:} Newer models featuring exceptionally large context windows (e.g., Claude 3) are engineered to more effectively locate and utilize information within extensive documents, which can confer a substantial advantage for specific RAG applications.
 \end{itemize}
 
 \section{Trade-offs in LLM Selection}
-Choosing the right LLM for a RAG system involves balancing several factors:
+Selecting the appropriate LLM for a RAG system necessitates balancing several factors:
 \begin{itemize}
-    \item \textbf{Performance:} The quality of the generated output, measured by metrics like faithfulness, relevancy, and accuracy.
-    \item \textbf{Cost:} The financial cost per generated token, which can vary significantly between models.
-    \item \textbf{Speed (Latency):} The time it takes for the model to generate a response.
-    \item \textbf{Customizability:} The ability to fine-tune the model on domain-specific data, which is often easier with open-source models.
+    \item \textbf{Performance:} The quality of the generated output, quantified by metrics such as faithfulness, relevancy, and accuracy.
+    \item \textbf{Cost:} The financial cost per generated token, which can fluctuate considerably among models.
+    \item \textbf{Speed (Latency):} The latency incurred by the model in generating a response.
+    \item \textbf{Customizability:} The capacity to fine-tune the model on domain-specific data, a process frequently more straightforward with open-source models.
 \end{itemize}
 
-Ultimately, the optimal choice depends on the specific requirements of the application. A customer-facing chatbot might prioritize speed and low cost, while a legal research assistant would prioritize the highest possible accuracy and faithfulness, even at a greater computational expense.
+Ultimately, the optimal selection is contingent upon the specific requirements of the application. A customer-facing chatbot might prioritize rapid response and low operational cost, whereas a legal research assistant would prioritize maximal accuracy and faithfulness, even at a greater computational expense.
