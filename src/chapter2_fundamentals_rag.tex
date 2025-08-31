@@ -70,6 +70,14 @@ This optimization obviates the computationally intensive square root operations 
 \subsection{Indexing for Efficient Search}
 To circumvent a brute-force search, vector databases employ specialized indexing algorithms for Approximate Nearest Neighbor (ANN) search. These algorithms, including Hierarchical Navigable Small World (HNSW) \autocite{hnsw_malkov_2018} and Inverted File (IVF) \autocite{ivf_zobel}, facilitate the efficient retrieval of the top-k most similar vectors without necessitating a comparison of the query vector to every individual vector in the database. This is paramount for attaining low-latency responses in large-scale RAG systems.
 
+\subsubsection{Hierarchical Navigable Small World (HNSW)}
+HNSW graphs construct a multi-layer graph structure where each layer connects a subset of nodes from the layer below, with higher layers containing fewer, more globally connected nodes. Search queries start at the top layer, quickly navigating to a region of interest, and then descend to lower layers for finer-grained search. This hierarchical approach allows for very fast query times (low latency) and high recall, making it a popular choice for real-time applications. However, HNSW indices can be relatively large in terms of storage and have higher build costs compared to some other methods.
+
+\subsubsection{Inverted File (IVF)}
+IVF indexes, on the other hand, partition the vector space into Voronoi cells, with each cell represented by a centroid. During indexing, vectors are assigned to their nearest centroid. For a query, the search is narrowed down to a few relevant cells, and then a brute-force search is performed only within those cells. IVF offers a good balance between search speed and memory usage, and its index build time is generally faster than HNSW. However, its search performance can be more sensitive to the number of centroids and the distribution of data, and it typically offers lower recall than HNSW for a given search speed.
+
+In terms of trade-offs, HNSW generally provides superior search performance (lower latency, higher recall) at the cost of higher memory consumption and potentially longer index build times. IVF offers a more memory-efficient solution with faster index construction, but may sacrifice some search accuracy or speed compared to HNSW, especially in very high-dimensional spaces \autocite{aumuller2017ann}. For the experiments conducted in this thesis, HNSW will be utilized due to its excellent balance of speed and recall, which is critical for robust RAG system performance.
+
 \section{Mitigating Hallucinations}
 A primary advantage of RAG is its capacity to mitigate LLM hallucinations. By providing factual, verifiable context directly within the prompt, RAG anchors the model's response in empirical data. The LLM is instructed to formulate its answer based on the provided text, reducing its reliance on its internal, parametric knowledge, which may be outdated or incorrect.
 
