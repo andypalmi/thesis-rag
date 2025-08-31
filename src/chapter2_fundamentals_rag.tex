@@ -4,18 +4,19 @@
 Retrieval-Augmented Generation (RAG) is an architectural pattern for LLM-based systems that combines a retrieval component with a generative model. This approach enhances the model's knowledge with external, up-to-date information, addressing common limitations like knowledge cutoffs and hallucination \autocite{lewis2020retrieval, gao2024retrievalaugmented}. This chapter lays the groundwork by explaining the core mechanics of RAG, its main challenges, and the role of its key components.
 
 \section{How it Works}
-The foundational RAG architecture, often referred to as \textbf{Naive RAG} \autocite{gao2024retrievalaugmented}, operates in two main stages: retrieval and generation, as originally proposed by Lewis et al. (2020) \autocite{lewis2020retrieval}. The process begins when a user submits a query. Instead of directly feeding the query to the LLM, the RAG pipeline intercepts it and first interacts with an external knowledge base.
+The foundational RAG architecture, often referred to as \textbf{Naive RAG} \autocite{gao2024retrievalaugmented}, operates in two main stages: retrieval and generation, as originally proposed by Lewis et al. (2020) \autocite{lewis2020retrieval}. This paradigm was significantly influenced by earlier and parallel developments in dense retrieval and knowledge-augmented language models, such as Dense Passage Retrieval (DPR) by Karpukhin et al. (2020) \autocite{karpukhin2020dense} and REALM (Retrieval-Augmented Language Model) by Guu et al. (2020) \autocite{guu2020realm}, which laid crucial groundwork for effectively integrating external knowledge. The process begins when a user submits a query. Instead of directly feeding the query to the LLM, the RAG pipeline intercepts it and first interacts with an external knowledge base.
 
 \begin{enumerate}
-    \item \textbf{Retrieval Stage:} The user's query is converted into a numerical representation, or \textit{embedding}, using a text embedding model. This query embedding is then used to search a pre-indexed collection of documents. The goal is to find and retrieve chunks of text that are semantically similar to the query. This retrieval is typically performed using a vector database, which is optimized for high-speed similarity searches over large datasets of embeddings. The output of this stage is a set of relevant text chunks, often referred to as the \textit{context}.
+    \item \textbf{Retrieval Stage:} The primary objective of this stage is to efficiently identify and extract the most relevant information from a vast external knowledge base that can help answer the user's query. The user's query is converted into a numerical representation, or \textit{embedding}, using a text embedding model. This query embedding is then used to search a pre-indexed collection of documents. The goal is to find and retrieve chunks of text that are semantically similar to the query. This retrieval is typically performed using a vector database, which is optimized for high-speed similarity searches over large datasets of embeddings. The output of this stage is a set of relevant text chunks, often referred to as the \textit{context}.
+
     
-    \item \textbf{Generation Stage:} The retrieved context is then combined with the original query into a structured prompt. This augmented prompt is fed to the LLM. By providing this explicit, relevant information, the LLM is guided to generate a response that is not only contextually appropriate but also grounded in the facts contained within the retrieved documents. This process significantly enhances the accuracy and factuality of the output.
+    \item \textbf{Generation Stage:} In this stage, the Large Language Model (LLM) acts as a sophisticated text synthesizer. The goal of this stage is to produce a coherent and factually accurate response by leveraging the retrieved information, a process often referred to as knowledge-grounded generation \autocite{yu2022survey}. The retrieved context is then combined with the original query into a structured prompt. This augmented prompt is fed to the LLM. By providing this explicit, relevant information, the LLM is guided to generate a response that is not only contextually appropriate but also grounded in the facts contained within the retrieved documents, minimizing reliance on its internal, potentially outdated or hallucinated, knowledge. This process significantly enhances the accuracy and factuality of the output.
 \end{enumerate}
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/chapter2/rag_architecture.png}
-    \caption{High-level architecture of a Retrieval-Augmented Generation system. Image from IBM \autocite{ibm-rag-pattern}.}
+    \includegraphics[width=0.9\textwidth]{images/chapter2/rag_architecture_2.png}
+    \caption{High-level architecture of a Retrieval-Augmented Generation system.}
     \label{fig:rag_architecture}
 \end{figure}
 
@@ -35,7 +36,9 @@ Real-world data is often messy. The retrieved context may contain conflicting fa
 The LLM must be able to seamlessly weave the retrieved information into a coherent and natural-sounding response. This requires not just extracting facts but understanding the nuances of the context and integrating them into a cohesive narrative that directly answers the user's query. The fluency and relevance of the final output are direct measures of the RAG system's success.
 
 \section{Vector Databases and Similarity Search}
-Vector databases are a cornerstone of modern RAG systems, serving as the indexed knowledge base. They work by storing text data as high-dimensional vectors known as \textit{embeddings}. When a query is received, it is also converted into an embedding, and the database searches for the vectors in its index that are closest to the query vector.
+The concept of representing text as vectors in a multi-dimensional space for similarity comparison, foundational to modern vector databases, was pioneered by the Vector Space Model (VSM) in 1975 \autocite{salton1975vector}. Vector databases are a cornerstone of modern RAG systems, serving as the indexed knowledge base. They work by storing text data as high-dimensional vectors known as \textit{embeddings}. When a query is received, it is also converted into an embedding, and the database searches for the vectors in its index that are closest to the query vector.
+
+
 
 \subsection{Measuring Similarity}
 The most common way to measure the distance between two vectors in the context of RAG is \textbf{cosine similarity}, which measures the cosine of the angle between them. For two vectors, A and B, the cosine similarity is calculated as:
@@ -70,4 +73,4 @@ To avoid a brute-force search, vector databases use specialized indexing algorit
 \section{Mitigating Hallucinations}
 One of the most significant benefits of RAG is its ability to mitigate LLM hallucinations. By providing factual, verifiable context directly within the prompt, RAG grounds the model's response in reality. The LLM is instructed to formulate its answer based on the provided text, reducing its reliance on its internal, parametric knowledge, which may be outdated or incorrect.
 
-However, RAG is not a perfect solution. If the retrieved context is of poor quality, contains subtle inaccuracies, or is itself misleading, the LLM may still generate a flawed response. Therefore, the quality of the retrieval process is paramount. A well-tuned retriever that provides accurate and relevant context is the first and most critical line of defense against hallucinations in a RAG system \autocite{gao2024retrievalaugmented}.
+However, RAG is not a perfect solution. Hallucinations in RAG systems can primarily stem from two sources: retrieval failure (e.g., providing irrelevant or inaccurate context) and generation deficiency (e.g., the LLM misinterpreting or ignoring the provided context). If the retrieved context is of poor quality, contains subtle inaccuracies, or is itself misleading, the LLM may still generate a flawed response. Therefore, the quality of the retrieval process is paramount. A well-tuned retriever that provides accurate and relevant context is the first and most critical line of defense against hallucinations in a RAG system \autocite{gao2024retrievalaugmented}.
