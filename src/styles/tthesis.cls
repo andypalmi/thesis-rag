@@ -100,6 +100,20 @@ basicstyle=\linespread{1.0}\ttfamily\footnotesize
 
 \usepackage{cleveref}
 
+% Abstract Environment Definition
+\newenvironment{abstract}{%
+  \cleardoublepage % Ensure abstract starts on a new page
+  \addcontentsline{toc}{chapter}{Abstract}% % Add to Table of Contents
+  \thispagestyle{empty}% % No page number on this page
+  \begin{center}%
+    \bfseries\Huge Abstract% % Single, prominent "Abstract" title
+  \end{center}%
+  \vspace{1em}% % Space after the title
+  \quotation% % Indent the abstract text
+}{%
+  \endquotation%
+}
+
 \newcommand{\printtitle}{\@title}
 \newcommand{\printauthor}{\@author}
 \newcommand{\regnumber}{N. Matricola}
