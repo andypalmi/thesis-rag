@@ -50,6 +50,22 @@
 
 \usepackage{styles/reallyblank} % insert empty page at the beginning of a chapter with empty headings
 
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, listings,breakable}
+\tcbset{
+  promptbox/.style={
+    enhanced,
+    boxsep=4pt, left=4pt, right=4pt,
+    colback=gray!10, colframe=gray!50,
+    left=1mm, right=1mm, top=1mm, bottom=1mm,
+    before skip=1ex, after skip=1ex,
+    sharp corners,
+    fonttitle=\bfseries,
+    fontupper=\ttfamily\small,
+    title={#1}
+  }
+}
+
 % the following is for thesis in Italian language; adapt it for English ones
 \usepackage{sistyle}
 \AddToSIstyle{English}{

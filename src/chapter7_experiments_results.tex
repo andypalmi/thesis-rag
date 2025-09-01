@@ -13,7 +13,7 @@ The primary dataset utilized for these experiments comprises a curated collectio
 \subsection{Baseline Configuration}
 To quantify the impact of various optimization techniques, a baseline RAG configuration was established:
 \begin{itemize}
-    \item \textbf{Embedding Model:} OpenAI \texttt{text-embedding-ada-002}, a widely adopted and robust baseline model.
+    \item \textbf{Embedding Model:} OpenAI \texttt{text-embedding-ada-002}, a widely adopted and robust baseline model \autocite{openai2022ada002}.
     \item \textbf{Chunking Strategy:} Naive fixed-size chunking, employing a chunk size of 300 tokens and an overlap of 50 tokens.
     \item \textbf{Retrieval Strategy:} Basic cosine similarity search, with a predetermined retrieval of the top 5 most similar chunks (Top-N).
     \item \textbf{Generator LLM:} \texttt{GPT-4}.
@@ -24,7 +24,7 @@ To quantify the impact of various optimization techniques, a baseline RAG config
 The performance of the RAG system was assessed at both the retrieval and generation stages.
 \begin{itemize}
 \item \textbf{Retrieval Performance:} Evaluated using \textit{Precision@k}, \textit{Recall@k}, and \textit{Mean Reciprocal Rank (MRR)}. These metrics are paramount for comprehending the effectiveness of the retrieval stage in isolation.
-\item \textbf{Generation Quality:} Assessed using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The primary metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination Rate} \autocite{zheng2023judging}.
+\item \textbf{Generation Quality:} Assessed using the \textit{LLM-as-a-Judge} method with the DeepEval framework. The primary metrics tracked were \textit{Faithfulness}, \textit{Answer Relevancy}, and \textit{Hallucination}, \textit{Correctness} and \textit{Specific Information Accuracy} \autocite{zheng2023judging}. The metrics are detailed in Section~\ref{sec:evaluation-methodology}
 \end{itemize}
 
 \section{Experiment 1: Embedding Models}
@@ -34,23 +34,23 @@ This experiment assesses the performance of various embedding models on long-con
 \subsection{Models and Methodology}
 We compared five embedding models on the \textbf{LongEmbed} benchmark \autocite{zhu2024longembedextendingembeddingmodels}, a suite of datasets formulated to evaluate long-context retrieval. The models assessed were:
 \begin{itemize}
-    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely adopted, high-performance proprietary model with a vector size of 1536. This model does not necessitate any specific task instruction.
-    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} An open-source model possessing a vector size of 768. This model employs a prefix for distinct tasks. For our retrieval task, we used `search\_query:` for queries and `search\_document:` for documents.
-    \item \textbf{Jina AI \texttt{jina-embeddings-v2-base-en}:} An open-source model with a vector size of 768. This model, like Ada-002, does not require a task instruction.
-    \item \textbf{Jina AI \texttt{jina-embeddings-v3}:} A model that implements \textit{late chunking}, where chunks from the same document are tokenized together up to the model's context window of 8192 tokens, with a vector size of 1024. It requires a `task` argument, for which we used `retrieval.query` and `retrieval.passage` for queries and documents respectively.
-    \item \textbf{Qwen \texttt{Qwen3-Embedding-0.6B}:} An open-source model with a vector size of 1024. This model benefits from a prompt for queries, for which we used the recommended `query` prompt name.
+    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely adopted, high-performance proprietary model with a vector size of 1536. This model does not necessitate any specific task instruction \autocite{openai2022ada002}.
+    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} An open-source model possessing a vector size of 768. This model employs a prefix for distinct tasks. For our retrieval task, we used \texttt{search\_query} for queries and \texttt{search\_document} for documents \autocite{nussbaum2025nomicembedtrainingreproducible}.
+    \item \textbf{Jina AI \texttt{jina-embeddings-v2-base-en}:} An open-source model with a vector size of 768. This model, like Ada-002, does not require a task instruction \autocite{günther2024jinaembeddings28192token}.
+    \item \textbf{Jina AI \texttt{jina-embeddings-v3}:} A model that implements \textit{late chunking}, where chunks from the same document are tokenized together up to the model's context window of 8192 tokens, with a vector size of 1024. It requires a \texttt{task} argument, for which we used \texttt{retrieval.query} and \texttt{retrieval.passage} for queries and documents respectively \autocite{sturua2024jinaembeddingsv3multilingualembeddingstask}.
+    \item \textbf{Qwen \texttt{Qwen3-Embedding-0.6B}:} An open-source model with a vector size of 1024. This model benefits from a prompt for queries, for which we used the recommended \texttt{query} prompt name \autocite{zhang2025qwen3embeddingadvancingtext}.
 \end{itemize}
-For vector storage and retrieval, we used Milvus \autocite{milvus}, a popular open-source vector database. We created an index of type HNSW (Hierarchical Navigable Small World) with the L2 distance metric. The index parameters were set to M=8 and efConstruction=64.
+For vector storage and retrieval, we used Milvus \autocite{milvus}, a popular open-source vector database. We created an index of type HNSW with the L2 distance metric. The index parameters were set to M=8 and efConstruction=64.
 
 \subsection{Datasets}
 The LongEmbed benchmark comprises six datasets, two of which are synthetic and four are derived from real-world data. The datasets are:
 \begin{itemize}
-    \item \textbf{2WikiMQA:} A multi-hop question-answering dataset.
-    \item \textbf{NarrativeQA:} A question-answering dataset featuring extended narratives.
-    \item \textbf{Needle In A Haystack (NIAH):} A synthetic dataset designed to evaluate the model's capacity to locate a specific piece of information ("needle") in an extensive text ("haystack").
-    \item \textbf{Passkey Retrieval:} A synthetic dataset designed to assess the model's ability to retrieve a specific key from an extended document.
-    \item \textbf{QMSum:} A query-based meeting summarization dataset.
-    \item \textbf{SummScreenFD:} A summarization dataset derived from television show scripts.
+    \item \textbf{2WikiMQA:} A multi-hop question-answering (QA) dataset designed to test reasoning and inference skills by requiring models to integrate information from multiple paragraphs. It includes evidence information with reasoning paths to provide comprehensive explanations and evaluate reasoning skills, ensuring that multi-hop reasoning is genuinely required for answering questions \autocite{ho2020constructingmultihopqadataset}.
+    \item \textbf{NarrativeQA:} A question-answering dataset designed to assess reading comprehension by requiring models to answer questions about stories from entire books or movie scripts. It emphasizes understanding the underlying narrative rather than shallow pattern matching, presenting a significant challenge for standard RC models \autocite{kočiský2017narrativeqareadingcomprehensionchallenge}.
+    \item \textbf{Needle In A Haystack (NIAH):} A synthetic dataset designed to evaluate the model's capacity to locate a specific piece of information ("needle") in an extensive text ("haystack") \autocite{nelson2024needlehaystackmemorybased}.
+    \item \textbf{Passkey Retrieval:} A synthetic dataset designed to assess a model\'s ability to retrieve a specific, randomly inserted passkey associated with a unique person\'s name from a document containing repetitive filler text and 100 candidate documents \autocite{Wang2023ImprovingTE}. 
+    \item \textbf{QMSum:} A query-based, multi-domain meeting summarization dataset where models must select and summarize relevant spans of long meetings in response to a query. It consists of 1,808 query-summary pairs over 232 meetings, posing significant challenges for long meeting summarization \autocite{zhong2021qmsumnewbenchmarkquerybased}. 
+    \item \textbf{SummScreenFD:} A summarization dataset comprising TV series transcripts and human-written recaps, designed for abstractive summarization. It presents challenges due to plot details scattered across long transcripts and the need to filter out non-essential content, requiring models to integrate information and generate succinct plot descriptions \autocite{chen2022summscreendatasetabstractivescreenplay}. 
 \end{itemize}
 
 \subsection{Results and Discussion}
@@ -87,9 +87,9 @@ This experiment assessed the benefit of incorporating a reranking step subsequen
 We compared three cross-encoder models to rerank the top 500 candidates yielded by the similarity search:
 \begin{itemize}
     \item \textbf{No Reranker (Baseline):} The initial retrieval order is employed.
-    \item \textbf{GTE ML Reranker Base:} A robust reranker based on the DeBERTa-v3 architecture, recognized for its strong performance on various reranking tasks \autocite{li2024generative}.
+    \item \textbf{GTE ML Reranker Base:} A robust reranker based on the DeBERTa-v3 architecture, recognized for its strong performance on various reranking tasks \autocite{zhang2024mgte}.
     \item \textbf{Jina Reranker v1 Tiny EN:} A lightweight and efficient reranker from Jina AI, engineered for rapid processing and scalability \autocite{jina-reranker-v1-tiny-en}.
-    \item \textbf{MXBAI Rerank Base v2:} A multilingual reranker that has demonstrated competitive performance on diverse datasets \autocite{pradeep2024reranking}.
+    \item \textbf{MXBAI Rerank Base v2:} A multilingual reranker that has demonstrated competitive performance on diverse datasets \autocite{v2rerank2025mxbai}.
 \end{itemize}
 
 \subsection{Results and Discussion}
@@ -161,7 +161,7 @@ This experiment centers on the generation component of the RAG pipeline, assessi
 \subsection{Motivation and Baseline}
 The evaluation commenced with a baseline configuration of \textbf{GPT-4o} employing prompt \texttt{P1} and a temperature of \texttt{0.2}. As novel and more powerful models were introduced during the course of this research, they were systematically evaluated against this baseline. This continuous evaluation process enabled us to remain at the forefront of research and select the most suitable model for integration into a production RAG system, thereby ensuring that any replacement would provide superior performance.
 
-\subsection{Evaluation Methodology}
+\subsection{Evaluation Methodology}\label{sec:evaluation-methodology}
 We utilized the \textbf{DeepEval} framework \autocite{deepeval2023}, which employs an LLM-as-a-Judge approach to assess the generator's output. For subjective, use-case-specific evaluations, we employed DeepEval's \textbf{G-Eval} functionality, which draws inspiration from the G-Eval framework \autocite{liu2023geval} and utilizes a chain-of-thought process to evaluate outputs against custom criteria. We delineated two such metrics:
 \begin{itemize}
     \item \textbf{Correctness (C):} This metric ascertains whether the actual output is factually correct based on the expected output. It heavily penalizes the omission of crucial details and the inclusion of information that contradicts the expected output.

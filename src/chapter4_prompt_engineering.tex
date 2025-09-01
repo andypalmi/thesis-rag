@@ -15,11 +15,14 @@ A typical RAG prompt includes:
 
 The formulation of the prompt necessitates a meticulous arrangement of these elements. For instance, a typical template might be structured as follows:
 
-\texttt{You are a helpful assistant. Use the following context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.}
+\begin{tcolorbox}[promptbox,title=Example: A Typical RAG prompt]
+You are a helpful assistant. Use the following context to answer the question at the end.\\
+If you don't know the answer, just say that you don't know, don't try to make up an answer.\\
 
-\texttt{Context: [retrieved chunks]}
+Context: \{retrieved chunks\}\\
 
-\texttt{Question: [user query]}
+Question: \{user query\}
+\end{tcolorbox}
 
 \section{Prompt Styles}
 Diverse prompting styles can be employed contingent upon the specific task and the LLM in use. The selection of style can substantially influence the quality of the generated response. Various prompting techniques exist, each with its own strengths and applications, allowing for fine-grained control over the LLM's behavior \autocite{liu2023geval}.
@@ -27,71 +30,72 @@ Diverse prompting styles can be employed contingent upon the specific task and t
 \subsubsection{Zero-Shot Prompting}
 This represents the most prevalent style in RAG, wherein the LLM receives instructions and context without prior examples demonstrating task completion \autocite{brown2020language}. The efficacy of zero-shot prompts is highly dependent on the clarity of the instructions and the LLM's intrinsic capacity for reasoning and adherence to directives.
 
-\paragraph{Example:}
-\begin{verbatim}
-You are a helpful assistant. Use the following context to answer the question at the end.
-If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
-Context: [retrieved chunks]
+\begin{tcolorbox}[promptbox,title=Example: Zero-Shot Prompting]
+You are a helpful assistant. Use the following context to answer the question at the end.\\
+If you don't know the answer, just say that you don't know, don't try to make up an answer.\\
 
-Question: [user query]
-\end{verbatim}
+Context: \{retrieved chunks\}\\
+
+Question: \{user query\}
+\end{tcolorbox}
     
-    \subsubsection{Few-Shot Prompting}
+\subsubsection{Few-Shot Prompting}
 In this approach, the prompt incorporates a limited number of examples (shots) illustrating the desired input-output format \autocite{brown2020language}. This can prove particularly advantageous for intricate tasks or when a highly specific output structure is mandated. For RAG, this might entail demonstrating to the model how to synthesize context into an answer for a few sample questions prior to presenting the actual query.
 
-\paragraph{Example:}
-\begin{verbatim}
-You are a helpful assistant. Use the following context to answer the question at the end.
-If you don't know the answer, just say that you don't know, don't try to make up an answer.
+\begin{tcolorbox}[promptbox,title=Example: Few Shot Prompting]
+You are a helpful assistant. Use the following context to answer the question at the end.\\
+If you don't know the answer, just say that you don't know, don't try to make up an answer.\\
 
-Here are a few examples:
+Here are a few examples:\\
 
-Context: "The capital of France is Paris."
-Question: "What is the capital of France?"
-Answer: "The capital of France is Paris."
+Context: "The capital of France is Paris."\\
+Question: "What is the capital of France?"\\
+Answer: "The capital of France is Paris."\\\\
+Context: "Mount Everest is 8848 meters tall."\\
+Question: "What is the highest mountain in the world?"\\
+Answer: "I'm sorry, I cannot answer with the provided information."\\
 
-Context: "Mount Everest is the world's highest mountain."
-Question: "What is the highest mountain in the world?"
-Answer: "Mount Everest is the world's highest mountain."
+Context: \{retrieved chunks\}
 
-Context: [retrieved chunks]
-Question: [user query]
-\end{verbatim}
+Question: \{user query\}
+\end{tcolorbox}
     
-    \subsubsection{Instruction-Based Prompts}
-These prompts emphasize the provision of highly detailed and explicit instructions \autocite{wei2022chain}. This may encompass negative constraints (e.g., "Do not mention information not present in the context") and positive constraints (e.g., "Summarize the answer in three bullet points").
+\subsubsection{Instruction-Based Prompts}
+These prompts emphasize the provision of highly detailed and explicit instructions \autocite{zhang2025instructiontuninglargelanguage}. This may encompass negative constraints (e.g., "Do not mention information not present in the context") and positive constraints (e.g., "Summarize the answer in three bullet points").
 
-\paragraph{Example:}
-\begin{verbatim}
-You are a concise summarizer.
-Based on the following context, provide a summary of the key points in exactly three bullet points.
-Do not include any information not explicitly stated in the context.
+\begin{tcolorbox}[promptbox,title=Example: Instruction-Based Prompt]
+You are a concise summarizer.\\
+Based on the following context, provide a summary of the key points in exactly three bullet points.\\
+Do not include any information not explicitly stated in the context.\\
 
-Context: [retrieved chunks]
+Context: \{retrieved chunks\}\\
 
-Question: [user query]
-\end{verbatim}
+Question: \{user query\}
+\end{tcolorbox}
     
-    \subsubsection{Role-Playing Prompts}
+\subsubsection{Role-Playing Prompts}
 Assigning a specific role to the LLM (e.g., "You are a financial analyst reviewing these documents") can assist in framing the context and directing the tone and focus of the response \autocite{tseng-etal-2024-two}.
 
-\paragraph{Example:}
-\begin{verbatim}
-You are a seasoned medical professional.
-Analyze the provided patient records and summarize the key health concerns and recommended treatments.
-Ensure your response is empathetic and easy for a non-medical person to understand.
+\begin{tcolorbox}[promptbox,title=Example: Role-Playing Prompt]
+You are a seasoned medical professional.\\
+Analyze the provided patient records and summarize the key health concerns and recommended treatments.\\
+Ensure your response is empathetic and easy for a non-medical person to understand.\\
 
-Context: [retrieved chunks]
+Context: \{retrieved chunks\}\\
 
-Question: [user query]
-\end{verbatim}
+Question: \{user query\}
+\end{tcolorbox}
 
 \section{Prompt Evaluation}
 Evaluating the efficacy of different prompts constitutes a critical step in optimizing a RAG pipeline. Given that the quality of a generated response can be subjective, a combination of qualitative and quantitative methods is frequently employed.
 
 \subsection{Golden Datasets}
-A \textbf{golden dataset} comprises a curated collection of queries coupled with optimal, human-verified answers. By comparing the LLM's output for a given query against the golden answer, one can evaluate the quality of the prompt. While the creation of a golden dataset can be labor-intensive, it furnishes a robust benchmark for evaluation.
+A \textbf{golden dataset} comprises a curated collection of queries coupled with optimal, human-verified answers. For our specific evaluation, this dataset was meticulously created internally within the company and consists of 50 samples. A crucial aspect of this dataset is its inclusion of examples designed to test the model's ability to refrain from answering when appropriate. This includes scenarios where the provided context is wrong, empty, or, more subtly, where the key information being asked is missing, even if other related information is present.
+
+For a business case where the factuality of the model's answer is of the utmost importance, the dataset contains anonymized versions of famous fables: Cinderella and Snow White. When presented with questions like "Who is Cinderella?" or "Who is Snow White?", the model is expected to refrain from answering, as the protagonist's name is intentionally omitted from the context, even though the model might be trained on the general story of these fables.
+
+Other examples within the dataset are designed to evaluate the model's capability of finding a key piece of information in a large document. Furthermore, many cases focus on the model's ability to answer a question using only the information present in the context. This capability of the LLM to answer solely based on provided context was an important business requirement that was thoroughly studied and evaluated. The answers generated by the LLM were evaluated against these golden answers using DeepEval as the framework, which leverages the LLM-as-a-Judge methodology for these evaluations. By comparing the LLM's output for a given query against the golden answer, one can evaluate the quality of the prompt, furnishing a robust benchmark for evaluation.
 
 \subsection{LLM-as-a-Judge}
 A more scalable approach to evaluation involves employing another, often more powerful, LLM as an evaluator, a methodology demonstrated to correlate favorably with human judgment \autocite{zheng2023judging}. This methodology is termed the \textbf{LLM-as-a-Judge} method. Frameworks such as \textbf{DeepEval} have materialized to standardize this process. An evaluator LLM is provided with a set of criteria and tasked with assessing the output of the RAG system across various dimensions.
