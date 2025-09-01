@@ -34,13 +34,14 @@ This experiment assesses the performance of various embedding models on long-con
 \subsection{Models and Methodology}
 We compared five embedding models on the \textbf{LongEmbed} benchmark \autocite{zhu2024longembedextendingembeddingmodels}, a suite of datasets formulated to evaluate long-context retrieval. The models assessed were:
 \begin{itemize}
-    \item \textbf{OpenAI \texttt{text-embedding-ada-002}:} A widely adopted, high-performance proprietary model with a vector size of 1536. This model does not necessitate any specific task instruction \autocite{openai2022ada002}.
-    \item \textbf{Nomic AI \texttt{nomic-embed-text}:} An open-source model possessing a vector size of 768. This model employs a prefix for distinct tasks. For our retrieval task, we used \texttt{search\_query} for queries and \texttt{search\_document} for documents \autocite{nussbaum2025nomicembedtrainingreproducible}.
-    \item \textbf{Jina AI \texttt{jina-embeddings-v2-base-en}:} An open-source model with a vector size of 768. This model, like Ada-002, does not require a task instruction \autocite{günther2024jinaembeddings28192token}.
-    \item \textbf{Jina AI \texttt{jina-embeddings-v3}:} A model that implements \textit{late chunking}, where chunks from the same document are tokenized together up to the model's context window of 8192 tokens, with a vector size of 1024. It requires a \texttt{task} argument, for which we used \texttt{retrieval.query} and \texttt{retrieval.passage} for queries and documents respectively \autocite{sturua2024jinaembeddingsv3multilingualembeddingstask}.
-    \item \textbf{Qwen \texttt{Qwen3-Embedding-0.6B}:} An open-source model with a vector size of 1024. This model benefits from a prompt for queries, for which we used the recommended \texttt{query} prompt name \autocite{zhang2025qwen3embeddingadvancingtext}.
+    \item OpenAI \texttt{text-embedding-ada-002}
+    \item Nomic AI \texttt{nomic-embed-text}
+    \item Jina AI \texttt{jina-embeddings-v2-base-en}
+    \item Jina AI \texttt{jina-embeddings-v3}
+    \item Qwen \texttt{Qwen3-Embedding-0.6B}
 \end{itemize}
 For vector storage and retrieval, we used Milvus \autocite{milvus}, a popular open-source vector database. We created an index of type HNSW with the L2 distance metric. The index parameters were set to M=8 and efConstruction=64.
+
 
 \subsection{Datasets}
 The LongEmbed benchmark comprises six datasets, two of which are synthetic and four are derived from real-world data. The datasets are:
