@@ -95,7 +95,7 @@ We compared three cross-encoder models to rerank the top 500 candidates yielded 
 
 \subsection{Results and Discussion}
 \input{reranker/reranker_performance.tex}
-The results presented in Table \ref{tab:reranker_performance} and the visualizations in Figure \ref{fig:avg_metrics_faceted} unveil a complex interplay among reranking models, chunking strategies, and thresholding methods. The principal finding is that the effectiveness of a reranker is not absolute but is highly contingent on the subsequent thresholding strategy employed to select the final documents.
+The results presented in Table \ref{tab:reranker_performance} and the visualizations in Figures \ref{fig:avg_f1_score}, \ref{fig:avg_precision}, \ref{fig:avg_recall}, \ref{fig:avg_num_items}, and \ref{fig:avg_num_docs} unveil a complex interplay among reranking models, chunking strategies, and thresholding methods. The principal finding is that the effectiveness of a reranker is not absolute but is highly contingent on the subsequent thresholding strategy employed to select the final documents.
 
 When no intelligent thresholding is applied (Baseline) or when suboptimal methods such as GMM or Otsu are utilized, the performance gains from reranking are minimal or even negative. These methods frequently include an excessive number of documents (as observed in Table \ref{tab:merged_retrieval_stats}), thereby diluting the context with noise and negating the precision benefits of the reranker. For instance, with the Baseline threshold, the F1 scores remain low (0.021-0.062) across all models due to the high recall being compromised by extremely low precision.
 
@@ -104,55 +104,42 @@ However, the full potential of reranking is realized when combined with an effec
 Conversely, the \textbf{MXBAI Rerank Base v2} model exhibits suboptimal performance with aggressive thresholding methods such as Knee and Max Gap. This is due to the model's score distribution being notably flat, which impedes these methods from identifying a distinct cutoff point. Consequently, it processes an insufficient number of documents (e.g., only 4.38 items with Knee), leading to a significant reduction in recall (0.388) and a low F1 score (0.105).
 
 In conclusion, this experiment demonstrates that merely incorporating a reranker is insufficient. The combination of a robust reranker such as \textbf{GTE ML Reranker Base} with an aggressive, well-suited thresholding method like \textbf{Max Gap} yields optimal performance, maximizing precision without compromising essential recall.
+
 \input{reranker/reranker_stats_items_docs.tex}
 
 \begin{figure}[htbp]
   \centering
-  \makebox[\textwidth][c]{%
-    \begin{minipage}{0.90\paperwidth}
-      \centering
-      % first row: F1 & precision
-      \begin{minipage}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{reranker/avg_f1_score_bar_faceted.png}
-        \\[1ex]\footnotesize (a) Average F1 score by facet
-      \end{minipage}
-      \hfill
-      \begin{minipage}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{reranker/avg_precision_bar_faceted.png}
-        \\[1ex]\footnotesize (b) Average precision by facet
-      \end{minipage}
+  \includegraphics[width=0.99\textwidth]{reranker/avg_f1_score_bar_faceted.png}
+  \caption{\footnotesize Average F1 score by facet.}
+  \label{fig:avg_f1_score}
+\end{figure}
 
-      \vspace{1ex}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.99\textwidth]{reranker/avg_precision_bar_faceted.png}
+  \caption{\footnotesize Average precision by facet.}
+  \label{fig:avg_precision}
+\end{figure}
 
-      % second row: recall
-      \begin{minipage}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{reranker/avg_recall_bar_faceted.png}
-        \\[1ex]\footnotesize (c) Average recall by facet
-      \end{minipage}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.99\textwidth]{reranker/avg_recall_bar_faceted.png}
+  \caption{\footnotesize Average recall by facet.}
+  \label{fig:avg_recall}
+\end{figure}
 
-      \vspace{1ex}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.99\textwidth]{reranker/avg_num_items_passed_bar_faceted.png}
+  \caption{\footnotesize Average number of items passed by facet.}
+  \label{fig:avg_num_items}
+\end{figure}
 
-      % third row: items & retrieved docs
-      \begin{minipage}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{reranker/avg_num_items_passed_bar_faceted.png}
-        \\[1ex]\footnotesize (d) Average number of items passed by facet
-      \end{minipage}
-      \hfill
-      \begin{minipage}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{reranker/avg_num_retrieved_docs_passed_bar_faceted.png}
-        \\[1ex]\footnotesize (e) Average number of retrieved documents passed by facet
-      \end{minipage}
-    \end{minipage}% 
-  }
-  \caption{\footnotesize Comparison of average metrics by model facet:
-    (a) F1 score, (b) precision, (c) recall, (d) number of items passed,
-    and (e) number of retrieved documents passed.}
-  \label{fig:avg_metrics_faceted}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.99\textwidth]{reranker/avg_num_retrieved_docs_passed_bar_faceted.png}
+  \caption{\footnotesize Average number of retrieved documents passed by facet.}
+  \label{fig:avg_num_docs}
 \end{figure}
 
 \section{Experiment 3: Prompt Engineering to Prevent Hallucination}
