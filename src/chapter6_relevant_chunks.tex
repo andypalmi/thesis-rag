@@ -4,7 +4,7 @@
 In a Retrieval-Augmented Generation system, the final response represents a synthesis of information derived from multiple retrieved document chunks. For the purposes of transparency, debuggability, and continuous improvement, it is imperative to ascertain precisely which segments of the retrieved context contributed to the constructed answer. This chapter investigates the methodologies and significance of analyzing the alignment between the generated response and the source chunks, a process frequently termed \textit{citation and attribution} or \textit{groundedness}.
 
 \section{The Importance of Chunk-Response Alignment}
-Comprehending the nexus between the source context and the final output, as underscored by Gao et al. (2024) \autocite{gao2024retrievalaugmented}, fulfills several pivotal functions:
+Comprehending the nexus between the source context and the final output, as underscored by Gao et al. (2024) \autocite{gao2024retrievalaugmentedgenerationlargelanguage}, fulfills several pivotal functions:
 \begin{itemize}
     \item \textbf{Trust and Verifiability:} For users, particularly in critical applications such as medical or legal research, the ability to verify the source of a particular statement is essential for establishing trust in the system's output. Citations enable users to independently verify the information.
     \item \textbf{Debugging and Evaluation:} When a RAG system generates a suboptimal or erroneous answer, tracing the response back to the source chunks constitutes the initial step in problem diagnosis. It assists in determining whether the issue resides with the retriever (e.g., retrieving irrelevant context), the generator (e.g., misinterpreting the context), or the source documents themselves.
@@ -16,12 +16,12 @@ Comprehending the nexus between the source context and the final output, as unde
 Various techniques can be employed to trace the provenance of the information within the generated response. The complexity and accuracy of these methods can fluctuate considerably, and they frequently entail a trade-off between computational cost and precision.
 
 \subsection{Prompt-Based Attribution}
-The most straightforward method involves explicitly instructing the LLM to cite its sources within the prompt. The instructions may incorporate a directive such as: \textit{"After each sentence in your response, cite the ID of the source document you used to formulate that sentence."} \autocite{gao2024retrievalaugmented}
+The most straightforward method involves explicitly instructing the LLM to cite its sources within the prompt. The instructions may incorporate a directive such as: \textit{"After each sentence in your response, cite the ID of the source document you used to formulate that sentence."} \autocite{gao2024retrievalaugmentedgenerationlargelanguage}
 
 While straightforward, this approach possesses inherent limitations. The LLM may not consistently adhere to the instructions, and it can occasionally hallucinate citations or erroneously attribute information. The reliability of this method is highly contingent upon the instruction-following capabilities of the selected LLM.
 
 \subsection{Post-Hoc Similarity Analysis}
-An alternative approach involves analyzing the alignment subsequent to the generation of the response \autocite{gao2024retrievalaugmented}. This can be achieved by:
+An alternative approach involves analyzing the alignment subsequent to the generation of the response \autocite{gao2024retrievalaugmentedgenerationlargelanguage}. This can be achieved by:
 \begin{enumerate}
     \item Decomposing the generated response into individual sentences or claims.
     \item For each sentence, computing its embedding.
@@ -36,10 +36,10 @@ For transformer-based LLMs, the internal \textit{attention mechanism} can theore
 In practice, this constitutes a highly complex approach. Accessing and interpreting attention weights can be challenging, particularly with proprietary, black-box models. Furthermore, the correlation between high attention scores and factual contribution is not invariably direct and remains an active area of research.
 
 \subsection{Building a Knowledge Graph}
-A more structured approach entails constructing a knowledge graph from the source documents \autocite{gao2024retrievalaugmented}. The graph would comprise entities and their interrelationships. Upon generation of a response, the entities referenced therein can be linked back to the nodes within the knowledge graph, thereby providing a clear and structured form of attribution. This constitutes a potent yet resource-intensive method that is optimally suited for well-defined domains.
+A more structured approach entails constructing a knowledge graph from the source documents \autocite{gao2024retrievalaugmentedgenerationlargelanguage}. The graph would comprise entities and their interrelationships. Upon generation of a response, the entities referenced therein can be linked back to the nodes within the knowledge graph, thereby providing a clear and structured form of attribution. This constitutes a potent yet resource-intensive method that is optimally suited for well-defined domains.
 
 \section{Evaluation Metrics for Retrieval}
-As discussed by Gao et al. (2024) \autocite{gao2024retrievalaugmented}, evaluating the retrieval component is paramount for comprehending the overall RAG system performance. Key metrics comprise:
+As discussed by Gao et al. (2024) \autocite{gao2024retrievalaugmentedgenerationlargelanguage}, evaluating the retrieval component is paramount for comprehending the overall RAG system performance. Key metrics comprise:
 \begin{itemize}
     \item \textbf{Precision@k:} The proportion of relevant documents within the top-k retrieved documents.
     \item \textbf{Recall@k:} The proportion of all relevant documents within the corpus that are identified among the top-k retrieved documents.
