@@ -16,7 +16,7 @@ Comprehending the nexus between the source context and the final output, as unde
 Various techniques can be employed to trace the provenance of the information within the generated response. The complexity and accuracy of these methods can fluctuate considerably, and they frequently entail a trade-off between computational cost and precision.
 
 \subsection{Prompt-Based Attribution}
-The most straightforward method involves explicitly instructing the LLM to cite its sources within the prompt. The instructions may incorporate a directive such as: \textit{"After each sentence in your response, cite the ID of the source document you used to formulate that sentence."} \autocite{gao2024retrievalaugmentedgenerationlargelanguage}
+The most straightforward method involves explicitly instructing the LLM to cite its sources within the prompt. The instructions may incorporate a directive such as: \textit{\enquote{After each sentence in your response, cite the ID of the source document you used to formulate that sentence.}} \autocite{gao2024retrievalaugmentedgenerationlargelanguage}
 
 While straightforward, this approach possesses inherent limitations. The LLM may not consistently adhere to the instructions, and it can occasionally hallucinate citations or erroneously attribute information. The reliability of this method is highly contingent upon the instruction-following capabilities of the selected LLM.
 
