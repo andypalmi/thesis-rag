@@ -15,6 +15,12 @@ The principal conclusions drawn from our research are as follows:
 
 In essence, this work underscores that developing a state-of-the-art RAG system is a multifaceted engineering endeavor, necessitating careful consideration of the trade-offs among performance, cost, and complexity at every stage of the pipeline.
 
+\section{Limitations and Practical Implications}
+
+While this thesis provides a comprehensive analysis of RAG systems, it is important to acknowledge its limitations. The experiments were conducted on a specialized corpus of academic papers in the AI field; therefore, the findings may not be directly generalizable to other domains with different linguistic characteristics, such as legal texts or conversational data. The evaluation of generation quality, while systematic, relied on the LLM-as-a-Judge methodology. Although this approach shows strong correlation with human assessment, it is not immune to the inherent biases and limitations of the evaluator model. Furthermore, due to computational and time constraints, our experiments explored a wide but not exhaustive set of component combinations. The performance of other configurations remains an open question.
+
+Despite these limitations, this work offers significant practical implications. It provides a clear and empirically-backed framework for practitioners seeking to build and optimize RAG systems. The demonstrated superiority of compact, open-source models like \texttt{Qwen3-Embedding-0.6B} and the substantial gains from rerankers like \texttt{GTE ML Reranker Base} offer concrete guidance for developing high-performance RAG pipelines that are also cost-effective. The analysis of dynamic thresholding techniques, particularly the success of the \texttt{Max Gap} method, presents a practical strategy for enhancing retrieval precision by adapting to the relevance distribution of each specific query. These insights can help organizations move beyond naive implementations and construct more robust, reliable, and efficient RAG solutions.
+
 \section{Future Work}
 
 The domain of Retrieval-Augmented Generation is characterized by rapid evolution, and this study illuminates several promising avenues for future research, many of which align with the directions proposed by Gao et al. (2024):

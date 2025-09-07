@@ -77,7 +77,7 @@ where $f(t,d)$ is the raw count of term $t$ in $d$, $|D|$ the total number of do
 
 By employing BM25 or TF–IDF to rerank the candidates retrieved via vector search, performance can be enhanced through the elevation of documents exhibiting substantial lexical overlap with the query \autocite{gao2024retrievalaugmentedgenerationlargelanguage}. This hybrid approach leverages the strengths of both semantic (dense) and keyword (sparse) matching.
 
-\subsection{Hybrid Systems: Combining Similarity with BM25/TF-IDF}
+\subsection{Hybrid Retrieval Systems}
 A \textbf{hybrid system} integrates the scores derived from both dense (embeddings-based methods) and sparse (BM25 or TF-IDF) retrieval methods. A prevalent approach involves utilizing a weighted combination of scores from a vector search and a BM25 search to yield a final relevance score. This enables the system to capitalize on the strengths of both approaches, thereby encompassing both semantic relevance and keyword importance for a more robust retrieval process \autocite{gao2024retrievalaugmentedgenerationlargelanguage}.
 
 \subsection{Cross-Encoder Rerankers}
