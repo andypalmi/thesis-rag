@@ -84,7 +84,16 @@ In summary, this experiment exemplifies a pivotal moment in the evolution of tex
 \label{sec:exp_reranking}
 This experiment assessed the benefit of incorporating a reranking step subsequent to the initial retrieval. A reranker, typically a cross-encoder model, re-evaluates the top-k documents returned by the initial retriever, thereby furnishing a more accurate relevance score. This facilitates the recovery of relevant documents that may have been ranked lower by the initial semantic search.
 
+\subsection{Methodology and Baseline}
+To quantify the impact of reranking, a baseline configuration was established using the OpenAI \texttt{text-embedding-ada-002} model. The initial retrieval was a basic cosine similarity search. For this experiment, two distinct chunking strategies were evaluated to understand their interaction with reranking models:
+\begin{itemize}
+    \item \textbf{Full Page:} Each page of a document is treated as a single chunk.
+    \item \textbf{Page Split:} Documents are split into chunks at each paragraph break.
+\end{itemize}
+The \enquote{No Reranker} condition in our results represents the baseline, where the top candidates from the initial retrieval are used directly without a reranking step.
+
 \subsection{Reranking Models Compared}
+
 We compared three cross-encoder models to rerank the top 500 candidates yielded by the similarity search:
 \begin{itemize}
     \item \textbf{No Reranker (Baseline):} The initial retrieval order is employed.
