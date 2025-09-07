@@ -14,7 +14,7 @@ The primary dataset utilized for these experiments comprises a curated collectio
 To quantify the impact of various optimization techniques, a baseline RAG configuration was established:
 \begin{itemize}
     \item \textbf{Embedding Model:} OpenAI \texttt{text-embedding-ada-002}, a widely adopted and robust baseline model \autocite{openai2022ada002}.
-    \item \textbf{Chunking Strategy:} Naive fixed-size chunking, employing a chunk size of 300 tokens and an overlap of 50 tokens.
+    \item \textbf{Chunking Strategy:} Naive fixed-size chunking, employing a chunk size of 500 tokens and no overlap.
     \item \textbf{Retrieval Strategy:} Basic cosine similarity search, with a predetermined retrieval of the Top-5 most similar chunks.
     \item \textbf{Generator LLM:} \texttt{GPT-4}.
     \item \textbf{Prompt Template:} A standard zero-shot prompt directing the LLM to formulate its answer based on the provided context.
