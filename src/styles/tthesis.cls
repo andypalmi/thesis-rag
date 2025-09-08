@@ -137,6 +137,8 @@ basicstyle=\linespread{1.0}\ttfamily\footnotesize
 \newcommand{\printacademicyear}{\@ifundefined{@academicyear}{}{\@academicyear}}
 \newcommand{\supervisor}[1]{\def\@supervisor{#1}}
 \newcommand{\printsupervisor}{\@ifundefined{@supervisor}{}{\@supervisor}}
+\newcommand{\cosupervisor}[1]{\def\@cosupervisor{#1}}
+\newcommand{\printcosupervisor}{\@ifundefined{@cosupervisor}{}{\@cosupervisor}}
 \makeatother
 
 \newcommand{\frontpagefile}{frontpages/frontpage-unipv.inc}
